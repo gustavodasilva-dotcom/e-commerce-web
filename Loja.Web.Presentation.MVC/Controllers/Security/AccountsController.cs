@@ -1,34 +1,45 @@
-﻿using Loja.Web.Application.Security;
+﻿using Loja.Web.Application.Interfaces.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Security
 {
     public class AccountsController : Controller
     {
-        private readonly SecurityApplication _securityApplication;
+        #region << PROPERTIES >>
+        private readonly ISecurityApplication _securityApplication;
+        #endregion
 
-        public AccountsController(SecurityApplication securityApplication)
+        #region << CONSTRUCTOR >>
+        public AccountsController(ISecurityApplication securityApplication)
         {
             _securityApplication = securityApplication;
         }
+        #endregion
 
+        #region << METHODS >>
+
+        #region Login
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(string emailUsername, string password)
+        public async Task<IActionResult> Login(string emailUsername, string password)
         {
             try
             {
-                _securityApplication.Login(emailUsername, password);
+                await _securityApplication.Login(emailUsername, password);
             }
             catch (Exception e)
             {
-
+                ViewBag.ErrorMessage = e.Message;
+                // TODO: create log at the database.
             }
             return View();
         }
+        #endregion
+
+        #endregion
     }
 }

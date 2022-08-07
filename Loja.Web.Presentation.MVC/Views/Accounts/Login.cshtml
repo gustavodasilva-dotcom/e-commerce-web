@@ -8,9 +8,15 @@
         <h1>Login</h1>
     </div>
 
-    <form>
+    <form id="loginForm" method="post" action="@Url.Action("Login", "Accounts")" enctype="application/x-www-form-urlencoded">
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div id="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
         <div>
-            <input type="text" name="emailUserName" id="emailemailUserName" placeholder="E-mail or username" />
+            <input type="text" name="emailUsername" id="emailUsername" placeholder="E-mail or username" />
         </div>
         <div>
             <input type="password" name="password" id="password" placeholder="Password" />

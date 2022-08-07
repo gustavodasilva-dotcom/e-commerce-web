@@ -1,13 +1,9 @@
 ﻿CREATE TABLE [dbo].[UserRoles]
 (
-	[ID]			UNIQUEIDENTIFIER	NOT NULL,
-	[Description]	VARCHAR(100)		NOT NULL,
-	[Active]		BIT					CONSTRAINT [DF_UserRole_Active]		DEFAULT (1) NOT NULL,
-	[Deleted]		BIT					CONSTRAINT [DF_UserRole_Deleted]	DEFAULT (0) NOT NULL,
-	[Created_at]	DATETIME			CONSTRAINT [DF_UserRole_Created_at] DEFAULT (GETDATE()) NOT NULL,
-	[Created_by]	UNIQUEIDENTIFIER	NULL,
-	[Deleted_at]	DATETIME			CONSTRAINT [DF_UserRole_Deleted_at] DEFAULT (GETDATE()) NOT NULL,
-	[Deleted_by]	UNIQUEIDENTIFIER	NULL
+	[ID]		UNIQUEIDENTIFIER	NOT NULL,
+	[Name]		VARCHAR(100)		NOT NULL,
+	[Active]	BIT					CONSTRAINT [DF_UserRole_Active]		DEFAULT (1) NOT NULL,
+	[Deleted]	BIT					CONSTRAINT [DF_UserRole_Deleted]	DEFAULT (0) NOT NULL
 
 	CONSTRAINT [PK_UserRoles] PRIMARY KEY CLUSTERED ([ID] ASC)
 )

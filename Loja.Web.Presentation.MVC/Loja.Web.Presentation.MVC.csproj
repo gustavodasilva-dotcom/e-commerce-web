@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-Loja.Web.Presentation.MVC-AEA61ACD-F781-4844-A84C-17671E9F5132</UserSecretsId>
+    <UserSecretsId>aspnet-Loja.Web.Presentation.MVC-0B86C9E7-171C-40E9-9F53-4EF4D8A450D3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Loja.Web.Application\Loja.Web.Application.csproj" />
+    <ProjectReference Include="..\Loja.Web.Domain\Loja.Web.Domain.csproj" />
+    <ProjectReference Include="..\Loja.Web.Infra.CrossCutting\Loja.Web.Infra.CrossCutting.csproj" />
+    <ProjectReference Include="..\Loja.Web.Infra.Data\Loja.Web.Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>

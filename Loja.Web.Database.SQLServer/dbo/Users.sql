@@ -9,7 +9,7 @@
 	[Deleted]		BIT					CONSTRAINT [DF_User_Deleted]	DEFAULT (0) NOT NULL,
 	[Created_at]	DATETIME			CONSTRAINT [DF_User_Created_at] DEFAULT (GETDATE()) NOT NULL,
 	[Created_by]	UNIQUEIDENTIFIER	NULL,
-	[Deleted_at]	DATETIME			CONSTRAINT [DF_User_Deleted_at] DEFAULT (GETDATE()) NOT NULL,
+	[Deleted_at]	DATETIME			NULL,
 	[Deleted_by]	UNIQUEIDENTIFIER	NULL,
 	[UserRoleID]	UNIQUEIDENTIFIER	NOT NULL
 
