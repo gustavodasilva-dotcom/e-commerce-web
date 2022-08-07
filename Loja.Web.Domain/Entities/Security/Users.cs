@@ -22,23 +22,6 @@ namespace Loja.Web.Domain.Entities.Security
         public Guid? UserRoleID { get; private set; }
         #endregion
 
-        #region << CONSTRUCTOR >>
-        public Users() { }
-
-        public Users(string name, string email, string login, string password)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentException("Property cannot be empty.", nameof(Name));
-            if (string.IsNullOrEmpty(email)) throw new ArgumentException("Property cannot be empty.", nameof(Email));
-            if (string.IsNullOrEmpty(login)) throw new ArgumentException("Property cannot be empty.", nameof(Login));
-            if (string.IsNullOrEmpty(password)) throw new ArgumentException("Property cannot be empty.", nameof(Password));
-
-            Name = name;
-            Email = email;
-            Login = login;
-            Password = password;
-        }
-        #endregion
-
         #region << METHODS >>
 
         #region GetAll

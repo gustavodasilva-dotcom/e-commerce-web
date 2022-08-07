@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Loja.Web.Domain\Loja.Web.Domain.csproj" />
+    <ProjectReference Include="..\Loja.Web.DTO\Loja.Web.DTO.csproj" />
     <ProjectReference Include="..\Loja.Web.Tools.String\Loja.Web.Tools.String.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,10 @@
-﻿namespace Loja.Web.Application.Interfaces.Security
+﻿using Loja.Web.DTO.Security;
+
+namespace Loja.Web.Application.Interfaces.Security
 {
     public interface ISecurityApplication
     {
-        Task Login(string emailUsername, string password);
+        Task<UsersDTO> Login(UsersDTO user);
+        Task<List<UserRolesDTO>> GetUserRoles();
     }
 }

@@ -17,17 +17,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05-Tools", "05-Tools", "{19
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Loja.Web.Database.SQLServer", "Loja.Web.Database.SQLServer\Loja.Web.Database.SQLServer.sqlproj", "{4185A941-2658-470C-A742-497CCA3B1E33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.Presentation.MVC", "Loja.Web.Presentation.MVC\Loja.Web.Presentation.MVC.csproj", "{9E931120-AD3C-4656-9153-BEA4D6DF2C16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Presentation.MVC", "Loja.Web.Presentation.MVC\Loja.Web.Presentation.MVC.csproj", "{9E931120-AD3C-4656-9153-BEA4D6DF2C16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.Application", "Loja.Web.Application\Loja.Web.Application.csproj", "{F25E73C8-9920-46E6-B13B-83CD531264EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Application", "Loja.Web.Application\Loja.Web.Application.csproj", "{F25E73C8-9920-46E6-B13B-83CD531264EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.Domain", "Loja.Web.Domain\Loja.Web.Domain.csproj", "{45F87534-ACCF-4854-85C2-9BE864657C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Domain", "Loja.Web.Domain\Loja.Web.Domain.csproj", "{45F87534-ACCF-4854-85C2-9BE864657C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.Infra.Data", "Loja.Web.Infra.Data\Loja.Web.Infra.Data.csproj", "{668EC2FB-BAC5-4117-9AF9-CB9854AD0E6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Infra.Data", "Loja.Web.Infra.Data\Loja.Web.Infra.Data.csproj", "{668EC2FB-BAC5-4117-9AF9-CB9854AD0E6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.Infra.CrossCutting", "Loja.Web.Infra.CrossCutting\Loja.Web.Infra.CrossCutting.csproj", "{C7C8480A-E30A-4AEA-A922-858C7C5B6703}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Infra.CrossCutting", "Loja.Web.Infra.CrossCutting\Loja.Web.Infra.CrossCutting.csproj", "{C7C8480A-E30A-4AEA-A922-858C7C5B6703}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.Tools.String", "Loja.Web.Tools.String\Loja.Web.Tools.String.csproj", "{F6D5FDB2-FA62-496A-A9B4-23EC396E0528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Tools.String", "Loja.Web.Tools.String\Loja.Web.Tools.String.csproj", "{F6D5FDB2-FA62-496A-A9B4-23EC396E0528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.DTO", "Loja.Web.DTO\Loja.Web.DTO.csproj", "{8946DCC0-4CB9-4620-908E-97D10B01DC84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{F6D5FDB2-FA62-496A-A9B4-23EC396E0528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D5FDB2-FA62-496A-A9B4-23EC396E0528}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D5FDB2-FA62-496A-A9B4-23EC396E0528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8946DCC0-4CB9-4620-908E-97D10B01DC84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8946DCC0-4CB9-4620-908E-97D10B01DC84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8946DCC0-4CB9-4620-908E-97D10B01DC84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8946DCC0-4CB9-4620-908E-97D10B01DC84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{668EC2FB-BAC5-4117-9AF9-CB9854AD0E6A} = {96C61D0F-27CF-4B82-9F77-B47E0601F8F6}
 		{C7C8480A-E30A-4AEA-A922-858C7C5B6703} = {96C61D0F-27CF-4B82-9F77-B47E0601F8F6}
 		{F6D5FDB2-FA62-496A-A9B4-23EC396E0528} = {194CB54E-9C62-45B5-9F2E-8B51A922D0F4}
+		{8946DCC0-4CB9-4620-908E-97D10B01DC84} = {3339F2FC-907F-4637-8410-3E15255FF8B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B4EA2BA5-38E0-4406-9768-AA7EE6EB9A2E}

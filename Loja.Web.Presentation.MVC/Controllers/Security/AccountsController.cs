@@ -1,4 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
+using Loja.Web.DTO.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Security
@@ -29,9 +30,28 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         {
             try
             {
-                await _securityApplication.Login(emailUsername, password);
+                var user = new UsersDTO(emailUsername, password);
+                try
+                {
+                    user = await _securityApplication.Login(user);
+                    var role = await _securityApplication.GetUserRoles();
+                    if (role.Where(x => x.ID == user.UserRoleID && x.Name == "Employee").Any())
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                    return Redirect("~/Home/Index");
+                }
+                catch (Exception e)
+                {
+                    ViewBag.ErrorMessage = e.Message;
+                    // TODO: create log at the database.
+                }
             }
-            catch (Exception e)
+            catch (ArgumentException e)
             {
                 ViewBag.ErrorMessage = e.Message;
                 // TODO: create log at the database.

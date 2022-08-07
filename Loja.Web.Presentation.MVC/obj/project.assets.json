@@ -849,6 +849,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "Loja.Web.DTO": "1.0.0",
           "Loja.Web.Domain": "1.0.0",
           "Loja.Web.Tools.String": "1.0.0"
         },
@@ -872,6 +873,20 @@
         },
         "runtime": {
           "bin/placeholder/Loja.Web.Domain.dll": {}
+        }
+      },
+      "Loja.Web.DTO/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Loja.Web.Domain": "1.0.0",
+          "Loja.Web.Tools.String": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Loja.Web.DTO.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Loja.Web.DTO.dll": {}
         }
       },
       "Loja.Web.Infra.CrossCutting/1.0.0": {
@@ -2593,6 +2608,11 @@
       "path": "../Loja.Web.Domain/Loja.Web.Domain.csproj",
       "msbuildProject": "../Loja.Web.Domain/Loja.Web.Domain.csproj"
     },
+    "Loja.Web.DTO/1.0.0": {
+      "type": "project",
+      "path": "../Loja.Web.DTO/Loja.Web.DTO.csproj",
+      "msbuildProject": "../Loja.Web.DTO/Loja.Web.DTO.csproj"
+    },
     "Loja.Web.Infra.CrossCutting/1.0.0": {
       "type": "project",
       "path": "../Loja.Web.Infra.CrossCutting/Loja.Web.Infra.CrossCutting.csproj",
@@ -2612,6 +2632,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "Loja.Web.Application >= 1.0.0",
+      "Loja.Web.DTO >= 1.0.0",
       "Loja.Web.Domain >= 1.0.0",
       "Loja.Web.Infra.CrossCutting >= 1.0.0",
       "Loja.Web.Infra.Data >= 1.0.0",
@@ -2660,6 +2681,9 @@
             },
             "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Domain\\Loja.Web.Domain.csproj": {
               "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Domain\\Loja.Web.Domain.csproj"
+            },
+            "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.DTO\\Loja.Web.DTO.csproj": {
+              "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.DTO\\Loja.Web.DTO.csproj"
             },
             "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Infra.CrossCutting\\Loja.Web.Infra.CrossCutting.csproj": {
               "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Infra.CrossCutting\\Loja.Web.Infra.CrossCutting.csproj"
