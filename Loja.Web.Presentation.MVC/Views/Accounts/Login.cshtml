@@ -3,26 +3,43 @@
     Layout = null;
 }
 
-<div>
-    <div>
-        <h1>Login</h1>
-    </div>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Security/Login.css" />
+</head>
+<body>
+    <div class="account-wrapper">
+        <div>
+            <h1 class="account-title">Login</h1>
+        </div>
 
-    <form id="loginForm" method="post" action="@Url.Action("Login", "Accounts")" enctype="application/x-www-form-urlencoded">
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-        {
-            <div id="alert">
-                @ViewBag.ErrorMessage
+        <div class="account-form">
+            <form id="loginForm" method="post" action="@Url.Action("Login", "Accounts")" enctype="application/x-www-form-urlencoded">
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="account-alert">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+                <div class="account-input-field">
+                    <input type="text" class="account-input" name="emailUsername" id="emailUsername" placeholder="E-mail or username" />
+                </div>
+                <div class="account-input-field">
+                    <input type="password" class="account-input" name="password" id="password" placeholder="Password" />
+                </div>
+                <div class="account-input-field">
+                    <button type="submit" class="account-btn-submit" name="login" id="login">Login</button>
+                </div>
+            </form>
+
+            <div>
+                <div class="account-default-div">
+                    <a class="account-a-forgot-pwd" href="#">Forgot my password</a>
+                </div>
+                <div class="account-default-div">
+                    <a class="account-a-register" href="#">Register</a>
+                </div>
             </div>
-        }
-        <div>
-            <input type="text" name="emailUsername" id="emailUsername" placeholder="E-mail or username" />
         </div>
-        <div>
-            <input type="password" name="password" id="password" placeholder="Password" />
-        </div>
-        <div>
-            <button type="submit" name="login" id="login">Login</button>
-        </div>
-    </form>
-</div>
+    </div>
+</body>

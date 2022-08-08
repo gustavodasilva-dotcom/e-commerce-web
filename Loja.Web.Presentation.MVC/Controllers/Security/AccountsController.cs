@@ -8,6 +8,11 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
     {
         #region << PROPERTIES >>
         private readonly ISecurityApplication _securityApplication;
+
+        const string SessionName = "Name";
+        const string SessionEmail = "Email";
+        const string SessionLogin = "Login";
+        const string SessionRole = "Role";
         #endregion
 
         #region << CONSTRUCTOR >>
@@ -34,14 +39,29 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
                 try
                 {
                     user = await _securityApplication.Login(user);
-                    var role = await _securityApplication.GetUserRoles();
-                    if (role.Where(x => x.ID == user.UserRoleID && x.Name == "Employee").Any())
-                    {
+                    var roles = await _securityApplication.GetUserRoles();
 
+                    var role = roles?.Where(x => x.ID == user.UserRoleID).FirstOrDefault()?.Name;
+                    var defaultRole = roles?.LastOrDefault()?.Name;
+
+                    HttpContext.Session.SetString(SessionName, string.IsNullOrEmpty(user.Name) ?
+                        throw new ArgumentException("Session value cannot be null.", nameof(user.Name)) : user.Name);
+
+                    HttpContext.Session.SetString(SessionEmail, string.IsNullOrEmpty(user.Email) ?
+                        throw new ArgumentException("Session value cannot be null.", nameof(user.Email)) : user.Email);
+
+                    HttpContext.Session.SetString(SessionLogin, string.IsNullOrEmpty(user.Login) ?
+                        throw new ArgumentException("Session value cannot be null.", nameof(user.Login)) : user.Login);
+
+                    if (user.UserRoleID is null)
+                    {
+                        HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(defaultRole) ?
+                            throw new ArgumentException("Session value cannot be null.", nameof(defaultRole)) : defaultRole);
                     }
                     else
                     {
-
+                        HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(role) ?
+                            throw new ArgumentException("Session value cannot be null.", nameof(role)) : role);
                     }
                     return Redirect("~/Home/Index");
                 }

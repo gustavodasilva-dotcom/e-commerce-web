@@ -51,6 +51,7 @@ namespace Loja.Web.Application.Applications.Security
             {
                 throw new Exception("There's no user roles registered.");
             }
+            roles = roles.OrderBy(x => x.Name);
             var rolesDTO = new List<UserRolesDTO>();
             foreach (var role in roles)
             {

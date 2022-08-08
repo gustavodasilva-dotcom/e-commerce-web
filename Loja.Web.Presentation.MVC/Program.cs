@@ -17,7 +17,19 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+// Global config variable:
 Settings.Configuration = builder.Configuration;
+// Global config variable:
+
+// Session configuration:
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(3);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+// Session configuration:
 
 builder.Services.AddSingleton<ISecurityApplication, SecurityApplication>();
 
@@ -39,6 +51,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Session configuration:
+app.UseSession();
+// Session configuration:
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,0 +1,96 @@
+﻿/*
+    Palette: https://coolors.co/palette/0081a7-00afb9-fdfcdc-fed9b7-f07167
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background: #ffffff;
+    padding: 0 10px;
+}
+
+.account-wrapper {
+    max-width: 500px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 30px;
+    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.140);
+}
+
+.account-wrapper .account-title {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.account-wrapper .account-form {
+    width: 100%;
+}
+
+.account-wrapper .account-form .account-input-field {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.account-wrapper .account-form .account-input-field .account-input {
+    width: 100%;
+    outline: none;
+    border: 1px solid #d5dbd9;
+    font-size: 17px;
+    padding: 8px 10px;
+    border-radius: 5px;
+}
+
+.account-wrapper .account-form .account-input-field .account-input:focus {
+    border: 2px solid #00afb9;
+}
+
+.account-wrapper .account-form .account-input-field .account-btn-submit {
+    width: 100%;
+    padding: 12px 10px;
+    font-size: 20px;
+    border: 0;
+    background: #0081a7;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+}
+
+.account-wrapper .account-form .account-input-field .account-btn-submit:hover {
+    background: #00AFB9;
+}
+
+.account-wrapper .account-form .account-default-div {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.account-wrapper .account-form .account-default-div .account-a-forgot-pwd,
+.account-wrapper .account-form .account-default-div .account-a-register {
+    color: black;
+    text-decoration: inherit;
+}
+
+.account-wrapper .account-form .account-default-div .account-a-forgot-pwd:hover,
+.account-wrapper .account-form .account-default-div .account-a-register:hover {
+    color: #00afb9;
+}
+
+.account-wrapper .account-form .account-default-div .account-a-forgot-pwd {
+    font-size: 15px;
+}
+
+.account-wrapper .account-form .account-default-div .account-a-register {
+    font-size: 14px;
+}

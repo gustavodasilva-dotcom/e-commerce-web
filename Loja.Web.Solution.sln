@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Infra.CrossCutting
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.Tools.String", "Loja.Web.Tools.String\Loja.Web.Tools.String.csproj", "{F6D5FDB2-FA62-496A-A9B4-23EC396E0528}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loja.Web.DTO", "Loja.Web.DTO\Loja.Web.DTO.csproj", "{8946DCC0-4CB9-4620-908E-97D10B01DC84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loja.Web.DTO", "Loja.Web.DTO\Loja.Web.DTO.csproj", "{8946DCC0-4CB9-4620-908E-97D10B01DC84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
