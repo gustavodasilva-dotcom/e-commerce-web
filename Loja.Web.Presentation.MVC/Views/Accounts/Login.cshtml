@@ -18,7 +18,7 @@
                 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
                 {
                     <div class="account-alert">
-                        @ViewBag.ErrorMessage
+                        <p>@ViewBag.ErrorMessage</p>
                     </div>
                 }
                 <div class="account-input-field">
@@ -37,7 +37,7 @@
                     <a class="account-a-forgot-pwd" href="#">Forgot my password</a>
                 </div>
                 <div class="account-default-div">
-                    <a class="account-a-register" href="#">Register</a>
+                    <a class="account-a-register" href="~/Accounts/Register">Register</a>
                 </div>
             </div>
         </div>

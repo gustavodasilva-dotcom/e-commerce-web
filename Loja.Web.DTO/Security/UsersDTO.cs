@@ -5,6 +5,7 @@ namespace Loja.Web.DTO.Security
 {
     public class UsersDTO
     {
+        #region << CONSTRUCTORS >>
         public UsersDTO(Users users)
         {
             ID = users.ID;
@@ -21,6 +22,14 @@ namespace Loja.Web.DTO.Security
             UserRoleID = users.UserRoleID;
         }
 
+        public UsersDTO(string name, string email, string login, string password)
+        {
+            Name = name;
+            Email = email;
+            Login = login;
+            Password = password;
+        }
+
         public UsersDTO(string email, string password)
         {
             Email = email;
@@ -31,7 +40,9 @@ namespace Loja.Web.DTO.Security
         {
             _usersDTO = usersDTO;
         }
+        #endregion
 
+        #region << GETTERS SETTERS >>
         private UsersDTO? _usersDTO;
         public UsersDTO? usersDTO
         {
@@ -174,5 +185,6 @@ namespace Loja.Web.DTO.Security
                 this._userRoleID = value;
             }
         }
+        #endregion
     }
 }

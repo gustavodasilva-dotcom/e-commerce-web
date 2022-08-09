@@ -1,5 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
 using Loja.Web.DTO.Security;
+using Loja.Web.Presentation.MVC.Models.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Security
@@ -64,6 +65,37 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
                             throw new ArgumentException("Session value cannot be null.", nameof(role)) : role);
                     }
                     return Redirect("~/Home/Index");
+                }
+                catch (Exception e)
+                {
+                    ViewBag.ErrorMessage = e.Message;
+                    // TODO: create log at the database.
+                }
+            }
+            catch (ArgumentException e)
+            {
+                ViewBag.ErrorMessage = e.Message;
+                // TODO: create log at the database.
+            }
+            return View();
+        }
+        #endregion
+
+        #region Register
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(Users model)
+        {
+            try
+            {
+                var dto = new UsersDTO(model.Name, model.Email, model.Login, model.Password);
+                try
+                {
+
                 }
                 catch (Exception e)
                 {

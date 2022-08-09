@@ -36,6 +36,19 @@ body {
     width: 100%;
 }
 
+.account-wrapper .account-form .account-alert {
+    width: 100%;
+    margin: 20px auto;
+    align-items: center;
+    background-color: #F07167;
+    padding: 10px;
+}
+
+.account-wrapper .account-form .account-alert p {
+    color: #ffffff;
+    text-align: center;
+}
+
 .account-wrapper .account-form .account-input-field {
     margin-bottom: 15px;
     display: flex;

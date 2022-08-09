@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@model Loja.Web.Presentation.MVC.Models.Security.Users
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+</head>
+<body>
+    <div class="register-wrapper">
+
+        <div>
+            <h1 class="register-title">Register</h1>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="register-form">
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="register-alert">
+                        <p>@ViewBag.ErrorMessage</p>
+                    </div>
+                }
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "register-input", placeholder = "Name" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "register-input", placeholder = "E-mail" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "register-input", placeholder = "Login" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "register-input", placeholder = "Password", type = "password" } })
+                </div>
+
+                @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
+                {
+                    <div class="register-select-field">
+                        <select name="roles" class="register-select">
+                            <option value="">Select a role</option>
+                            <option value="employee">Employee</option>
+                            <option value="externalUser">External user</option>
+                        </select>
+                    </div>
+                }
+
+                <div class="register-input-field">
+                    <button type="submit" class="register-btn-submit" name="register" id="register">Register</button>
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+</body>
