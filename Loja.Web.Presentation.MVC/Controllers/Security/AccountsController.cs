@@ -100,6 +100,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
                     model.UserRoleID_Guid = roles?.Where(x => x?.Name?.ToLower() == role).FirstOrDefault()?.GuidID;
                 }
                 await _securityApplication.InsertAsync(model);
+                ViewBag.SuccessMessage = "User created successfully.";
             }
             catch (Exception e)
             {

@@ -32,6 +32,13 @@
                     </div>
                 }
 
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <div class="register-success">
+                        <p>@ViewBag.SuccessMessage</p>
+                    </div>
+                }
+
                 <div class="register-input-field">
                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "register-input", placeholder = "Name" } })
                 </div>
@@ -66,6 +73,10 @@
             </div>
 
         }
+
+        <div class="register-default-div">
+            <a href="~/Accounts/Login">Sign in</a>
+        </div>
 
     </div>
 </body>

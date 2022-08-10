@@ -49,6 +49,19 @@ body {
     text-align: center;
 }
 
+.register-wrapper .register-form .register-success {
+    width: 100%;
+    margin: 20px auto;
+    align-items: center;
+    background-color: #00BA84;
+    padding: 10px;
+}
+
+.register-wrapper .register-form .register-success p {
+    color: #ffffff;
+    text-align: center;
+}
+
 .register-wrapper .register-form .register-input-field {
     margin-bottom: 15px;
     display: flex;
@@ -112,4 +125,19 @@ body {
 
 .register-wrapper .register-form .register-input-field .register-btn-submit:hover {
     background: #00AFB9;
+}
+
+.register-wrapper .register-default-div {
+    margin: 30px auto;
+    text-align: center;
+}
+
+.register-wrapper .register-default-div a {
+    color: black;
+    font-size: 15px;
+    text-decoration: inherit;
+}
+
+.register-wrapper .register-default-div a:hover {
+    color: #00afb9;
 }
