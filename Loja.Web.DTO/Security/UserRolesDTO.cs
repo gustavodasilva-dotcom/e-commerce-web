@@ -1,24 +1,47 @@
-﻿using Loja.Web.Domain.Entities.Security;
-
-namespace Loja.Web.DTO.Security
+﻿namespace Loja.Web.DTO.Security
 {
     public class UserRolesDTO
     {
-        public UserRolesDTO(UserRoles userRole)
+        #region << CONSTRUCTORS >>
+        public UserRolesDTO(int id, Guid guidID, string? code, string? name, bool active, bool deleted)
         {
-            ID = userRole.ID;
-            Name = userRole.Name;
-            Active = userRole.Active;
-            Deleted = userRole.Deleted;
+            ID = id;
+            GuidID = guidID;
+            Code = code;
+            Name = name;
+            Active = active;
+            Deleted = deleted;
         }
+        #endregion
 
-        private Guid _ID;
-        public Guid ID
+        #region << GETTERS SETTERS >>
+        private int _id;
+        public int ID
         {
-            get { return _ID; }
+            get { return _id; }
             private set
             {
-                _ID = value;
+                _id = value;
+            }
+        }
+
+        private Guid _guidID;
+        public Guid GuidID
+        {
+            get { return _guidID; }
+            private set
+            {
+                _guidID = value;
+            }
+        }
+
+        private string? _code;
+        public string? Code
+        {
+            get { return _code; }
+            private set
+            {
+                _code = value;
             }
         }
 
@@ -51,5 +74,6 @@ namespace Loja.Web.DTO.Security
                 _deleted = value;
             }
         }
+        #endregion
     }
 }

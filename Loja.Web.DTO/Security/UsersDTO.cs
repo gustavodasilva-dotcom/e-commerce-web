@@ -1,65 +1,46 @@
-﻿using Loja.Web.Domain.Entities.Security;
-using Loja.Web.Tools.String.Extensions;
-
-namespace Loja.Web.DTO.Security
+﻿namespace Loja.Web.DTO.Security
 {
     public class UsersDTO
     {
         #region << CONSTRUCTORS >>
-        public UsersDTO(Users users)
+        public UsersDTO(
+            Guid guidID,
+            string? name,
+            string? email,
+            string? login,
+            string password,
+            bool active,
+            bool deleted,
+            DateTime created_at,
+            int? created_by,
+            DateTime? deleted_at,
+            int? deleted_by,
+            int? userRoleID
+            )
         {
-            ID = users.ID;
-            Name = users.Name;
-            Email = users.Email;
-            Login = users.Login;
-            Password = users.Password;
-            Active = users.Active;
-            Deleted = users.Deleted;
-            Created_at = users.Created_at;
-            Created_by = users.Created_by;
-            Deleted_at = users.Deleted_at;
-            Deleted_by = users.Deleted_by;
-            UserRoleID = users.UserRoleID;
-        }
-
-        public UsersDTO(string name, string email, string login, string password)
-        {
+            GuidID = guidID;
             Name = name;
             Email = email;
             Login = login;
             Password = password;
-        }
-
-        public UsersDTO(string email, string password)
-        {
-            Email = email;
-            Password = password;
-        }
-
-        public UsersDTO(UsersDTO usersDTO)
-        {
-            _usersDTO = usersDTO;
+            Active = active;
+            Deleted = deleted;
+            Created_at = created_at;
+            Created_by = created_by;
+            Deleted_at = deleted_at;
+            Deleted_by = deleted_by;
+            UserRoleID = userRoleID;
         }
         #endregion
 
         #region << GETTERS SETTERS >>
-        private UsersDTO? _usersDTO;
-        public UsersDTO? usersDTO
+        private Guid _guidID;
+        public Guid GuidID
         {
-            get { return _usersDTO; }
+            get { return _guidID; }
             private set
             {
-                _usersDTO = value;
-            }
-        }
-
-        private Guid _ID;
-        public Guid ID
-        {
-            get { return _ID; }
-            private set
-            {
-                _ID = value;
+                _guidID = value;
             }
         }
 
@@ -82,15 +63,6 @@ namespace Loja.Web.DTO.Security
             {
                 this._email = string.IsNullOrEmpty(value) ?
                     throw new ArgumentException("Property cannot be empty.", nameof(Email)) : value.Trim();
-                if (!this._email.IsEmail())
-                {
-                    this._login = value;
-                    this._email = null;
-                }
-                else
-                {
-                    this._login = null;
-                }
             }
         }
 
@@ -146,8 +118,8 @@ namespace Loja.Web.DTO.Security
             }
         }
 
-        public Guid? _created_by;
-        public Guid? Created_by
+        public int? _created_by;
+        public int? Created_by
         {
             get { return _created_by; }
             private set
@@ -166,8 +138,8 @@ namespace Loja.Web.DTO.Security
             }
         }
 
-        private Guid? _deleted_by;
-        public Guid? Deleted_by
+        private int? _deleted_by;
+        public int? Deleted_by
         {
             get { return _deleted_by; }
             private set
@@ -176,8 +148,8 @@ namespace Loja.Web.DTO.Security
             }
         }
 
-        public Guid? _userRoleID;
-        public Guid? UserRoleID
+        private int? _userRoleID;
+        public int? UserRoleID
         {
             get { return _userRoleID; }
             private set

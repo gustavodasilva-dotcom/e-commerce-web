@@ -1,6 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
-using Loja.Web.DTO.Security;
-using Loja.Web.Presentation.MVC.Models.Security;
+using Loja.Web.Presentation.Models.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Security
@@ -13,6 +12,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         const string SessionName = "Name";
         const string SessionEmail = "Email";
         const string SessionLogin = "Login";
+        const string SessionUserID = "UserID";
         const string SessionRole = "Role";
         #endregion
 
@@ -36,43 +36,36 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         {
             try
             {
-                var user = new UsersDTO(emailUsername, password);
-                try
+                var user = await _securityApplication.LoginAsync(emailUsername, password);
+                var roles = await _securityApplication.GetUserRolesAsync();
+
+                var role = roles?.Where(x => x.ID == user.UserRoleID).FirstOrDefault()?.Name;
+                var defaultRole = roles?.LastOrDefault()?.Name;
+
+                HttpContext.Session.SetString(SessionName, string.IsNullOrEmpty(user.Name) ?
+                    throw new ArgumentException("Session value cannot be null.", nameof(user.Name)) : user.Name);
+
+                HttpContext.Session.SetString(SessionEmail, string.IsNullOrEmpty(user.Email) ?
+                    throw new ArgumentException("Session value cannot be null.", nameof(user.Email)) : user.Email);
+
+                HttpContext.Session.SetString(SessionLogin, string.IsNullOrEmpty(user.Login) ?
+                    throw new ArgumentException("Session value cannot be null.", nameof(user.Login)) : user.Login);
+
+                HttpContext.Session.SetString(SessionUserID, user.GuidID.ToString());
+
+                if (user.UserRoleID is null)
                 {
-                    user = await _securityApplication.Login(user);
-                    var roles = await _securityApplication.GetUserRoles();
-
-                    var role = roles?.Where(x => x.ID == user.UserRoleID).FirstOrDefault()?.Name;
-                    var defaultRole = roles?.LastOrDefault()?.Name;
-
-                    HttpContext.Session.SetString(SessionName, string.IsNullOrEmpty(user.Name) ?
-                        throw new ArgumentException("Session value cannot be null.", nameof(user.Name)) : user.Name);
-
-                    HttpContext.Session.SetString(SessionEmail, string.IsNullOrEmpty(user.Email) ?
-                        throw new ArgumentException("Session value cannot be null.", nameof(user.Email)) : user.Email);
-
-                    HttpContext.Session.SetString(SessionLogin, string.IsNullOrEmpty(user.Login) ?
-                        throw new ArgumentException("Session value cannot be null.", nameof(user.Login)) : user.Login);
-
-                    if (user.UserRoleID is null)
-                    {
-                        HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(defaultRole) ?
-                            throw new ArgumentException("Session value cannot be null.", nameof(defaultRole)) : defaultRole);
-                    }
-                    else
-                    {
-                        HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(role) ?
-                            throw new ArgumentException("Session value cannot be null.", nameof(role)) : role);
-                    }
-                    return Redirect("~/Home/Index");
+                    HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(defaultRole) ?
+                        throw new ArgumentException("Session value cannot be null.", nameof(defaultRole)) : defaultRole);
                 }
-                catch (Exception e)
+                else
                 {
-                    ViewBag.ErrorMessage = e.Message;
-                    // TODO: create log at the database.
+                    HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(role) ?
+                        throw new ArgumentException("Session value cannot be null.", nameof(role)) : role);
                 }
+                return Redirect("~/Home/Index");
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 ViewBag.ErrorMessage = e.Message;
                 // TODO: create log at the database.
@@ -88,22 +81,27 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         }
 
         [HttpPost]
-        public IActionResult Register(Users model)
+        public async Task<IActionResult> Register(UsersModel model)
         {
             try
             {
-                var dto = new UsersDTO(model.Name, model.Email, model.Login, model.Password);
-                try
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-
+                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString(SessionUserID));
                 }
-                catch (Exception e)
+                var role = Request.Form["roles"].ToString().ToLower();
+                var roles = await _securityApplication.GetUserRolesAsync();
+                if (string.IsNullOrEmpty(role))
                 {
-                    ViewBag.ErrorMessage = e.Message;
-                    // TODO: create log at the database.
+                    model.UserRoleID_Guid = roles?.LastOrDefault()?.GuidID;
                 }
+                else
+                {
+                    model.UserRoleID_Guid = roles?.Where(x => x?.Name?.ToLower() == role).FirstOrDefault()?.GuidID;
+                }
+                await _securityApplication.InsertAsync(model);
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 ViewBag.ErrorMessage = e.Message;
                 // TODO: create log at the database.

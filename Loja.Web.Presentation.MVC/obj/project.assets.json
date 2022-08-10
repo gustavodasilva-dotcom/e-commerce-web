@@ -851,6 +851,7 @@
         "dependencies": {
           "Loja.Web.DTO": "1.0.0",
           "Loja.Web.Domain": "1.0.0",
+          "Loja.Web.Presentation.Models": "1.0.0",
           "Loja.Web.Tools.String": "1.0.0"
         },
         "compile": {
@@ -865,7 +866,9 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "Dapper.Contrib": "2.0.78",
+          "Loja.Web.DTO": "1.0.0",
           "Loja.Web.Infra.Data": "1.0.0",
+          "Loja.Web.Presentation.Models": "1.0.0",
           "System.Data.SqlClient": "4.8.3"
         },
         "compile": {
@@ -879,8 +882,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "Loja.Web.Domain": "1.0.0",
-          "Loja.Web.Tools.String": "1.0.0"
+          "Loja.Web.Presentation.Models": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Loja.Web.DTO.dll": {}
@@ -914,6 +916,16 @@
         },
         "runtime": {
           "bin/placeholder/Loja.Web.Infra.Data.dll": {}
+        }
+      },
+      "Loja.Web.Presentation.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Loja.Web.Presentation.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Loja.Web.Presentation.Models.dll": {}
         }
       },
       "Loja.Web.Tools.String/1.0.0": {
@@ -2623,6 +2635,11 @@
       "path": "../Loja.Web.Infra.Data/Loja.Web.Infra.Data.csproj",
       "msbuildProject": "../Loja.Web.Infra.Data/Loja.Web.Infra.Data.csproj"
     },
+    "Loja.Web.Presentation.Models/1.0.0": {
+      "type": "project",
+      "path": "../Loja.Web.Presentation.Models/Loja.Web.Presentation.Models.csproj",
+      "msbuildProject": "../Loja.Web.Presentation.Models/Loja.Web.Presentation.Models.csproj"
+    },
     "Loja.Web.Tools.String/1.0.0": {
       "type": "project",
       "path": "../Loja.Web.Tools.String/Loja.Web.Tools.String.csproj",
@@ -2636,6 +2653,7 @@
       "Loja.Web.Domain >= 1.0.0",
       "Loja.Web.Infra.CrossCutting >= 1.0.0",
       "Loja.Web.Infra.Data >= 1.0.0",
+      "Loja.Web.Presentation.Models >= 1.0.0",
       "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 6.0.5",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 6.0.5",
       "Microsoft.AspNetCore.Identity.UI >= 6.0.5",
@@ -2690,6 +2708,9 @@
             },
             "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Infra.Data\\Loja.Web.Infra.Data.csproj": {
               "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Infra.Data\\Loja.Web.Infra.Data.csproj"
+            },
+            "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Presentation.Models\\Loja.Web.Presentation.Models.csproj": {
+              "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Presentation.Models\\Loja.Web.Presentation.Models.csproj"
             }
           }
         }

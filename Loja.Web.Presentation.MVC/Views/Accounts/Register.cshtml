@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor Accessor
 
-@model Loja.Web.Presentation.MVC.Models.Security.Users
+@model Loja.Web.Presentation.Models.Security.UsersModel
 
 @{
     ViewData["Title"] = "Register";
@@ -54,7 +54,7 @@
                         <select name="roles" class="register-select">
                             <option value="">Select a role</option>
                             <option value="employee">Employee</option>
-                            <option value="externalUser">External user</option>
+                            <option value="external_user">External user</option>
                         </select>
                     </div>
                 }

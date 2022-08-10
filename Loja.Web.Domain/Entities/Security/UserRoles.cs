@@ -9,16 +9,18 @@ namespace Loja.Web.Domain.Entities.Security
     {
         #region << PROPERTIES >>
         [Key]
-        public Guid ID { get; private set; }
-	    public string Name { get; private set; }
+        public int ID { get; private set; }
+        public Guid GuidID { get; private set; }
+        public string? Code { get; private set; }
+        public string? Name { get; private set; }
 	    public bool Active { get; private set; }
 	    public bool Deleted { get; private set; }
         #endregion
 
         #region << METHODS >>
 
-        #region GetAll
-        public async Task<IEnumerable<UserRoles>> GetAll()
+        #region GetAllAsync
+        public async Task<IEnumerable<UserRoles>> GetAllAsync()
         {
             try
             {
