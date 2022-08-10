@@ -1,0 +1,6 @@
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
+
+/Loja.Web.Database.SQLServer/Loja.Web.Database.SQLServer.dbmdl
+/Loja.Web.Database.SQLServer/Loja.Web.Database.SQLServer.jfm
