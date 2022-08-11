@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Loja.Web.Domain\Loja.Web.Domain.csproj" />
-    <ProjectReference Include="..\Loja.Web.DTO\Loja.Web.DTO.csproj" />
     <ProjectReference Include="..\Loja.Web.Presentation.Models\Loja.Web.Presentation.Models.csproj" />
     <ProjectReference Include="..\Loja.Web.Tools.String\Loja.Web.Tools.String.csproj" />
   </ItemGroup>

@@ -62,5 +62,15 @@
     <Build Include="dbo\UserRoles.sql" />
     <Build Include="dbo\Users.sql" />
     <Build Include="dbo\ErrorLogs.sql" />
+    <Build Include="dbo\Products.sql" />
+    <Build Include="dbo\Categories.sql" />
+    <Build Include="dbo\Subcategories.sql" />
+    <Build Include="dbo\Manufacturers.sql" />
+    <Build Include="dbo\Addresses.sql" />
+    <Build Include="dbo\Neighborhoods.sql" />
+    <Build Include="dbo\Cities.sql" />
+    <Build Include="dbo\States.sql" />
+    <Build Include="dbo\Countries.sql" />
+    <Build Include="dbo\Contacts.sql" />
   </ItemGroup>
 </Project>

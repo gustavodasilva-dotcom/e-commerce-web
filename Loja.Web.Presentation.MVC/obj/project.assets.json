@@ -560,6 +560,15 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -849,10 +858,10 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
-          "Loja.Web.DTO": "1.0.0",
           "Loja.Web.Domain": "1.0.0",
           "Loja.Web.Presentation.Models": "1.0.0",
-          "Loja.Web.Tools.String": "1.0.0"
+          "Loja.Web.Tools.String": "1.0.0",
+          "Newtonsoft.Json": "13.0.1"
         },
         "compile": {
           "bin/placeholder/Loja.Web.Application.dll": {}
@@ -866,7 +875,6 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "Dapper.Contrib": "2.0.78",
-          "Loja.Web.DTO": "1.0.0",
           "Loja.Web.Infra.Data": "1.0.0",
           "Loja.Web.Presentation.Models": "1.0.0",
           "System.Data.SqlClient": "4.8.3"
@@ -876,19 +884,6 @@
         },
         "runtime": {
           "bin/placeholder/Loja.Web.Domain.dll": {}
-        }
-      },
-      "Loja.Web.DTO/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "Loja.Web.Presentation.Models": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/Loja.Web.DTO.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Loja.Web.DTO.dll": {}
         }
       },
       "Loja.Web.Infra.CrossCutting/1.0.0": {
@@ -1977,6 +1972,33 @@
         "version.txt"
       ]
     },
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.1.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
       "type": "package",
@@ -2620,11 +2642,6 @@
       "path": "../Loja.Web.Domain/Loja.Web.Domain.csproj",
       "msbuildProject": "../Loja.Web.Domain/Loja.Web.Domain.csproj"
     },
-    "Loja.Web.DTO/1.0.0": {
-      "type": "project",
-      "path": "../Loja.Web.DTO/Loja.Web.DTO.csproj",
-      "msbuildProject": "../Loja.Web.DTO/Loja.Web.DTO.csproj"
-    },
     "Loja.Web.Infra.CrossCutting/1.0.0": {
       "type": "project",
       "path": "../Loja.Web.Infra.CrossCutting/Loja.Web.Infra.CrossCutting.csproj",
@@ -2649,7 +2666,6 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "Loja.Web.Application >= 1.0.0",
-      "Loja.Web.DTO >= 1.0.0",
       "Loja.Web.Domain >= 1.0.0",
       "Loja.Web.Infra.CrossCutting >= 1.0.0",
       "Loja.Web.Infra.Data >= 1.0.0",
@@ -2699,9 +2715,6 @@
             },
             "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Domain\\Loja.Web.Domain.csproj": {
               "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Domain\\Loja.Web.Domain.csproj"
-            },
-            "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.DTO\\Loja.Web.DTO.csproj": {
-              "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.DTO\\Loja.Web.DTO.csproj"
             },
             "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Infra.CrossCutting\\Loja.Web.Infra.CrossCutting.csproj": {
               "projectPath": "C:\\Users\\LENOVO-EQP301\\source\\repos\\Loja.Web.Solution\\Loja.Web.Infra.CrossCutting\\Loja.Web.Infra.CrossCutting.csproj"

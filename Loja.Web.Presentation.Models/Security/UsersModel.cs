@@ -8,16 +8,12 @@ namespace Loja.Web.Presentation.Models.Security
 
         public Guid GuidID { get; set; } = Guid.NewGuid();
 
-        [Required(ErrorMessage = "The name must be informed.")]
         public string? Name { get; set; }
 
-        [Required(ErrorMessage = "The e-mail must be informed.")]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "The login must be informed.")]
         public string? Login { get; set; }
 
-        [Required(ErrorMessage = "The password must be informed.")]
         public string? Password { get; set; }
 
         public bool Active { get; set; } = true;

@@ -1,6 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
 using Loja.Web.Domain.Entities.Security;
-using Loja.Web.DTO.Security;
 using Loja.Web.Tools.String.Extensions;
 using Loja.Web.Presentation.Models.Security;
 
@@ -16,7 +15,7 @@ namespace Loja.Web.Application.Applications.Security
         #region << METHODS >>
 
         #region LoginAsync
-        public async Task<UsersDTO> LoginAsync(string emailUsername, string password)
+        public async Task<Users> LoginAsync(string emailUsername, string password)
         {
             Validate(emailUsername, password);
             var users = await _users.GetAllAsync();
@@ -24,54 +23,36 @@ namespace Loja.Web.Application.Applications.Security
             {
                 throw new Exception("Please, sign a user.");
             }
-            Users? userDb = null;
+            Users? domain = null;
             if (emailUsername.IsEmail())
             {
-                userDb = users.Where(x => x.Email == emailUsername && x.Active && !x.Deleted).FirstOrDefault();
+                domain = users.Where(x => x.Email == emailUsername && x.Active && !x.Deleted).FirstOrDefault();
             }
             else
             {
-                userDb = users.Where(x => x.Login == emailUsername && x.Active && !x.Deleted).FirstOrDefault();
+                domain = users.Where(x => x.Login == emailUsername && x.Active && !x.Deleted).FirstOrDefault();
             }
-            if (userDb is null)
+            if (domain is null)
             {
                 throw new Exception("Invalid username / e-mail.");
             }
-            if (!userDb.Password.Decrypt().Equals(password))
+            if (!domain.Password.Decrypt().Equals(password))
             {
                 throw new Exception("Invalid password.");
             }
-            return _ = new UsersDTO(
-                userDb.GuidID,
-                userDb.Name,
-                userDb.Email,
-                userDb.Login,
-                userDb.Password,
-                userDb.Active,
-                userDb.Deleted,
-                userDb.Created_at,
-                userDb?.Created_by,
-                userDb?.Deleted_at,
-                userDb?.Deleted_by,
-                userDb?.UserRoleID);
+            return domain;
         }
         #endregion
 
         #region GetUserRolesAsync
-        public async Task<List<UserRolesDTO>> GetUserRolesAsync()
+        public async Task<List<UserRoles>> GetUserRolesAsync()
         {
             var roles = await _userRoles.GetAllAsync();
             if (!roles.Any())
             {
                 throw new Exception("There's no user roles registered.");
             }
-            roles = roles.OrderBy(x => x.Name);
-            var rolesDTO = new List<UserRolesDTO>();
-            foreach (var role in roles)
-            {
-                rolesDTO.Add(_ = new UserRolesDTO(role.ID, role.GuidID, role?.Code, role?.Name, role.Active, role.Deleted));
-            }
-            return rolesDTO;
+            return roles.OrderBy(x => x.Name).ToList();
         }
         #endregion
 

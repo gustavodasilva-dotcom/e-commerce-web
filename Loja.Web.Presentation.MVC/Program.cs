@@ -1,4 +1,6 @@
+using Loja.Web.Application.Applications.Registration.Address;
 using Loja.Web.Application.Applications.Security;
+using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Application.Interfaces.Security;
 using Loja.Web.Infra.CrossCutting.Config;
 using Loja.Web.Presentation.MVC.Data;
@@ -17,11 +19,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-// Global config variable:
+#region Global config variable
 Settings.Configuration = builder.Configuration;
-// Global config variable:
+#endregion
 
-// Session configuration:
+#region Session configuration
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -29,9 +31,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-// Session configuration:
+#endregion
 
+#region Dependency injection
 builder.Services.AddSingleton<ISecurityApplication, SecurityApplication>();
+builder.Services.AddSingleton<IAddressAplication, AddressApplication>();
+#endregion
 
 var app = builder.Build();
 
@@ -52,9 +57,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Session configuration:
+#region Session configuration:
 app.UseSession();
-// Session configuration:
+#endregion
 
 app.UseAuthentication();
 app.UseAuthorization();

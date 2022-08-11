@@ -1,0 +1,15 @@
+﻿CREATE TABLE [dbo].[Cities]
+(
+	[ID]			INT					NOT NULL IDENTITY(1, 1),
+	[GuidID]		UNIQUEIDENTIFIER	NOT NULL,
+	[Name]			VARCHAR(150)		NOT NULL,
+	[StateID]		INT					NOT NULL,
+	[Active]		BIT					CONSTRAINT [DF_City_Active]		DEFAULT (1) NOT NULL,
+	[Deleted]		BIT					CONSTRAINT [DF_City_Deleted]	DEFAULT (0) NOT NULL,
+	[Created_at]	DATETIME			CONSTRAINT [DF_City_Created_at]	DEFAULT (GETDATE()) NOT NULL
+
+	CONSTRAINT [PK_Cities] PRIMARY KEY CLUSTERED ([ID] ASC)
+
+	CONSTRAINT [FK_Cities_StateID] FOREIGN KEY([StateID])
+	REFERENCES States([ID])
+)

@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Loja.Web.Application\Loja.Web.Application.csproj" />
     <ProjectReference Include="..\Loja.Web.Domain\Loja.Web.Domain.csproj" />
-    <ProjectReference Include="..\Loja.Web.DTO\Loja.Web.DTO.csproj" />
     <ProjectReference Include="..\Loja.Web.Infra.CrossCutting\Loja.Web.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\Loja.Web.Infra.Data\Loja.Web.Infra.Data.csproj" />
     <ProjectReference Include="..\Loja.Web.Presentation.Models\Loja.Web.Presentation.Models.csproj" />

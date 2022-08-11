@@ -1,5 +1,4 @@
 ﻿using Dapper.Contrib.Extensions;
-using Loja.Web.DTO.Security;
 using Loja.Web.Infra.Data.Repositories;
 using Loja.Web.Presentation.Models.Security;
 using System.Diagnostics;
@@ -28,7 +27,7 @@ namespace Loja.Web.Domain.Entities.Security
 
         #region << METHODS >>
 
-        #region GetAll
+        #region GetAllAsync
         public async Task<IEnumerable<Users>> GetAllAsync()
         {
             try
