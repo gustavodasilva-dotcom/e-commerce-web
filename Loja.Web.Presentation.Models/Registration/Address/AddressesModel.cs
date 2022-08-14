@@ -14,7 +14,17 @@
         
         public string? Comment { get; set; }
 
-        public int NeighborhoodID { get; set; } = 0;
+        public string? Neighborhood { get; set; } = null;
+        public int? NeighborhoodID { get; set; } = null;
+
+        public string? City { get; set; } = null;
+        public int? CityID { get; set; } = null;
+
+        public string? State { get; set; } = null;
+        public int? StateID { get; set; } = null;
+
+        public string? Country { get; set; } = null;
+        public int? CountryID { get; set; } = null;
 
         public bool Active { get; set; } = true;
 

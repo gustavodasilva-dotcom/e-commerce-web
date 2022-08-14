@@ -56,7 +56,7 @@ namespace Loja.Web.Application.Applications.Security
         }
         #endregion
 
-        #region Insert
+        #region InsertAsync
         public async Task InsertAsync(UsersModel model)
         {
             Validate(model);

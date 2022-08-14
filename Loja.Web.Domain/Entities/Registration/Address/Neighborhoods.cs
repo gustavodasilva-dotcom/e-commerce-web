@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
+using Loja.Web.Presentation.Models.Registration.Address;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Address
@@ -34,6 +35,34 @@ namespace Loja.Web.Domain.Entities.Registration.Address
 #endif
                 throw new Exception(e.Message);
             }
+        }
+        #endregion
+
+        #region InsertAsync
+        public async Task<long?> InsertAsync(AddressesModel model)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new Neighborhoods
+                {
+                    GuidID = model.GuidID,
+                    Name = model.State,
+                    CityID = (int)model.CityID,
+                    Active = model.Active,
+                    Deleted = model.Deleted,
+                    Created_at = model.Created_at
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
         }
         #endregion
 

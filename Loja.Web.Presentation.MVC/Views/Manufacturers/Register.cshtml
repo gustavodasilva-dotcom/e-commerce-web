@@ -1,0 +1,123 @@
+﻿@model Loja.Web.Presentation.Models.Registration.Manufacturer.ManufacturersModel
+
+@{
+    ViewData["Title"] = "Register new manufacturer";
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+</head>
+<body>
+    <div class="register-wrapper">
+
+        <div>
+            <h1 class="register-title">Register</h1>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="register-form">
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="register-alert">
+                        <p>@ViewBag.ErrorMessage</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <div class="register-success">
+                        <p>@ViewBag.SuccessMessage</p>
+                    </div>
+                }
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "register-input", placeholder = "Name" } })
+                </div>
+
+                <div class="register-input-field">
+                    <label>Brazilian company?</label>
+                    <div>
+                        <input type="radio" class="register-input-radio" name="localition" id="localition_brazil" value="BR" />
+                        <label for="localition_brazil">Yes</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="register-input-radio" name="localition" id="localition_foreign" value="BR" />
+                        <label for="localition_foreign">No</label>
+                    </div>
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.CAGE, new { htmlAttributes = new { @class = "register-input", placeholder = "CAGE" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.NCAGE, new { htmlAttributes = new { @class = "register-input", placeholder = "NCAGE" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.SEC, new { htmlAttributes = new { @class = "register-input", placeholder = "SEC" } })
+                </div>
+
+                <h2 class="register-title-2">Contact info</h2>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Contacts.Phone, new { htmlAttributes = new { @class = "register-input", placeholder = "Phone" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Contacts.Cellphone, new { htmlAttributes = new { @class = "register-input", placeholder = "Cellphone" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Contacts.Email, new { htmlAttributes = new { @class = "register-input", placeholder = "Email" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Contacts.Website, new { htmlAttributes = new { @class = "register-input", placeholder = "Website" } })
+                </div>
+
+                <h2 class="register-title-2">Address info</h2>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.PostalCode, new { htmlAttributes = new { @class = "register-input", placeholder = "Postal code" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.Name, new { htmlAttributes = new { @class = "register-input", placeholder = "Name" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.Number, new { htmlAttributes = new { @class = "register-input", placeholder = "Number" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.Comment, new { htmlAttributes = new { @class = "register-input", placeholder = "Comment" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.Neighborhood, new { htmlAttributes = new { @class = "register-input", placeholder = "Neighborhood" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.City, new { htmlAttributes = new { @class = "register-input", placeholder = "City" } })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Addresses.Country, new { htmlAttributes = new { @class = "register-input", placeholder = "Country" } })
+                </div>
+
+                <div class="register-input-field">
+                    <button type="submit" class="register-btn-submit" name="register" id="register">Register</button>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</body>
