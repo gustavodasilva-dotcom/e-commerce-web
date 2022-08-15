@@ -11,11 +11,21 @@ namespace Loja.Web.Presentation.Models.Registration.Manufacturer
 
         public string? Name { get; set; }
 
-        public string? CAGE { get; set; }
+        public bool BrazilianCompany { get; set; } = true;
 
-        public string? NCAGE { get; set; }
+        #region Foreigh manufacturer
+        public string? CAGE { get; set; } = null;
 
-        public int? SEC { get; set; }
+        public string? NCAGE { get; set; } = null;
+
+        public string? SEC { get; set; } = null;
+        #endregion
+
+        #region Brazilian manufacturer
+        public string? FederalTaxpayerRegistrationNumber { get; set; } = null;
+
+        public string? StateTaxpayerRegistrationNumber { get; set; } = null;
+        #endregion
 
         public ContactsModel? Contacts { get; set; }
 

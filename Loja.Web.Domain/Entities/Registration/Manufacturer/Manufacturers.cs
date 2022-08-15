@@ -13,9 +13,12 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
         public int ID { get; private set; }
         public Guid GuidID { get; private set; }
         public string Name { get; private set; }
-        public string CAGE { get; private set; }
-        public string NCAGE { get; private set; }
-        public int SEC { get; private set; }
+        public bool BrazilianCompany { get; private set; }
+        public string? CAGE { get; private set; }
+        public string? NCAGE { get; private set; }
+        public string? SEC { get; private set; }
+        public string? FederalTaxpayerRegistrationNumber { get; private set; }
+        public string? StateTaxpayerRegistrationNumber { get; private set; }
         public int ContactID { get; private set; }
         public int AddressID { get; private set; }
         public bool Active { get; private set; }
@@ -59,7 +62,9 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
                     Name = model.Name,
                     CAGE = model.CAGE,
                     NCAGE = model.NCAGE,
-                    SEC = model.SEC.Value,
+                    SEC = model.SEC,
+                    FederalTaxpayerRegistrationNumber = model.FederalTaxpayerRegistrationNumber,
+                    StateTaxpayerRegistrationNumber = model.StateTaxpayerRegistrationNumber,
                     ContactID = (int)model.Contacts.ID,
                     AddressID = (int)model.Addresses.ID,
                     Active = model.Active,

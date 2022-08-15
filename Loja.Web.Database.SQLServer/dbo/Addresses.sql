@@ -4,7 +4,7 @@
 	[GuidID]			UNIQUEIDENTIFIER	NOT NULL,
 	[PostalCode]		VARCHAR(8)			NOT NULL,
 	[Name]				VARCHAR(150)		NOT NULL,
-	[Number]			INT					NOT NULL,
+	[Number]			VARCHAR(10)			NOT NULL,
 	[Comment]			VARCHAR(100),
 	[NeighborhoodID]	INT					NOT NULL,
 	[Active]			BIT					CONSTRAINT [DF_Address_Active]		DEFAULT (1) NOT NULL,

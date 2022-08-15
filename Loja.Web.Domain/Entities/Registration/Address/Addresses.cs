@@ -14,7 +14,7 @@ namespace Loja.Web.Domain.Entities.Registration.Address
         public Guid GuidID { get; private set; }
         public string PostalCode { get; private set; }
         public string Name { get; private set; }
-        public int Number { get; private set; }
+        public string Number { get; private set; }
         public string? Comment { get; private set; }
         public int NeighborhoodID { get; private set; }
         public bool Active { get; private set; }

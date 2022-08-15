@@ -10,7 +10,7 @@
 
         public string? Name { get; set; }
         
-        public int Number { get; set; }
+        public string? Number { get; set; }
         
         public string? Comment { get; set; }
 
