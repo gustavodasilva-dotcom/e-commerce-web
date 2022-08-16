@@ -12,11 +12,9 @@ namespace Loja.Web.Domain.Entities.Registration.Address
         [Key]
         public int ID { get; private set; }
         public Guid GuidID { get; private set; }
-        public string PostalCode { get; private set; }
-        public string Name { get; private set; }
         public string Number { get; private set; }
         public string? Comment { get; private set; }
-        public int NeighborhoodID { get; private set; }
+        public int StreetID { get; private set; }
         public bool Active { get; private set; }
         public bool Deleted { get; private set; }
         public DateTime Created_at { get; private set; }
@@ -52,11 +50,9 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 id = await connect.InsertAsync(new Addresses
                 {
                     GuidID = model.GuidID,
-                    PostalCode = model.PostalCode,
-                    Name = model.Name,
                     Number = model.Number,
                     Comment = model.Comment,
-                    NeighborhoodID = (int)model.NeighborhoodID,
+                    StreetID = (int)model.StreetID,
                     Active = model.Active,
                     Deleted = model.Deleted,
                     Created_at = model.Created_at

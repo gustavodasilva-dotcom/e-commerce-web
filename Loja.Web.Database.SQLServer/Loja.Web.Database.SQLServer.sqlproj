@@ -72,5 +72,6 @@
     <Build Include="dbo\States.sql" />
     <Build Include="dbo\Countries.sql" />
     <Build Include="dbo\Contacts.sql" />
+    <Build Include="dbo\Streets.sql" />
   </ItemGroup>
 </Project>

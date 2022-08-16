@@ -42,11 +42,11 @@
                 <div class="register-input-field">
                     <label>Brazilian company?</label>
                     <div>
-                        <input type="radio" class="register-input-radio" name="localition" id="localition_brazil" value="BR" />
+                        <input type="radio" class="register-input-radio" name="localition" id="localition_brazil" value="true" />
                         <label for="localition_brazil">Yes</label>
                     </div>
                     <div>
-                        <input type="radio" class="register-input-radio" name="localition" id="localition_foreign" value="BR" />
+                        <input type="radio" class="register-input-radio" name="localition" id="localition_foreign" value="false" />
                         <label for="localition_foreign">No</label>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                             }
                         })
                     </div>
-                    
+
                     <div class="register-input-field">
                         @Html.EditorFor(model => model.StateTaxpayerRegistrationNumber, new { htmlAttributes = new
                             {
@@ -171,6 +171,24 @@
             $('#address-city').prop('readonly', false);
             $('#address-state').prop('readonly', false);
             $('#address-country').prop('readonly', false);
+        });
+
+        $('#address-postal-code').focusout(function() {
+            var postal_code = $(this).val();
+
+            $.ajax({
+                async: true,
+                type: "GET",
+                dataType: "json",
+                url: "@Url.Action("GetAddress")",
+                data: { postalCode: postal_code },
+                success: function(result) {
+                    alert('OK.');
+                },
+                error: function(req, status, error) {
+                    alert('Not OK.', status);
+                }
+            });
         });
 
     </script>

@@ -47,12 +47,12 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Neighborhoods
                 {
-                    GuidID = model.GuidID,
-                    Name = model.State,
+                    GuidID = Guid.NewGuid(),
+                    Name = model.Neighborhood,
                     CityID = (int)model.CityID,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now
                 });
             }
             catch (Exception e)

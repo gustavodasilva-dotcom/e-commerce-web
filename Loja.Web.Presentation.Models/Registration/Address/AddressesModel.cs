@@ -8,6 +8,7 @@
 
         public string? PostalCode { get; set; }
 
+        public int? StreetID { get; set; } = null;
         public string? Name { get; set; }
         
         public string? Number { get; set; }
@@ -25,6 +26,8 @@
 
         public string? Country { get; set; } = null;
         public int? CountryID { get; set; } = null;
+
+        public bool IsForeign { get; set; } = false;
 
         public bool Active { get; set; } = true;
 

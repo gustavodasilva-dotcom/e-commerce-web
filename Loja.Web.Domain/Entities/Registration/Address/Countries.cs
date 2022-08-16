@@ -46,11 +46,11 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Countries
                 {
-                    GuidID = model.GuidID,
+                    GuidID = Guid.NewGuid(),
                     Name = model.Country,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now
                 });
             }
             catch (Exception e)

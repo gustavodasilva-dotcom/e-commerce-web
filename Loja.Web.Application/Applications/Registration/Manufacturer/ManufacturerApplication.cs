@@ -32,14 +32,26 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         {
             Validate(model);
             var manufacturers = await _manufacturer.GetAllAsync();
-            if (manufacturers.Any(x => x?.CAGE == model?.CAGE || x?.SEC == model?.SEC))
+            if (model.BrazilianCompany)
             {
-                throw new Exception("There's already a manufacturer registered with the CAGE or SEC informed.");
+                if (manufacturers.Any(x => x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber
+                    || x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber))
+                {
+                    throw new Exception("There's already a manufacturer registered with the federal or state taxpayer registration number.");
+                }
+            }
+            else
+            {
+                if (manufacturers.Any(x => x?.CAGE == model?.CAGE || x?.SEC == model?.SEC))
+                {
+                    throw new Exception("There's already a manufacturer registered with the CAGE or SEC informed.");
+                }
             }
             var address = await _addressApplication.GetAddressByPostalCodeAsync(model?.Addresses?.PostalCode);
             if (address == null)
             {
-                model.Addresses.ID = (int)await _addressApplication.InsertAsync(model.Addresses);
+                await _addressApplication.InsertAsync(model.Addresses);
+                await _addressApplication.InsertAddressAsync(model.Addresses);
             }
             else
             {
@@ -68,10 +80,24 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         #region Validate
         private static void Validate(ManufacturersModel model)
         {
-            if (string.IsNullOrEmpty(model.Name)) throw new Exception("Name cannot be null or empty.");
-            if (string.IsNullOrEmpty(model.CAGE)) throw new Exception("CAGE cannot be null or empty.");
-            if (string.IsNullOrEmpty(model.NCAGE)) throw new Exception("NCAGE cannot be null or empty.");
-            if (model.SEC is null) throw new Exception("SEC number cannot be null or empty.");
+            if (model.BrazilianCompany)
+            {
+                if (string.IsNullOrEmpty(model.FederalTaxpayerRegistrationNumber))
+                {
+                    throw new Exception("Federal taxpayer registration number cannot be null or empty.");
+                }
+                if (string.IsNullOrEmpty(model.StateTaxpayerRegistrationNumber))
+                {
+                    throw new Exception("State taxpayer registration number cannot be null or empty.");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(model.Name)) throw new Exception("Name cannot be null or empty.");
+                if (string.IsNullOrEmpty(model.CAGE)) throw new Exception("CAGE cannot be null or empty.");
+                if (string.IsNullOrEmpty(model.NCAGE)) throw new Exception("NCAGE cannot be null or empty.");
+                if (model.SEC is null) throw new Exception("SEC number cannot be null or empty.");
+            }
         }
         #endregion
 
