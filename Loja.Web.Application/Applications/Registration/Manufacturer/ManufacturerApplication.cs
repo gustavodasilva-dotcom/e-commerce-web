@@ -47,7 +47,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                     throw new Exception("There's already a manufacturer registered with the CAGE or SEC informed.");
                 }
             }
-            var address = await _addressApplication.GetAddressByPostalCodeAsync(model?.Addresses?.PostalCode);
+            var address = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode);
             if (address == null)
             {
                 await _addressApplication.InsertAsync(model.Addresses);

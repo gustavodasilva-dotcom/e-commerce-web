@@ -63,15 +63,59 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         [HttpGet]
         public async Task<JsonResult> GetAddress(string postalCode)
         {
-            Streets? street = null;
+            Cities? city;
+            States? state;
+            Streets? street;
+            Countries? country;
+            Neighborhoods? neighborhood;
             try
             {
-                street = await _addressApplication.GetAddressByPostalCodeAsync(postalCode);
+                street = await _addressApplication.GetStreetByPostalCodeAsync(postalCode);
                 if (street is null)
                 {
                     await _addressApplication.InsertAsync(postalCode);
-                    street = await _addressApplication.GetAddressByPostalCodeAsync(postalCode);
+                    street = await _addressApplication.GetStreetByPostalCodeAsync(postalCode);
                     if (street is null)
+                    {
+                        throw new Exception("An error ocurred while executing the process.");
+                    }
+                }
+                neighborhood = await _addressApplication.GetNeighborhoodAsync(street.NeighborhoodID);
+                if (neighborhood is null)
+                {
+                    await _addressApplication.InsertAsync(postalCode);
+                    neighborhood = await _addressApplication.GetNeighborhoodAsync(street.NeighborhoodID);
+                    if (neighborhood is null)
+                    {
+                        throw new Exception("An error ocurred while executing the process.");
+                    }
+                }
+                city = await _addressApplication.GetCityAsync(neighborhood.CityID);
+                if (city is null)
+                {
+                    await _addressApplication.InsertAsync(postalCode);
+                    city = await _addressApplication.GetCityAsync(neighborhood.CityID);
+                    if (city is null)
+                    {
+                        throw new Exception("An error ocurred while executing the process.");
+                    }
+                }
+                state = await _addressApplication.GetStateAsync(city.StateID);
+                if (state is null)
+                {
+                    await _addressApplication.InsertAsync(postalCode);
+                    state = await _addressApplication.GetStateAsync(city.StateID);
+                    if (state is null)
+                    {
+                        throw new Exception("An error ocurred while executing the process.");
+                    }
+                }
+                country = await _addressApplication.GetCountriesAsync(state.CountryID);
+                if (country is null)
+                {
+                    await _addressApplication.InsertAsync(postalCode);
+                    country = await _addressApplication.GetCountriesAsync(state.CountryID);
+                    if (country is null)
                     {
                         throw new Exception("An error ocurred while executing the process.");
                     }
@@ -79,11 +123,20 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = e.Message;
+                return Json(new
+                {
+                    Code = 0,
+                    e.Message
+                });
             }
             return Json(new
             {
-                Street = street
+                Code = 1,
+                Street = street,
+                Neighborhood = neighborhood,
+                City = city,
+                State = state,
+                Country = country
             });
         }
         #endregion

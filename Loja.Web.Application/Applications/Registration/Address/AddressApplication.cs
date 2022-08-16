@@ -38,13 +38,49 @@ namespace Loja.Web.Application.Applications.Registration.Address
 
         #region PUBLIC
 
-        #region GetAddressByPostalCodeAsync
-        public async Task<Streets?> GetAddressByPostalCodeAsync(string postalCode)
+        #region Gets
+
+        #region GetStreetByPostalCodeAsync
+        public async Task<Streets?> GetStreetByPostalCodeAsync(string postalCode)
         {
             postalCode = ValidatePostalCode(postalCode);
             var streets = await _streets.GetAllAsync();
             return streets?.FirstOrDefault(x => x?.PostalCode == postalCode);
         }
+        #endregion
+
+        #region GetNeighborhoodAsync
+        public async Task<Neighborhoods?> GetNeighborhoodAsync(int neighborhoodID)
+        {
+            var neighborhoods = await _neighborhoods.GetAllAsync();
+            return neighborhoods?.FirstOrDefault(x => x?.ID == neighborhoodID);
+        }
+        #endregion
+
+        #region GetCityAsync
+        public async Task<Cities?> GetCityAsync(int cityID)
+        {
+            var cities = await _cities.GetAllAsync();
+            return cities?.FirstOrDefault(x => x?.ID == cityID);
+        }
+        #endregion
+
+        #region GetStateAsync
+        public async Task<States?> GetStateAsync(int stateID)
+        {
+            var states = await _states.GetAllAsync();
+            return states?.FirstOrDefault(x => x?.ID == stateID);
+        }
+        #endregion
+
+        #region GetCountriesAsync
+        public async Task<Countries?> GetCountriesAsync(int countryID)
+        {
+            var countries = await _countries.GetAllAsync();
+            return countries?.FirstOrDefault(x => x?.ID == countryID);
+        }
+        #endregion
+
         #endregion
 
         #region InsertAsync
@@ -174,6 +210,10 @@ namespace Loja.Web.Application.Applications.Registration.Address
         #region ValidateModel
         private static string ValidatePostalCode(string postalCode)
         {
+            if (string.IsNullOrEmpty(postalCode))
+            {
+                throw new Exception("Postal code cannot be null or empty.");
+            }
             postalCode = postalCode.Replace("-", "");
             if (int.Parse(postalCode) == 0 || !int.TryParse(postalCode, out int _))
             {
@@ -184,6 +224,10 @@ namespace Loja.Web.Application.Applications.Registration.Address
 
         private static void ValidatePostalCode(ref AddressesModel model)
         {
+            if (string.IsNullOrEmpty(model.PostalCode))
+            {
+                throw new Exception("Postal code cannot be null or empty.");
+            }
             model.PostalCode = model?.PostalCode?.Replace("-", "");
             if (!model.IsForeign)
             {

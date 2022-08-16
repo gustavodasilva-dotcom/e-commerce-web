@@ -77,7 +77,7 @@
 
                     <div class="register-input-field">
                         @Html.EditorFor(model => model.StateTaxpayerRegistrationNumber, new { htmlAttributes = new
-                            {
+                        {
                                 @class = "register-input",
                                 placeholder = "State taxpayer registration"
                             }
@@ -155,41 +155,74 @@
             $('#register-input-foreigh').hide();
             $('#register-input-brazilian').show();
 
-            $('#address-name').prop('readonly', true);
-            $('#address-neighborhood').prop('readonly', true);
-            $('#address-city').prop('readonly', true);
-            $('#address-state').prop('readonly', true);
-            $('#address-country').prop('readonly', true);
+            ReadonlyAddressInputs(true);
         });
 
         $('#localition_foreign').click(function() {
             $('#register-input-foreigh').show();
             $('#register-input-brazilian').hide();
 
-            $('#address-name').prop('readonly', false);
-            $('#address-neighborhood').prop('readonly', false);
-            $('#address-city').prop('readonly', false);
-            $('#address-state').prop('readonly', false);
-            $('#address-country').prop('readonly', false);
+            ReadonlyAddressInputs(false);
         });
 
         $('#address-postal-code').focusout(function() {
-            var postal_code = $(this).val();
+            if ($('input[id="localition_brazil"]:checked').length > 0) {
+                var postal_code = $(this).val();
 
-            $.ajax({
-                async: true,
-                type: "GET",
-                dataType: "json",
-                url: "@Url.Action("GetAddress")",
-                data: { postalCode: postal_code },
-                success: function(result) {
-                    alert('OK.');
-                },
-                error: function(req, status, error) {
-                    alert('Not OK.', status);
-                }
-            });
+                $.ajax({
+                    async: true,
+                    type: "GET",
+                    dataType: "json",
+                    url: "@Url.Action("GetAddress")",
+                    data: { postalCode: postal_code },
+                    success: function(result) {
+                        if (result.code == 1) {
+                            SetAddressInputValues(result);
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function(req, status, error) {
+                        alert('Error: ', error);
+                    }
+                });
+            }
         });
+
+        function ReadonlyAddressInputs(readonly) {
+            if (readonly) {
+                $('#address-name').prop('readonly', true);
+                $('#address-neighborhood').prop('readonly', true);
+                $('#address-city').prop('readonly', true);
+                $('#address-state').prop('readonly', true);
+                $('#address-country').prop('readonly', true);
+            }
+            else {
+                $('#address-name').prop('readonly', false);
+                $('#address-neighborhood').prop('readonly', false);
+                $('#address-city').prop('readonly', false);
+                $('#address-state').prop('readonly', false);
+                $('#address-country').prop('readonly', false);
+            }
+        }
+
+        function SetAddressInputValues(model) {
+            $('#address-name').val(model.street.name);
+            $('#address-name').prop('readonly', true);
+
+            $('#address-neighborhood').val(model.neighborhood.name);
+            $('#address-neighborhood').prop('readonly', true);
+
+            $('#address-city').val(model.city.name);
+            $('#address-city').prop('readonly', true);
+
+            $('#address-state').val(model.state.initials);
+            $('#address-state').prop('readonly', true);
+
+            $('#address-country').val(model.country.name);
+            $('#address-country').prop('readonly', true);
+        }
 
     </script>
 
