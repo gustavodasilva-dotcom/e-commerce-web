@@ -37,7 +37,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         {
             try
             {
-                model.BrazilianCompany = Request.Form["localition"].ToString().ToLower().Equals("true") ? true : false;
+                var localition = Request.Form["localition"].ToString().ToLower().Equals("true") ? true : false;
+                model.BrazilianCompany = localition;
+                model.Addresses.IsForeign = !localition;
                 if (await _manufacturerApplication.InsertAsync(model) != null)
                 {
                     ViewBag.SuccessMessage = "Manufacturer created successfully.";

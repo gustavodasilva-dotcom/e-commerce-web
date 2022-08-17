@@ -86,7 +86,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
         #region InsertAsync
         public async Task InsertAsync(string postalCode)
         {
-            ValidatePostalCode(postalCode);
+            postalCode = ValidatePostalCode(postalCode);
             var model = new AddressesModel
             {
                 PostalCode = postalCode,

@@ -36,7 +36,12 @@
                 }
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "register-input", placeholder = "Name" } })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Name"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
@@ -53,15 +58,30 @@
 
                 <div id="register-input-foreigh" style="display:none;">
                     <div class="register-input-field">
-                        @Html.EditorFor(model => model.CAGE, new { htmlAttributes = new { @class = "register-input", placeholder = "CAGE" } })
+                        @Html.EditorFor(model => model.CAGE, new { htmlAttributes = new
+                            {
+                                @class = "register-input",
+                                placeholder = "CAGE"
+                            }
+                        })
                     </div>
 
                     <div class="register-input-field">
-                        @Html.EditorFor(model => model.NCAGE, new { htmlAttributes = new { @class = "register-input", placeholder = "NCAGE" } })
+                        @Html.EditorFor(model => model.NCAGE, new { htmlAttributes = new
+                            {
+                                @class = "register-input",
+                                placeholder = "NCAGE"
+                            }
+                        })
                     </div>
 
                     <div class="register-input-field">
-                        @Html.EditorFor(model => model.SEC, new { htmlAttributes = new { @class = "register-input", placeholder = "SEC" } })
+                        @Html.EditorFor(model => model.SEC, new { htmlAttributes = new
+                            {
+                                @class = "register-input",
+                                placeholder = "SEC"
+                            }
+                        })
                     </div>
                 </div>
 
@@ -70,6 +90,7 @@
                         @Html.EditorFor(model => model.FederalTaxpayerRegistrationNumber, new { htmlAttributes = new
                             {
                                 @class = "register-input",
+                                id = "register-input-federal-taxpayer-registration",
                                 placeholder = "Federal taxpayer registration"
                             }
                         })
@@ -79,6 +100,7 @@
                         @Html.EditorFor(model => model.StateTaxpayerRegistrationNumber, new { htmlAttributes = new
                             {
                                 @class = "register-input",
+                                id = "state-input-federal-taxpayer-registration",
                                 placeholder = "State taxpayer registration"
                             }
                         })
@@ -88,19 +110,41 @@
                 <h2 class="register-title-2">Contact info</h2>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Contacts.Phone, new { htmlAttributes = new { @class = "register-input", placeholder = "Phone" } })
+                    @Html.EditorFor(model => model.Contacts.Phone, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "register-input-phone",
+                            placeholder = "Phone"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Contacts.Cellphone, new { htmlAttributes = new { @class = "register-input", placeholder = "Cellphone" } })
+                    @Html.EditorFor(model => model.Contacts.Cellphone, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "register-input-cellphone",
+                            placeholder = "Cellphone"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Contacts.Email, new { htmlAttributes = new { @class = "register-input", placeholder = "Email" } })
+                    @Html.EditorFor(model => model.Contacts.Email, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Email"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Contacts.Website, new { htmlAttributes = new { @class = "register-input", placeholder = "Website" } })
+                    @Html.EditorFor(model => model.Contacts.Website, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Website"
+                        }
+                    })
                 </div>
 
                 <h2 class="register-title-2">Address info</h2>
@@ -110,35 +154,83 @@
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.PostalCode, new { htmlAttributes = new { @class = "register-input", id="address-postal-code", placeholder = "Postal code" } })
+                    @Html.EditorFor(model => model.Addresses.PostalCode, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id="address-postal-code",
+                            placeholder = "Postal code"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.Name, new { htmlAttributes = new { @class = "register-input", id="address-name", placeholder = "Name" } })
+                    @Html.EditorFor(model => model.Addresses.Name, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id="address-name",
+                            placeholder = "Name"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.Number, new { htmlAttributes = new { @class = "register-input", id="address-number", placeholder = "Number" } })
+                    @Html.EditorFor(model => model.Addresses.Number, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "address-number",
+                            placeholder = "Number"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.Comment, new { htmlAttributes = new { @class = "register-input", id="address-comment", placeholder = "Comment" } })
+                    @Html.EditorFor(model => model.Addresses.Comment, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "address-comment",
+                            placeholder = "Comment"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.Neighborhood, new { htmlAttributes = new { @class = "register-input", id="address-neighborhood",  placeholder = "Neighborhood" } })
+                    @Html.EditorFor(model => model.Addresses.Neighborhood, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "address-neighborhood",
+                            placeholder = "Neighborhood"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.City, new { htmlAttributes = new { @class = "register-input", id="address-city", placeholder = "City" } })
+                    @Html.EditorFor(model => model.Addresses.City, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "address-city",
+                            placeholder = "City"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.State, new { htmlAttributes = new { @class = "register-input", id="address-state", placeholder = "State" } })
+                    @Html.EditorFor(model => model.Addresses.State, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "address-state",
+                            placeholder = "State"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
-                    @Html.EditorFor(model => model.Addresses.Country, new { htmlAttributes = new { @class = "register-input", id="address-country", placeholder = "Country" } })
+                    @Html.EditorFor(model => model.Addresses.Country, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            id = "address-country",
+                            placeholder = "Country"
+                        }
+                    })
                 </div>
 
                 <div class="register-input-field">
@@ -153,7 +245,33 @@
 
 @section Scripts {
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
     <script>
+
+        $(document).ready(function() {
+            $('#register-input-brazilian').show();
+            $('#localition_brazil').prop('checked', true);
+            $('#register-input-phone').mask('(00) 0000-0000');
+            $('#address-postal-code').mask('00000-000');
+            $('#register-input-cellphone').mask('(00) 0 0000-0000');
+            $('#register-input-federal-taxpayer-registration').mask('00.000.000/0000-00');
+            ReadonlyAddressInputs(true);
+        });
+
+        $('#localition_brazil').change(function() {
+            $('#register-input-phone').mask('(00) 0000-0000');
+            $('#address-postal-code').mask('00000-000');
+            $('#register-input-cellphone').mask('(00) 0 0000-0000');
+            $('#register-input-federal-taxpayer-registration').mask('00.000.000/0000-00');
+        });
+
+        $('#localition_foreign').change(function() {
+            $('#register-input-phone').unmask();
+            $('#address-postal-code').unmask();
+            $('#register-input-cellphone').unmask();
+            $('#register-input-federal-taxpayer-registration').unmask();
+        });
 
         $('#localition_brazil').click(function() {
             $('#register-input-foreigh').hide();
