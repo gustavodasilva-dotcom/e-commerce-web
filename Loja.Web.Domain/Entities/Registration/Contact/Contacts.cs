@@ -50,15 +50,15 @@ namespace Loja.Web.Domain.Entities.Registration.Contact
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Contacts
                 {
-                    GuidID = model.GuidID,
+                    GuidID = Guid.NewGuid(),
                     Phone = model.Phone,
                     Cellphone = model.Cellphone,
                     Email = model.Email,
                     Website = model.Website,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at
-                });
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now
+                }); ;
             }
             catch (Exception e)
             {

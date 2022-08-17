@@ -49,13 +49,13 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Addresses
                 {
-                    GuidID = model.GuidID,
+                    GuidID = Guid.NewGuid(),
                     Number = model.Number,
                     Comment = model.Comment,
                     StreetID = (int)model.StreetID,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now
                 });
             }
             catch (Exception e)

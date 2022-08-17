@@ -31,6 +31,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         public async Task<Manufacturers> InsertAsync(ManufacturersModel model)
         {
             Validate(model);
+            Manufacturers? manufacturer = null;
             var manufacturers = await _manufacturer.GetAllAsync();
             if (model.BrazilianCompany)
             {
@@ -47,16 +48,14 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                     throw new Exception("There's already a manufacturer registered with the CAGE or SEC informed.");
                 }
             }
-            var address = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode);
-            if (address == null)
+            var street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode);
+            if (street == null)
             {
                 await _addressApplication.InsertAsync(model.Addresses);
-                await _addressApplication.InsertAddressAsync(model.Addresses);
+                street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode);
             }
-            else
-            {
-                model.Addresses.ID = address.ID;
-            }
+            model.Addresses.StreetID = street?.ID;
+            model.Addresses.ID = (int)await _addressApplication.InsertAddressAsync(model.Addresses);
             model.Contacts.ID = (int)await _contactApplication.InsertAsync(model.Contacts);
             var manufacturerID = await _manufacturer.InsertAsync(model);
             if (manufacturerID is null)
@@ -64,7 +63,16 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
             }
             manufacturers = await _manufacturer.GetAllAsync();
-            var manufacturer = manufacturers.FirstOrDefault(x => x?.CAGE == model?.CAGE);
+            if (model.BrazilianCompany)
+            {
+                manufacturer = manufacturers.FirstOrDefault(
+                    x => x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber &&
+                    x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber);
+            }
+            else
+            {
+                manufacturer = manufacturers.FirstOrDefault(x => x?.CAGE == model?.CAGE);
+            }
             if (manufacturer is null)
             {
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
@@ -82,11 +90,13 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         {
             if (model.BrazilianCompany)
             {
-                if (string.IsNullOrEmpty(model.FederalTaxpayerRegistrationNumber))
+                if (string.IsNullOrEmpty(model.FederalTaxpayerRegistrationNumber) &&
+                    !int.TryParse(model.FederalTaxpayerRegistrationNumber, out int _))
                 {
                     throw new Exception("Federal taxpayer registration number cannot be null or empty.");
                 }
-                if (string.IsNullOrEmpty(model.StateTaxpayerRegistrationNumber))
+                if (!string.IsNullOrEmpty(model.StateTaxpayerRegistrationNumber) &&
+                    !int.TryParse(model.StateTaxpayerRegistrationNumber, out int _))
                 {
                     throw new Exception("State taxpayer registration number cannot be null or empty.");
                 }

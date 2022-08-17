@@ -77,7 +77,7 @@
 
                     <div class="register-input-field">
                         @Html.EditorFor(model => model.StateTaxpayerRegistrationNumber, new { htmlAttributes = new
-                        {
+                            {
                                 @class = "register-input",
                                 placeholder = "State taxpayer registration"
                             }
@@ -104,6 +104,10 @@
                 </div>
 
                 <h2 class="register-title-2">Address info</h2>
+
+                <div class="register-alert" id="register-address-alert" style="display:none;">
+                    <p id="register-address-error-message"></p>
+                </div>
 
                 <div class="register-input-field">
                     @Html.EditorFor(model => model.Addresses.PostalCode, new { htmlAttributes = new { @class = "register-input", id="address-postal-code", placeholder = "Postal code" } })
@@ -173,15 +177,17 @@
                     async: true,
                     type: "GET",
                     dataType: "json",
-                    url: "@Url.Action("GetAddress")",
+                    url: "/Addresses/Get",
                     data: { postalCode: postal_code },
                     success: function(result) {
                         if (result.code == 1) {
                             SetAddressInputValues(result);
+                            DisplayAddressErrorMessage(false, '');
                         }
                         else {
-                            alert(result.message);
+                            DisplayAddressErrorMessage(true, result.message);
                             ReadonlyAddressInputs(true);
+                            CleanAddressInputValues();
                         }
                     },
                     error: function(req, status, error) {
@@ -223,6 +229,24 @@
 
             $('#address-country').val(model.country.name);
             $('#address-country').prop('readonly', true);
+        }
+
+        function CleanAddressInputValues() {
+            $('#address-name').val('');
+            $('#address-neighborhood').val('');
+            $('#address-city').val('');
+            $('#address-state').val('');
+            $('#address-country').val('');
+        }
+
+        function DisplayAddressErrorMessage(display, error) {
+            if (display) {
+                $('#register-address-alert').show();
+                $('#register-address-error-message').text(error);
+            }
+            else {
+                $('#register-address-alert').hide();
+            }
         }
 
     </script>
