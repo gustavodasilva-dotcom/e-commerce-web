@@ -138,7 +138,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
                 model.State = viaCEP?.uf;
             }
             var states = await _states.GetAllAsync();
-            if (states is null || !states.Any(x => x.Initials.ToLower().Contains(model.State.ToLower())))
+            if (states is null || !states.Any(x => x.Initials.ToLower().Contains(model.State.ToLower()) && x.CountryID == model.CountryID))
             {
                 stateID = await _states.InsertAsync(model);
                 if (stateID == null)
@@ -156,7 +156,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
                 model.City = viaCEP?.localidade;
             }
             var cities = await _cities.GetAllAsync();
-            if (cities is null || !cities.Any(x => x.Name.ToLower().Contains(model.City.ToLower())))
+            if (cities is null || !cities.Any(x => x.Name.ToLower().Contains(model.City.ToLower()) && x.StateID == model.StateID))
             {
                 cityID = await _cities.InsertAsync(model);
                 if (cityID == null)
@@ -167,14 +167,14 @@ namespace Loja.Web.Application.Applications.Registration.Address
             }
             else
             {
-                model.CityID = cities.FirstOrDefault(x => x.Name.ToLower().Contains(model.City.ToLower())).ID;
+                model.CityID = cities?.FirstOrDefault(x => x.Name.ToLower().Contains(model.City.ToLower())).ID;
             }
             if (!model.IsForeign)
             {
                 model.Neighborhood = viaCEP?.bairro;
             }
             var neighborhoods = await _neighborhoods.GetAllAsync();
-            if (neighborhoods is null || !neighborhoods.Any(x => x.Name.ToLower().Contains(model.Neighborhood.ToLower())))
+            if (neighborhoods is null || !neighborhoods.Any(x => x.Name.ToLower().Contains(model.Neighborhood.ToLower()) && x.CityID == model.CityID))
             {
                 neighborhoodID = await _neighborhoods.InsertAsync(model);
                 if (neighborhoodID == null)
@@ -185,14 +185,14 @@ namespace Loja.Web.Application.Applications.Registration.Address
             }
             else
             {
-                model.NeighborhoodID = neighborhoods.FirstOrDefault(x => x.Name.ToLower().Contains(model.Neighborhood.ToLower())).ID;
+                model.NeighborhoodID = neighborhoods?.FirstOrDefault(x => x.Name.ToLower().Contains(model.Neighborhood.ToLower())).ID;
             }
             if (!model.IsForeign)
             {
                 model.Name = viaCEP?.logradouro;
             }
             var streets = await _streets.GetAllAsync();
-            if (streets is null || !streets.Any(x => x.Name.ToLower().Equals(model.Name.ToLower())))
+            if (streets is null || !streets.Any(x => x.Name.ToLower().Equals(model?.Name?.ToLower()) && x.NeighborhoodID == model.NeighborhoodID))
             {
                 streetID = await _streets.InsertAsync(model);
                 if (streetID == null)
