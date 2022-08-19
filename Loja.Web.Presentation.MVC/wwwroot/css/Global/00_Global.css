@@ -154,3 +154,29 @@ body {
 .register-wrapper .register-default-div a:hover {
     color: #00afb9;
 }
+
+.register-wrapper .register-table,
+.register-wrapper .register-table .register-table-tr {
+    border: 1px solid #d5dbd9;
+}
+
+.register-wrapper .register-table {
+    width: 100%;
+    font-size: 17px;
+}
+
+.register-wrapper .register-table .register-table-th {
+    height: 75px;
+    text-align: center;
+}
+
+.register-wrapper .register-table .register-table-td {
+    height: 50px;
+    text-align: center;
+}
+
+.register-wrapper .register-table .register-table-td:hover {
+    background-color: #00AFB9;
+    color: #ffffff;
+    cursor: pointer;
+}

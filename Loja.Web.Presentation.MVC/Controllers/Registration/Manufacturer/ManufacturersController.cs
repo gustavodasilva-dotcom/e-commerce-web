@@ -1,4 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+using Loja.Web.Presentation.Models.Registration.Address;
+using Loja.Web.Presentation.Models.Registration.Contact;
 using Loja.Web.Presentation.Models.Registration.Manufacturer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,16 +22,49 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         #region << METHODS >>
 
         #region Index
-        public IActionResult Index()
+        public async Task<ActionResult<IEnumerable<ManufacturersModel>>> Index()
         {
-            return View();
+            if (HttpContext.Session.GetString("Role") == "Employee")
+            {
+                var manufacturers = await _manufacturerApplication.GetAllAsync();
+                if (manufacturers.Any())
+                {
+                    return View(manufacturers.Where(x => !x.Deleted).Select(x => new ManufacturersModel
+                    {
+                        GuidID = x.GuidID,
+                        Name = x.Name,
+                        BrazilianCompany = x.BrazilianCompany,
+                        CAGE = x.CAGE,
+                        NCAGE = x.NCAGE,
+                        SEC = x.SEC,
+                        Contacts = new ContactsModel
+                        {
+                            ID = x.ContactID
+                        },
+                        Addresses = new AddressesModel
+                        {
+                            ID = x.AddressID
+                        },
+                        FederalTaxpayerRegistrationNumber = x.FederalTaxpayerRegistrationNumber,
+                        StateTaxpayerRegistrationNumber = x.StateTaxpayerRegistrationNumber,
+                        Active = x.Active,
+                        Deleted = x.Deleted
+                    }).ToList());
+                }
+                return BadRequest();
+            }
+            return Unauthorized();
         }
         #endregion
 
         #region Register
         public IActionResult Register()
         {
-            return View();
+            if (HttpContext.Session.GetString("Role") == "Employee")
+            {
+                return View();
+            }
+            return Unauthorized();
         }
 
         [HttpPost]
@@ -54,6 +89,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
                 ViewBag.ErrorMessage = e.Message;
             }
             return View();
+        }
+        #endregion
+
+        #region Details
+        public async Task<ActionResult<ManufacturersModel>> Details(Guid guid)
+        {
+            var manufacturers = await _manufacturerApplication.GetAllAsync();
+            return View(manufacturers.FirstOrDefault(x => x.GuidID == guid));
         }
         #endregion
 

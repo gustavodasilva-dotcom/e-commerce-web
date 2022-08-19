@@ -27,6 +27,13 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
 
         #region PUBLIC
 
+        #region GetAllAsync
+        public async Task<IEnumerable<Manufacturers?>> GetAllAsync()
+        {
+            return await _manufacturer.GetAllAsync();
+        }
+        #endregion
+
         #region InsertAsync
         public async Task<Manufacturers> InsertAsync(ManufacturersModel model)
         {

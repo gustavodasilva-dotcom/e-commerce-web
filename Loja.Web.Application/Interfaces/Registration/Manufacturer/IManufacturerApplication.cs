@@ -5,6 +5,7 @@ namespace Loja.Web.Application.Interfaces.Registration.Manufacturer
 {
     public interface IManufacturerApplication
     {
+        Task<IEnumerable<Manufacturers?>> GetAllAsync();
         Task<Manufacturers> InsertAsync(ManufacturersModel model);
     }
 }
