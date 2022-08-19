@@ -15,6 +15,13 @@ namespace Loja.Web.Application.Applications.Registration.Contact
 
         #region PUBLIC
 
+        #region GetAllAsync
+        public async Task<IEnumerable<Contacts?>> GetAllAsync()
+        {
+            return await _contacts.GetAllAsync();
+        }
+        #endregion
+
         #region InsertAsync
         public async Task<long?> InsertAsync(ContactsModel model)
         {

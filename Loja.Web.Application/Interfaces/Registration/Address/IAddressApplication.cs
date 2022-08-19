@@ -6,6 +6,8 @@ namespace Loja.Web.Application.Interfaces.Registration.Address
     public interface IAddressApplication
     {
         Task<Streets?> GetStreetByPostalCodeAsync(string postalCode);
+        Task<IEnumerable<Addresses?>> GetAllAddressesAsync();
+        Task<IEnumerable<Streets?>> GetAllStreetsAsync();
         Task<Neighborhoods?> GetNeighborhoodAsync(int neighborhoodID);
         Task<Cities?> GetCityAsync(int cityID);
         Task<States?> GetStateAsync(int stateID);

@@ -49,6 +49,20 @@ namespace Loja.Web.Application.Applications.Registration.Address
         }
         #endregion
 
+        #region GetAllAddressesAsync
+        public async Task<IEnumerable<Addresses?>> GetAllAddressesAsync()
+        {
+            return await _addresses.GetAllAsync();
+        }
+        #endregion
+
+        #region GetAllAddressesAsync
+        public async Task<IEnumerable<Streets?>> GetAllStreetsAsync()
+        {
+            return await _streets.GetAllAsync();
+        }
+        #endregion
+
         #region GetNeighborhoodAsync
         public async Task<Neighborhoods?> GetNeighborhoodAsync(int neighborhoodID)
         {

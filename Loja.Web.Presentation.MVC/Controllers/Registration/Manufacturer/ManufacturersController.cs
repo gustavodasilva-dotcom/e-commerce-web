@@ -1,4 +1,6 @@
-﻿using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+﻿using Loja.Web.Application.Interfaces.Registration.Address;
+using Loja.Web.Application.Interfaces.Registration.Contact;
+using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Presentation.Models.Registration.Address;
 using Loja.Web.Presentation.Models.Registration.Contact;
 using Loja.Web.Presentation.Models.Registration.Manufacturer;
@@ -10,12 +12,19 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
     {
         #region << PROPERTIES >>
         private readonly IManufacturerApplication _manufacturerApplication;
+        private readonly IContactApplication _contactApplication;
+        private readonly IAddressApplication _addressApplication;
         #endregion
 
         #region << CONSTRUCTOR >>
-        public ManufacturersController(IManufacturerApplication manufacturerApplication)
+        public ManufacturersController(
+            IManufacturerApplication manufacturerApplication,
+            IContactApplication contactApplication,
+            IAddressApplication addressApplication)
         {
             _manufacturerApplication = manufacturerApplication;
+            _contactApplication = contactApplication;
+            _addressApplication = addressApplication;
         }
         #endregion
 
@@ -26,32 +35,39 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         {
             if (HttpContext.Session.GetString("Role") == "Employee")
             {
-                var manufacturers = await _manufacturerApplication.GetAllAsync();
-                if (manufacturers.Any())
+                try
                 {
-                    return View(manufacturers.Where(x => !x.Deleted).Select(x => new ManufacturersModel
+                    var manufacturers = await _manufacturerApplication.GetAllAsync();
+                    if (manufacturers.Any())
                     {
-                        GuidID = x.GuidID,
-                        Name = x.Name,
-                        BrazilianCompany = x.BrazilianCompany,
-                        CAGE = x.CAGE,
-                        NCAGE = x.NCAGE,
-                        SEC = x.SEC,
-                        Contacts = new ContactsModel
+                        return View(manufacturers.Where(x => !x.Deleted).Select(x => new ManufacturersModel
                         {
-                            ID = x.ContactID
-                        },
-                        Addresses = new AddressesModel
-                        {
-                            ID = x.AddressID
-                        },
-                        FederalTaxpayerRegistrationNumber = x.FederalTaxpayerRegistrationNumber,
-                        StateTaxpayerRegistrationNumber = x.StateTaxpayerRegistrationNumber,
-                        Active = x.Active,
-                        Deleted = x.Deleted
-                    }).ToList());
+                            GuidID = x.GuidID,
+                            Name = x.Name,
+                            BrazilianCompany = x.BrazilianCompany,
+                            CAGE = x.CAGE,
+                            NCAGE = x.NCAGE,
+                            SEC = x.SEC,
+                            Contacts = new ContactsModel
+                            {
+                                ID = x.ContactID
+                            },
+                            Addresses = new AddressesModel
+                            {
+                                ID = x.AddressID
+                            },
+                            FederalTaxpayerRegistrationNumber = x.FederalTaxpayerRegistrationNumber,
+                            StateTaxpayerRegistrationNumber = x.StateTaxpayerRegistrationNumber,
+                            Active = x.Active,
+                            Deleted = x.Deleted
+                        }).ToList());
+                    }
+                    return BadRequest();
                 }
-                return BadRequest();
+                catch (Exception e)
+                {
+                    return StatusCode(500, e.Message);
+                }
             }
             return Unauthorized();
         }
@@ -95,8 +111,62 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         #region Details
         public async Task<ActionResult<ManufacturersModel>> Details(Guid guid)
         {
-            var manufacturers = await _manufacturerApplication.GetAllAsync();
-            return View(manufacturers.FirstOrDefault(x => x.GuidID == guid));
+            if (HttpContext.Session.GetString("Role") == "Employee")
+            {
+                try
+                {
+                    var manufacturers = await _manufacturerApplication.GetAllAsync();
+                    var contacts = await _contactApplication.GetAllAsync();
+                    var addresses = await _addressApplication.GetAllAddressesAsync();
+                    var streets = await _addressApplication.GetAllStreetsAsync();
+                    var manufacturer = manufacturers.FirstOrDefault(x => x?.GuidID == guid);
+                    var contact = contacts.FirstOrDefault(x => x?.ID == manufacturer?.ContactID);
+                    var address = addresses.FirstOrDefault(x => x?.ID == manufacturer?.AddressID);
+                    var street = streets.FirstOrDefault(x => x?.ID == address?.StreetID);
+                    var neighborhood = await _addressApplication.GetNeighborhoodAsync(street.NeighborhoodID);
+                    var city = await _addressApplication.GetCityAsync(neighborhood.CityID);
+                    var state = await _addressApplication.GetStateAsync(city.StateID);
+                    var country = await _addressApplication.GetCountriesAsync(state.CountryID);
+                    return View(new ManufacturersModel
+                    {
+                        GuidID = manufacturer.GuidID,
+                        Name = manufacturer.Name,
+                        BrazilianCompany = manufacturer.BrazilianCompany,
+                        CAGE = manufacturer.CAGE,
+                        NCAGE = manufacturer.NCAGE,
+                        SEC = manufacturer.SEC,
+                        Contacts = new ContactsModel
+                        {
+                            ID = contact?.ID,
+                            Phone = contact?.Phone,
+                            Cellphone = contact?.Cellphone,
+                            Email = contact?.Email,
+                            Website = contact?.Website
+                        },
+                        Addresses = new AddressesModel
+                        {
+                            ID = address?.ID,
+                            PostalCode = street?.PostalCode,
+                            Name = street?.Name,
+                            Number = address?.Number,
+                            Comment = address?.Comment,
+                            Neighborhood = neighborhood?.Name,
+                            City = city?.Name,
+                            State = state?.Initials,
+                            Country = country?.Name
+                        },
+                        FederalTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                        StateTaxpayerRegistrationNumber = manufacturer.StateTaxpayerRegistrationNumber,
+                        Active = manufacturer.Active,
+                        Deleted = manufacturer.Deleted
+                    });
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, e.Message);
+                }
+            }
+            return Unauthorized();
         }
         #endregion
 
