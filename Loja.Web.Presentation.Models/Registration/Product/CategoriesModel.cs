@@ -15,6 +15,7 @@
         public DateTime Created_at { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
 
         public int? Created_by { get; set; } = null;
+        public Guid? Created_by_Guid { get; set; } = null;
 
         public DateTime? Deleted_at { get; set; } = null;
 

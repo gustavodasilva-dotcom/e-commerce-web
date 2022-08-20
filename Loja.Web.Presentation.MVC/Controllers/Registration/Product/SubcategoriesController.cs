@@ -1,7 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Presentation.Models.Registration.Product;
 using Microsoft.AspNetCore.Mvc;
-using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
@@ -72,6 +71,10 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         {
             try
             {
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                }
                 var categories = await _categoryApplication.GetAllAsync();
                 try
                 {

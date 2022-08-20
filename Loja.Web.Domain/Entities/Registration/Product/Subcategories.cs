@@ -52,7 +52,7 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                 id = await connect.InsertAsync(new Subcategories
                 {
                     GuidID = model.GuidID,
-                    Name = model.Name,
+                    Name = model.Name.Trim(),
                     CategoryID = model.CategoryID.Value,
                     Active = model.Active,
                     Deleted = model.Deleted,

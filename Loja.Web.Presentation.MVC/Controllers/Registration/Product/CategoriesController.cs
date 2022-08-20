@@ -103,6 +103,31 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
             }
             return Unauthorized();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(CategoriesModel model)
+        {
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                }
+                if (await _categoryApplication.InsertAsync(model) != null)
+                {
+                    ViewBag.SuccessMessage = "Category created successfully.";
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "An error occurred while executing the process. Please, contact the system administrator.";
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorMessage = e.Message;
+            }
+            return View();
+        }
         #endregion
 
         #endregion

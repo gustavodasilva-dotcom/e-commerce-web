@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
+using Loja.Web.Presentation.Models.Registration.Product;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Product
@@ -37,6 +38,36 @@ namespace Loja.Web.Domain.Entities.Registration.Product
 #endif
                 throw new Exception(e.Message);
             }
+        }
+        #endregion
+
+        #region InsertAsync
+        public async Task<long?> InsertAsync(CategoriesModel model)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new Categories
+                {
+                    GuidID = model.GuidID,
+                    Name = model.Name.Trim(),
+                    Active = model.Active,
+                    Deleted = model.Deleted,
+                    Created_at = model.Created_at,
+                    Created_by = model.Created_by,
+                    Deleted_at = model.Deleted_at,
+                    Deleted_by = model.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
         }
         #endregion
 
