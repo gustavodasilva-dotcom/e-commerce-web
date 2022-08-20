@@ -50,8 +50,8 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 id = await connect.InsertAsync(new Addresses
                 {
                     GuidID = Guid.NewGuid(),
-                    Number = model.Number,
-                    Comment = model.Comment,
+                    Number = model.Number.Trim(),
+                    Comment = model?.Comment?.Trim(),
                     StreetID = (int)model.StreetID,
                     Active = true,
                     Deleted = false,

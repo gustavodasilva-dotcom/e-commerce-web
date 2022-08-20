@@ -51,14 +51,14 @@ namespace Loja.Web.Domain.Entities.Registration.Contact
                 id = await connect.InsertAsync(new Contacts
                 {
                     GuidID = Guid.NewGuid(),
-                    Phone = model.Phone,
-                    Cellphone = model.Cellphone,
-                    Email = model.Email,
-                    Website = model.Website,
+                    Phone = model?.Phone?.Trim(),
+                    Cellphone = model?.Cellphone?.Trim(),
+                    Email = model?.Email?.Trim(),
+                    Website = model?.Website?.Trim(),
                     Active = true,
                     Deleted = false,
                     Created_at = DateTime.Now
-                }); ;
+                });
             }
             catch (Exception e)
             {

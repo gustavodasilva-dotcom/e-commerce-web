@@ -48,7 +48,7 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 id = await connect.InsertAsync(new Neighborhoods
                 {
                     GuidID = Guid.NewGuid(),
-                    Name = model.Neighborhood,
+                    Name = model.Neighborhood.Trim(),
                     CityID = (int)model.CityID,
                     Active = true,
                     Deleted = false,

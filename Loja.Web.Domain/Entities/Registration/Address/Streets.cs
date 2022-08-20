@@ -50,8 +50,8 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 id = await connect.InsertAsync(new Streets
                 {
                     GuidID = Guid.NewGuid(),
-                    PostalCode = model.PostalCode,
-                    Name = model.Name,
+                    PostalCode = model.PostalCode.Trim(),
+                    Name = model.Name.Trim(),
                     NeighborhoodID = (int)model.NeighborhoodID,
                     Active = true,
                     Deleted = false,

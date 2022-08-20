@@ -47,7 +47,7 @@ namespace Loja.Web.Domain.Entities.Registration.Address
                 id = await connect.InsertAsync(new Countries
                 {
                     GuidID = Guid.NewGuid(),
-                    Name = model.Country,
+                    Name = model.Country.Trim(),
                     Active = true,
                     Deleted = false,
                     Created_at = DateTime.Now
