@@ -1,9 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Loja</title>
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Loja.Web.Presentation.MVC.styles.css" asp-append-version="true" />
@@ -20,13 +24,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (Accessor.HttpContext.Session.Keys.Any())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Manufacturers" asp-action="Index">Manufacturers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Register">Users</a>
+                            </li>
+                        }
                     </ul>
-                    @*<partial name="_LoginPartial" />*@
+                    @if (!Accessor.HttpContext.Session.Keys.Any())
+                    {
+                        <button type="button" class="login-upper-button-white" onclick="window.location.href = '/Accounts/Register';">Sign up</button>
+                        <button type="button" class="login-upper-button" onclick="window.location.href = '/Accounts/Login';">Login</button>
+                    }
+                    else
+                    {
+                        // TODO: create function to clean the sessions.
+                        <button type="button" class="login-upper-button" id="logout-button">Log out</button>
+                    }
                 </div>
             </div>
         </nav>
@@ -39,12 +58,35 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Loja.Web.Presentation.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - Loja
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $('#logout-button').click(function() {
+            $.ajax({
+                    async: false,
+                    type: "POST",
+                    dataType: "json",
+                    url: "/Accounts/Logout",
+                    success: function(result) {
+                        if (result.Code == 1) {
+                            window.location.href = '/Home/Index';
+                        }
+                        else {
+                            alert(result.Message);
+                        }
+                    },
+                    error: function(req, status, error) {
+                        alert('Error: ', error);
+                    }
+                });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

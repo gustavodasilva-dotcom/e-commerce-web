@@ -60,6 +60,7 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
                 {
                     GuidID = model.GuidID,
                     Name = model.Name,
+                    BrazilianCompany = model.BrazilianCompany,
                     CAGE = model.CAGE,
                     NCAGE = model.NCAGE,
                     SEC = model.SEC,

@@ -73,5 +73,7 @@
     <Build Include="dbo\Countries.sql" />
     <Build Include="dbo\Contacts.sql" />
     <Build Include="dbo\Streets.sql" />
+    <Build Include="dbo\UsersAddresses.sql" />
+    <Build Include="dbo\UsersContacts.sql" />
   </ItemGroup>
 </Project>

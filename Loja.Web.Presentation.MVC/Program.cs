@@ -1,10 +1,12 @@
 using Loja.Web.Application.Applications.Registration.Address;
 using Loja.Web.Application.Applications.Registration.Contact;
 using Loja.Web.Application.Applications.Registration.Manufacturer;
+using Loja.Web.Application.Applications.Registration.Product;
 using Loja.Web.Application.Applications.Security;
 using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Application.Interfaces.Registration.Contact;
 using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Application.Interfaces.Security;
 using Loja.Web.Infra.CrossCutting.Config;
 using Loja.Web.Presentation.MVC.Data;
@@ -42,6 +44,9 @@ builder.Services.AddSingleton<ISecurityApplication, SecurityApplication>();
 builder.Services.AddSingleton<IAddressApplication, AddressApplication>();
 builder.Services.AddSingleton<IContactApplication, ContactApplication>();
 builder.Services.AddSingleton<IManufacturerApplication, ManufacturerApplication>();
+builder.Services.AddSingleton<ICategoryApplication, CategoryApplication>();
+builder.Services.AddSingleton<ISubcategoryApplication, SubcategoryApplication>();
+builder.Services.AddSingleton<IProductApplication, ProductApplication>();
 #endregion
 
 var app = builder.Build();

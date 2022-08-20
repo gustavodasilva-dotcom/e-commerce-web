@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Loja.Web.Presentation.Models.Registration.Product.SubcategoriesModel>
+
+@{
+    ViewData["Title"] = "Subcategories";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+</head>
+<body>
+    <button class="default-button" onclick="window.location.href = '/Subcategories/Register';">Register</button>
+
+    <div class="register-wrapper">
+
+        <div>
+            <h1 class="register-title">@ViewData["Title"]</h1>
+        </div>
+        
+        <div>
+
+            <table class="register-table">
+
+                <tr class="register-table-tr">
+                    <th class="register-table-th">Name</th>
+                </tr>
+
+                @foreach (var item in @Model)
+                {
+                    <tr class="register-table-tr">
+                        <td class="register-table-td" id="subcategories-name" data-guid="@item?.GuidID">@item?.Name?.ToUpper()</td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+
+    </div>
+</body>

@@ -1,0 +1,95 @@
+﻿@model Loja.Web.Presentation.Models.Registration.Product.SubcategoriesModel
+
+@{
+    ViewData["Title"] = "Register | Subcategories";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+</head>
+<body>
+    <div class="register-wrapper">
+
+        <div>
+            <h1 class="register-title">Register</h1>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="register-form">
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="register-alert">
+                        <p>@ViewBag.ErrorMessage</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <div class="register-success">
+                        <p>@ViewBag.SuccessMessage</p>
+                    </div>
+                }
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Name"
+                        }
+                    })
+                </div>
+
+                <div class="register-select-field">
+                    <select name="categories" class="register-select">
+                        <option value="">Select a category</option>
+                    </select>
+                </div>
+
+                <div class="register-input-field">
+                    <button type="submit" class="register-btn-submit" name="register" id="register">Register</button>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</body>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function() {
+            $.ajax({
+                async: true,
+                type: "GET",
+                dataType: "json",
+                url: "/Categories/Get",
+                success: function(result) {
+                    if (result.Code == 1) {
+                        SetComboBox(result.Categories);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                },
+                error: function(req, status, error) {
+                    alert('Error: ', error);
+                }
+            });
+        });
+
+        function SetComboBox(categories) {
+            $.each(categories, function(i, item) {
+                $('.register-select').append(`<option value="${categories[i].guidID}">${categories[i].name}</option>`);
+            });
+        }
+
+    </script>
+
+}

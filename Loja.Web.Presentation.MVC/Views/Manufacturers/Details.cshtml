@@ -243,7 +243,7 @@
                     })
                 </div>
 
-                <div class="register-input-field">
+                <div class="register-input-field" style="display: none;">
                     <button type="submit" class="register-btn-submit" name="register" id="register">Register</button>
                 </div>
 
@@ -252,3 +252,32 @@
 
     </div>
 </body>
+
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            $('.register-input').prop('readonly', true);
+            $('.register-input-radio').prop('disabled', true);
+
+            if ($('input[id="localition_brazil"]:checked').length > 0) {
+                $('#register-input-brazilian').show();
+                $('#register-input-foreigh').hide();
+
+                $('#register-input-phone').mask('(00) 0000-0000');
+                $('#address-postal-code').mask('00000-000');
+                $('#register-input-cellphone').mask('(00) 0 0000-0000');
+                $('#register-input-federal-taxpayer-registration').mask('00.000.000/0000-00');
+            }
+            else {
+                $('#register-input-brazilian').hide();
+                $('#register-input-foreigh').show();
+            }
+        });
+
+    </script>
+
+}

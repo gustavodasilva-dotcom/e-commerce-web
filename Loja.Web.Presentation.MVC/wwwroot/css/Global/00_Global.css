@@ -16,6 +16,59 @@ body {
     padding: 0 10px;
 }
 
+.login-upper-button {
+    width: 7%;
+    height: 40px;
+    padding: 7px 10px;
+    font-size: 15px;
+    border: 0;
+    background: #0081a7;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+}
+
+.login-upper-button:hover {
+    background: #00AFB9;
+}
+
+.login-upper-button-white {
+    width: 7%;
+    height: 40px;
+    padding: 7px 10px;
+    font-size: 15px;
+    border: 0;
+    background: #ffffff;
+    color: #231F1F;
+    cursor: pointer;
+    border: 1px solid #7A7777;
+    border-radius: 3px;
+    outline: none;
+    margin-right: 15px
+}
+
+.login-upper-button-white:hover {
+    background: #D7F6F7;
+}
+
+.default-button {
+    width: 10%;
+    height: 45px;
+    padding: 10px 15px;
+    font-size: 19px;
+    border: 0;
+    background: #0081a7;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+}
+
+.default-button:hover {
+    background: #00AFB9;
+}
+
 .register-wrapper {
     max-width: 500px;
     width: 100%;
@@ -95,10 +148,14 @@ body {
     border: 2px solid #00afb9;
 }
 
+.register-wrapper .register-form .register-input-field .register-input:read-only {
+    background-color: #D7F6F7;
+}
+
 .register-wrapper .register-form .register-select-field {
     position: relative;
     width: 100%;
-    height: 37px;
+    height: 43px;
     margin-bottom: 20px;
 }
 

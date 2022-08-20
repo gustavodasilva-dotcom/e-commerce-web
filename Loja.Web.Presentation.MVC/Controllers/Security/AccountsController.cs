@@ -1,6 +1,7 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
 using Loja.Web.Presentation.Models.Security;
 using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Security
 {
@@ -71,6 +72,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
                 // TODO: create log at the database.
             }
             return View();
+        }
+        #endregion
+
+        #region Logout
+        [HttpPost]
+        public JsonResult Logout()
+        {
+            dynamic result = new ExpandoObject();
+            try
+            {
+                result.Code = 1;
+                HttpContext.Session.Clear();
+            }
+            catch (Exception e)
+            {
+                result.Code = 0;
+                result.Message = e.Message;
+            }
+            return Json(result);
         }
         #endregion
 
