@@ -15,13 +15,14 @@ namespace Loja.Web.Domain.Entities.Registration.Product
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 		public decimal Price { get; private set; }
-		public float Discount { get; private set; }
+        public int CurrencyID { get; private set; }
+        public int Discount { get; private set; }
 		public int SubcategoryID { get; private set; }
 		public int ManufacturerID { get; private set; }
-		public float? Weight { get; private set; }
-		public float? Height { get; private set; }
-		public float? Width { get; private set; }
-		public float? Length { get; private set; }
+		public decimal? Weight { get; private set; }
+		public decimal? Height { get; private set; }
+		public decimal? Width { get; private set; }
+		public decimal? Length { get; private set; }
 		public int Stock { get; private set; }
 		public bool Active { get; private set; }
 		public bool Deleted { get; private set; }
@@ -64,6 +65,7 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                     Name = model.Name.Trim(),
                     Description = model.Description.Trim(),
                     Price = model.PriceConverted.Value,
+                    CurrencyID = model.CurrencyID.Value,
                     Discount = model.Discount,
                     SubcategoryID = model.SubcategoryID.Value,
                     ManufacturerID = model.ManufacturerID.Value,

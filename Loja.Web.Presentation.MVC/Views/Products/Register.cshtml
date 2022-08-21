@@ -52,6 +52,12 @@
                     })
                 </div>
 
+                <div class="register-select-field">
+                    <select name="currencies" class="register-select" id="register-select-currencies">
+                        <option value="">Select a currency</option>
+                    </select>
+                </div>
+
                 <div class="register-input-field">
                     @Html.EditorFor(model => model.Price, new { htmlAttributes = new
                         {
@@ -66,6 +72,7 @@
                     @Html.EditorFor(model => model.Discount, new { htmlAttributes = new
                         {
                             @class = "register-input",
+                            pattern = "^[0-9]*$",
                             placeholder = "Discount"
                         }
                     })
@@ -127,6 +134,7 @@
                     @Html.EditorFor(model => model.Stock, new { htmlAttributes = new
                         {
                             @class = "register-input",
+                            pattern = "^[0-9]*$",
                             placeholder = "Stock",
                             min = "0"
                         }
@@ -152,17 +160,17 @@
 
         $(document).ready(function () {
             $('#register-input-price').maskMoney();
-            $('#register-input-weight').mask("#0.00", {reverse: true});
+            $('#register-input-weight').mask("#0.000", {reverse: true});
             $('#register-input-height').mask("#0.00", {reverse: true});
             $('#register-input-width').mask("#0.00", {reverse: true});
             $('#register-input-length').mask("#0.00", {reverse: true});
             
             GetManufacturers();
             GetSubcategories();
+            GetCurrencies();
         });
 
-        function GetManufacturers()
-        {
+        function GetManufacturers() {
             $.ajax({
                 async: true,
                 type: "GET",
@@ -182,8 +190,7 @@
             });
         }
 
-        function GetSubcategories()
-        {
+        function GetSubcategories() {
             $.ajax({
                 async: true,
                 type: "GET",
@@ -192,6 +199,26 @@
                 success: function(result) {
                     if (result.Code == 1) {
                         SetComboBoxSubcategories(result.Subcategories);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                },
+                error: function(req, status, error) {
+                    alert('Error: ', error);
+                }
+            });
+        }
+
+        function GetCurrencies() {
+            $.ajax({
+                async: true,
+                type: "GET",
+                dataType: "json",
+                url: "/Currencies/Get",
+                success: function(result) {
+                    if (result.Code == 1) {
+                        SetComboBoxCurrencies(result.Currencies);
                     }
                     else {
                         alert(result.Message);
@@ -212,6 +239,12 @@
         function SetComboBoxSubcategories(subcategories) {
             $.each(subcategories, function(i, item) {
                 $('#register-select-subcategories').append(`<option value="${subcategories[i].guidID}">${subcategories[i].name}</option>`);
+            });
+        }
+
+        function SetComboBoxCurrencies(currencies) {
+            $.each(currencies, function(i, item) {
+                $('#register-select-currencies').append(`<option value="${currencies[i].guidID}">${currencies[i].name}</option>`);
             });
         }
 

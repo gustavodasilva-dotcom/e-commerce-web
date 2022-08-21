@@ -1,4 +1,5 @@
-﻿using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+﻿using Loja.Web.Application.Interfaces.Registration.Finance;
+using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Presentation.Models.Registration.Product;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +12,20 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         private readonly IProductApplication _productApplication;
         private readonly IManufacturerApplication _manufacturerApplication;
         private readonly ISubcategoryApplication _subcategoryApplication;
+        private readonly ICurrencyApplication _currenciesApplication;
         #endregion
 
         #region << CONSTRUCTOR >>
         public ProductsController(
             IProductApplication productApplication,
             IManufacturerApplication manufacturerApplication,
-            ISubcategoryApplication subcategoryApplication)
+            ISubcategoryApplication subcategoryApplication,
+            ICurrencyApplication currencyApplication)
         {
             _productApplication = productApplication;
             _manufacturerApplication = manufacturerApplication;
             _subcategoryApplication = subcategoryApplication;
+            _currenciesApplication = currencyApplication;
         }
         #endregion
 
@@ -43,7 +47,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                         Name = product.Name,
                         Description = product.Description,
                         //Price = product.Price,
-                        Discount = product.Discount,
+                        //Discount = product.Discount,
                         SubcategoryID = product.SubcategoryID,
                         ManufacturerID = product.ManufacturerID,
                         //Weight = product.Weight,
@@ -82,6 +86,15 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                 if (HttpContext.Session.Keys.Any(k => k == "UserID"))
                 {
                     model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                }
+                var currencies = await _currenciesApplication.GetAllAsync();
+                try
+                {
+                    model.CurrencyID = currencies?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["currencies"]))?.ID;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Please, select a currency.");
                 }
                 var manufacturers = await _manufacturerApplication.GetAllAsync();
                 try

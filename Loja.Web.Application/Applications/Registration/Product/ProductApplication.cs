@@ -22,6 +22,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
         }
         #endregion
 
+        #region InsertAsync
         public async Task<Products> InsertAsync(ProductsModel model)
         {
             Validate(ref model);
@@ -44,6 +45,8 @@ namespace Loja.Web.Application.Applications.Registration.Product
             }
             return product;
         }
+        #endregion
+
         #endregion
 
         #region PRIVATE
@@ -72,15 +75,15 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("The product's price cannot be null, equal or less then 0.");
             }
-            if (model.Discount < 0)
+            if (model.Discount < 0 || model.Discount > 100)
             {
-                throw new Exception("The product's price cannot be less then 0.");
+                throw new Exception("The product's price cannot be less then 0 or greater then 100.");
             }
             if (string.IsNullOrEmpty(model.Weight))
             {
                 throw new Exception("Please, inform the product's weight.");
             }
-            if (!float.TryParse(model.Weight, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float weight))
+            if (!decimal.TryParse(model.Weight, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal weight))
             {
                 throw new Exception("The product's weight is not numeric.");
             }
@@ -93,7 +96,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("Please, inform the product's height.");
             }
-            if (!float.TryParse(model.Height, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float height))
+            if (!decimal.TryParse(model.Height, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal height))
             {
                 throw new Exception("The product's height is not numeric.");
             }
@@ -106,7 +109,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("Please, inform the product's width.");
             }
-            if (!float.TryParse(model.Width, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float width))
+            if (!decimal.TryParse(model.Width, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal width))
             {
                 throw new Exception("The product's width is not numeric.");
             }
@@ -119,7 +122,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("Please, inform the product's length.");
             }
-            if (!float.TryParse(model.Length, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float length))
+            if (!decimal.TryParse(model.Length, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal length))
             {
                 throw new Exception("The product's length is not numeric.");
             }

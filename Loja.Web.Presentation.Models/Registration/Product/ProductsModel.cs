@@ -13,23 +13,25 @@
 		public string Price { get; set; }
 		public decimal? PriceConverted { get; set; } = null;
 
-		public float Discount { get; set; } = 0;
+		public int? CurrencyID { get; set; }
+
+		public int Discount { get; set; } = 0;
 		
 		public int? SubcategoryID { get; set; }
 		
 		public int? ManufacturerID { get; set; }
 		
 		public string Weight { get; set; }
-		public float? WeightConverted { get; set; } = null;
+		public decimal? WeightConverted { get; set; } = null;
 
 		public string Height { get; set; }
-		public float? HeightConverted { get; set; } = null;
+		public decimal? HeightConverted { get; set; } = null;
 
 		public string Width { get; set; }
-		public float? WidthConverted { get; set; } = null;
+		public decimal? WidthConverted { get; set; } = null;
 
 		public string Length { get; set; }
-		public float? LengthConverted { get; set; } = null;
+		public decimal? LengthConverted { get; set; } = null;
 
 		public int Stock { get; set; }
 
