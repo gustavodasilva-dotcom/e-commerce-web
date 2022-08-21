@@ -1,4 +1,5 @@
-﻿using Loja.Web.Application.Interfaces.Registration.Product;
+﻿using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Presentation.Models.Registration.Product;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,19 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
     {
         #region << PROPERTIES >>
         private readonly IProductApplication _productApplication;
+        private readonly IManufacturerApplication _manufacturerApplication;
+        private readonly ISubcategoryApplication _subcategoryApplication;
         #endregion
 
         #region << CONSTRUCTOR >>
-        public ProductsController(IProductApplication productApplication)
+        public ProductsController(
+            IProductApplication productApplication,
+            IManufacturerApplication manufacturerApplication,
+            ISubcategoryApplication subcategoryApplication)
         {
             _productApplication = productApplication;
+            _manufacturerApplication = manufacturerApplication;
+            _subcategoryApplication = subcategoryApplication;
         }
         #endregion
 
@@ -34,14 +42,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                         GuidID = product.GuidID,
                         Name = product.Name,
                         Description = product.Description,
-                        Price = product.Price,
+                        //Price = product.Price,
                         Discount = product.Discount,
                         SubcategoryID = product.SubcategoryID,
                         ManufacturerID = product.ManufacturerID,
-                        Weight = product.Weight,
-                        Height = product.Height,
-                        Width = product.Width,
-                        Length = product.Length,
+                        //Weight = product.Weight,
+                        //Height = product.Height,
+                        //Width = product.Width,
+                        //Length = product.Length,
                         Stock = product.Stock,
                         Active = product.Active,
                         Deleted = product.Deleted,
@@ -63,6 +71,49 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region Register
         public IActionResult Register()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(ProductsModel model)
+        {
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                }
+                var manufacturers = await _manufacturerApplication.GetAllAsync();
+                try
+                {
+                    model.ManufacturerID = manufacturers?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["manufacturers"]))?.ID;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Please, select a manufacturer.");
+                }
+                var subcategories = await _subcategoryApplication.GetAllAsync();
+                try
+                {
+                    model.SubcategoryID = subcategories?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["subcategories"]))?.ID;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Please, select a subcategory.");
+                }
+                if (await _productApplication.InsertAsync(model) != null)
+                {
+                    return Redirect("~/Home/Index");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "An error occurred while executing the process. Please, contact the system administrator.";
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorMessage = e.Message;
+            }
             return View();
         }
         #endregion

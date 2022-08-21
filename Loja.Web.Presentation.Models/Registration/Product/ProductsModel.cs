@@ -4,28 +4,33 @@
     {
 		public int? ID { get; set; } = null;
 
-		public Guid GuidID { get; set; } = Guid.Empty;
+		public Guid GuidID { get; set; } = Guid.NewGuid();
 
 		public string Name { get; set; }
 		
 		public string Description { get; set; }
 		
-		public decimal Price { get; set; }
+		public string Price { get; set; }
+		public decimal? PriceConverted { get; set; } = null;
+
+		public float Discount { get; set; } = 0;
 		
-		public float Discount { get; set; }
+		public int? SubcategoryID { get; set; }
 		
-		public int SubcategoryID { get; set; }
+		public int? ManufacturerID { get; set; }
 		
-		public int ManufacturerID { get; set; }
-		
-		public float? Weight { get; set; }
-		
-		public float? Height { get; set; }
-		
-		public float? Width { get; set; }
-		
-		public float? Length { get; set; }
-		
+		public string Weight { get; set; }
+		public float? WeightConverted { get; set; } = null;
+
+		public string Height { get; set; }
+		public float? HeightConverted { get; set; } = null;
+
+		public string Width { get; set; }
+		public float? WidthConverted { get; set; } = null;
+
+		public string Length { get; set; }
+		public float? LengthConverted { get; set; } = null;
+
 		public int Stock { get; set; }
 
 		public bool Active { get; set; } = true;
@@ -35,6 +40,7 @@
 		public DateTime Created_at { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
 
 		public int? Created_by { get; set; } = null;
+		public Guid? Created_by_Guid { get; set; } = null;
 
 		public DateTime? Deleted_at { get; set; } = null;
 
