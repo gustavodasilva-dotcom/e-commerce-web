@@ -119,6 +119,18 @@ body {
     padding: 10px;
 }
 
+/* Hide number input's spin box  */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+/* Hide number input's spin box  */
+
 .register-wrapper .register-form .register-success p {
     color: #ffffff;
     text-align: center;
@@ -134,13 +146,19 @@ body {
     margin: 10px;
 }
 
-.register-wrapper .register-form .register-input-field .register-input {
+.register-wrapper .register-form .register-input-field .register-input,
+.register-wrapper .register-form .register-input-field textarea {
     width: 100%;
     outline: none;
     border: 1px solid #d5dbd9;
     font-size: 17px;
     padding: 8px 10px;
     border-radius: 5px;
+}
+
+.register-wrapper .register-form .register-input-field textarea {
+    resize: none;
+    height: 125px;
 }
 
 .register-wrapper .register-form .register-input-field .register-input:focus,

@@ -10,6 +10,8 @@
 
 		public int? CategoryID { get; set; } = null;
 
+		public CategoriesModel? Category { get; set; } = null;
+
 		public bool Active { get; set; } = true;
 
 		public bool Deleted { get; set; } = false;

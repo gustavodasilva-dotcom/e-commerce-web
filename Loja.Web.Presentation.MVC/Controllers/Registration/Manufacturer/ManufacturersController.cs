@@ -5,6 +5,7 @@ using Loja.Web.Presentation.Models.Registration.Address;
 using Loja.Web.Presentation.Models.Registration.Contact;
 using Loja.Web.Presentation.Models.Registration.Manufacturer;
 using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
 {
@@ -70,6 +71,59 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
                 }
             }
             return Unauthorized();
+        }
+        #endregion
+
+        #region Get
+        [HttpGet]
+        public async Task<JsonResult> Get()
+        {
+            dynamic result = new ExpandoObject();
+            try
+            {
+                var manufacturers = await _manufacturerApplication.GetAllAsync();
+                if (manufacturers.Any())
+                {
+                    var manufacturersObj = new List<ManufacturersModel>();
+                    foreach (var manufacturer in manufacturers)
+                    {
+                        manufacturersObj.Add(new ManufacturersModel
+                        {
+                            GuidID = manufacturer.GuidID,
+                            Name = manufacturer.Name,
+                            BrazilianCompany = manufacturer.BrazilianCompany,
+                            CAGE = manufacturer.CAGE,
+                            NCAGE = manufacturer.NCAGE,
+                            SEC = manufacturer.SEC,
+                            Contacts = new ContactsModel
+                            {
+                                ID = manufacturer.ContactID
+                            },
+                            Addresses = new AddressesModel
+                            {
+                                ID = manufacturer.AddressID
+                            },
+                            FederalTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                            StateTaxpayerRegistrationNumber = manufacturer.StateTaxpayerRegistrationNumber,
+                            Active = manufacturer.Active,
+                            Deleted = manufacturer.Deleted
+                        });
+                    }
+                    result.Code = 1;
+                    result.Manufacturers = manufacturersObj;
+                }
+                else
+                {
+                    result.Code = 0;
+                    result.Message = "There's no manufacturers registered.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Code = 0;
+                result.Message = e.Message;
+            }
+            return Json(result);
         }
         #endregion
 

@@ -16,20 +16,24 @@
         <div>
             <h1 class="register-title">@ViewData["Title"]</h1>
         </div>
-        
+
         <div>
 
             <table class="register-table">
 
                 <tr class="register-table-tr">
-                    <th class="register-table-th">Name</th>
+                    <th class="register-table-th">Subcategory</th>
+                    @*<th class="register-table-th">Category</th>*@
                 </tr>
 
-                @foreach (var item in @Model)
+                @foreach (var item in @Model.OrderBy(x => x.CategoryID))
                 {
+
                     <tr class="register-table-tr">
                         <td class="register-table-td" id="subcategories-name" data-guid="@item?.GuidID">@item?.Name?.ToUpper()</td>
+                        @*<td class="register-table-td" id="subcategories-name" data-guid="@item?.GuidID">@item?.Category?.Name</td>*@
                     </tr>
+
                 }
 
             </table>

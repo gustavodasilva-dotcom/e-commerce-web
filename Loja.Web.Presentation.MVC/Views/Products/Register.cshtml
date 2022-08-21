@@ -1,0 +1,206 @@
+﻿@model Loja.Web.Presentation.Models.Registration.Product.ProductsModel
+
+@{
+    ViewData["Title"] = "Register | Products";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+</head>
+<body>
+    <div class="register-wrapper">
+
+        <div>
+            <h1 class="register-title">Register</h1>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="register-form">
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="register-alert">
+                        <p>@ViewBag.ErrorMessage</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <div class="register-success">
+                        <p>@ViewBag.SuccessMessage</p>
+                    </div>
+                }
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Name"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new
+                        {
+                            placeholder = "Description"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Price"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Discount, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Discount"
+                        }
+                    })
+                </div>
+
+                <div class="register-select-field">
+                    <select name="subcategories" class="register-select" id="register-select-subcategories">
+                        <option value="">Select a subcategory</option>
+                    </select>
+                </div>
+
+                <div class="register-select-field">
+                    <select name="manufacturers" class="register-select" id="register-select-manufacturers">
+                        <option value="">Select a manufacturer</option>
+                    </select>
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Weight, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Weight"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Height, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Height"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Width, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Width"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Length, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Length"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    @Html.EditorFor(model => model.Stock, new { htmlAttributes = new
+                        {
+                            @class = "register-input",
+                            placeholder = "Stock",
+                            min = "0"
+                        }
+                    })
+                </div>
+
+                <div class="register-input-field">
+                    <button type="submit" class="register-btn-submit" name="register" id="register">Register</button>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</body>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            GetManufacturers();
+            GetSubcategories();
+        });
+
+        function GetManufacturers()
+        {
+            $.ajax({
+                async: true,
+                type: "GET",
+                dataType: "json",
+                url: "/Manufacturers/Get",
+                success: function(result) {
+                    if (result.Code == 1) {
+                        SetComboBoxManufacturers(result.Manufacturers);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                },
+                error: function(req, status, error) {
+                    alert('Error: ', error);
+                }
+            });
+        }
+
+        function GetSubcategories()
+        {
+            $.ajax({
+                async: true,
+                type: "GET",
+                dataType: "json",
+                url: "/Subcategories/Get",
+                success: function(result) {
+                    if (result.Code == 1) {
+                        SetComboBoxSubcategories(result.Subcategories);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                },
+                error: function(req, status, error) {
+                    alert('Error: ', error);
+                }
+            });
+        }
+
+        function SetComboBoxManufacturers(manufacturers) {
+            $.each(manufacturers, function(i, item) {
+                $('#register-select-manufacturers').append(`<option value="${manufacturers[i].guidID}">${manufacturers[i].name}</option>`);
+            });
+        }
+
+        function SetComboBoxSubcategories(subcategories) {
+            $.each(subcategories, function(i, item) {
+                $('#register-select-subcategories').append(`<option value="${subcategories[i].guidID}">${subcategories[i].name}</option>`);
+            });
+        }
+
+    </script>
+
+}

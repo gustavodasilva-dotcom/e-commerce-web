@@ -1,6 +1,7 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Presentation.Models.Registration.Product;
 using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
@@ -26,26 +27,46 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         {
             if (HttpContext.Session.GetString("Role") == "Employee")
             {
+                List<SubcategoriesModel>? result = new();
                 try
                 {
                     var subcategories = await _subcategoryApplication.GetAllAsync();
-                    if (subcategories.Any())
+                    var categories = await _categoryApplication.GetAllAsync();
+                    foreach (var subcategory in subcategories)
                     {
-                        return View(subcategories.Select(x => new SubcategoriesModel
+                        var sub = new SubcategoriesModel
                         {
-                            ID = x?.ID,
-                            GuidID = x.GuidID,
-                            Name = x.Name,
-                            CategoryID = x.CategoryID,
-                            Active = x.Active,
-                            Deleted = x.Deleted,
-                            Created_at = x.Created_at,
-                            Created_by = x.Created_by,
-                            Deleted_at = x.Deleted_at,
-                            Deleted_by = x.Deleted_by
-                        }));
+                            ID = subcategory?.ID,
+                            GuidID = subcategory.GuidID,
+                            Name = subcategory.Name,
+                            CategoryID = subcategory.CategoryID,
+                            Active = subcategory.Active,
+                            Deleted = subcategory.Deleted,
+                            Created_at = subcategory.Created_at,
+                            Created_by = subcategory.Created_by,
+                            Deleted_at = subcategory.Deleted_at,
+                            Deleted_by = subcategory.Deleted_by
+                        };
+                        foreach (var category in categories)
+                        {
+                            if (sub.ID == category?.ID)
+                            {
+                                sub.Category = new CategoriesModel
+                                {
+                                    ID = category?.ID,
+                                    GuidID = category.GuidID,
+                                    Name = category.Name,
+                                    Active = category.Active,
+                                    Deleted = category.Deleted,
+                                    Created_at = category.Created_at,
+                                    Deleted_at = category.Deleted_at,
+                                    Deleted_by = category.Deleted_by
+                                };
+                            }
+                        }
+                        result?.Add(sub);
                     }
-                    return NoContent();
+                    return View(result);
                 }
                 catch (Exception e)
                 {
@@ -53,6 +74,51 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                 }
             }
             return Unauthorized();
+        }
+        #endregion
+
+        #region Get
+        [HttpGet]
+        public async Task<JsonResult> Get()
+        {
+            dynamic result = new ExpandoObject();
+            try
+            {
+                var subcategories = await _subcategoryApplication.GetAllAsync();
+                if (subcategories.Any())
+                {
+                    var subcategoriesObj = new List<SubcategoriesModel>();
+                    foreach (var subcategory in subcategories)
+                    {
+                        subcategoriesObj.Add(new SubcategoriesModel
+                        {
+                            ID = subcategory?.ID,
+                            GuidID = subcategory.GuidID,
+                            Name = subcategory.Name,
+                            CategoryID = subcategory.CategoryID,
+                            Active = subcategory.Active,
+                            Deleted = subcategory.Deleted,
+                            Created_at = subcategory.Created_at,
+                            Created_by = subcategory.Created_by,
+                            Deleted_at = subcategory.Deleted_at,
+                            Deleted_by = subcategory.Deleted_by
+                        });
+                    }
+                    result.Code = 1;
+                    result.Subcategories = subcategoriesObj;
+                }
+                else
+                {
+                    result.Code = 0;
+                    result.Message = "There's no subcategories registered.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Code = 0;
+                result.Message = e.Message;
+            }
+            return Json(result);
         }
         #endregion
 
