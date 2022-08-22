@@ -50,6 +50,7 @@ builder.Services.AddSingleton<ICategoryApplication, CategoryApplication>();
 builder.Services.AddSingleton<ISubcategoryApplication, SubcategoryApplication>();
 builder.Services.AddSingleton<IProductApplication, ProductApplication>();
 builder.Services.AddSingleton<ICurrencyApplication, CurrencyApplication>();
+builder.Services.AddSingleton<IMeasurementApplication, MeasurementApplication>();
 #endregion
 
 var app = builder.Build();

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="dbo" />
+    <Folder Include="dbo\Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\UserRoles.sql" />
@@ -76,5 +77,10 @@
     <Build Include="dbo\UsersAddresses.sql" />
     <Build Include="dbo\UsersContacts.sql" />
     <Build Include="dbo\Currencies.sql" />
+    <Build Include="dbo\Measurements.sql" />
+    <Build Include="dbo\MeasurementTypes.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dbo\Scripts\MeasuramentTypes_Script.sql" />
   </ItemGroup>
 </Project>
