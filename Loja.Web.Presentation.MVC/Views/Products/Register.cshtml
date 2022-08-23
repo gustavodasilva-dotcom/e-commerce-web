@@ -45,12 +45,25 @@
                 </div>
 
                 <div class="register-input-field">
-                    @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new
+                    @Html.TextAreaFor(model => model.Description, new
                         {
-                            placeholder = "Description"
-                        }
-                    })
+                            @placeholder = "Description"
+                        })
                 </div>
+
+                <div class="register-select-field">
+                    <select name="subcategories" class="register-select" id="register-select-subcategories">
+                        <option value="">Select a subcategory</option>
+                    </select>
+                </div>
+
+                <div class="register-select-field">
+                    <select name="manufacturers" class="register-select" id="register-select-manufacturers">
+                        <option value="">Select a manufacturer</option>
+                    </select>
+                </div>
+
+                <h2 class="register-title-2">Product prices</h2>
 
                 <div class="register-select-field">
                     <select name="currencies" class="register-select" id="register-select-currencies">
@@ -78,20 +91,10 @@
                     })
                 </div>
 
-                <div class="register-select-field">
-                    <select name="subcategories" class="register-select" id="register-select-subcategories">
-                        <option value="">Select a subcategory</option>
-                    </select>
-                </div>
+                <h2 class="register-title-2">Product measures</h2>
 
                 <div class="register-select-field">
-                    <select name="manufacturers" class="register-select" id="register-select-manufacturers">
-                        <option value="">Select a manufacturer</option>
-                    </select>
-                </div>
-
-                <div class="register-select-field">
-                    <select name="height-manufacturers" class="register-select" id="register-select-mass-measurements">
+                    <select name="weight-measure" class="register-select" id="register-select-mass-measurements">
                         <option value="">Select mass measurement</option>
                     </select>
                 </div>
@@ -107,7 +110,7 @@
                 </div>
 
                 <div class="register-select-field">
-                    <select name="height-manufacturers" class="register-select" id="register-select-height-measurements">
+                    <select name="height-measure" class="register-select" id="register-select-height-measurements">
                         <option value="">Select height measurement</option>
                     </select>
                 </div>
@@ -123,7 +126,7 @@
                 </div>
 
                 <div class="register-select-field">
-                    <select name="width-manufacturers" class="register-select" id="register-select-width-measurements">
+                    <select name="width-measure" class="register-select" id="register-select-width-measurements">
                         <option value="">Select width measurement</option>
                     </select>
                 </div>
@@ -139,7 +142,7 @@
                 </div>
 
                 <div class="register-select-field">
-                    <select name="length-manufacturers" class="register-select" id="register-select-length-measurements">
+                    <select name="length-measure" class="register-select" id="register-select-length-measurements">
                         <option value="">Select length measurement</option>
                     </select>
                 </div>
@@ -154,12 +157,14 @@
                     })
                 </div>
 
+                <h2 class="register-title-2">Stock details</h2>
+
                 <div class="register-input-field">
                     @Html.EditorFor(model => model.Stock, new { htmlAttributes = new
                         {
                             @class = "register-input",
                             pattern = "^[0-9]*$",
-                            placeholder = "Stock",
+                            placeholder = "Quantity",
                             min = "0"
                         }
                     })
@@ -185,15 +190,14 @@
         $(document).ready(function () {
             $('#register-input-price').maskMoney();
             $('#register-input-weight').mask("#0.000", {reverse: true});
-            $('#register-input-height').mask("#0.00", {reverse: true});
-            $('#register-input-width').mask("#0.00", {reverse: true});
-            $('#register-input-length').mask("#0.00", {reverse: true});
+            $('#register-input-height').mask("#0.000", {reverse: true});
+            $('#register-input-width').mask("#0.000", {reverse: true});
+            $('#register-input-length').mask("#0.000", {reverse: true});
             
             GetManufacturers();
             GetSubcategories();
             GetCurrencies();
-            GetHeightMeasurements();
-            //GetMassMeasurements();
+            GetMeasurements();
         });
 
         function GetManufacturers() {
@@ -256,35 +260,15 @@
             });
         }
 
-        function GetHeightMeasurements() {
+        function GetMeasurements() {
             $.ajax({
                 async: true,
                 type: "GET",
                 dataType: "json",
-                url: "/Measurements/GetHeightMeasurements",
+                url: "/Measurements/Get",
                 success: function(result) {
                     if (result.Code == 1) {
-                        SetComboBoxHeightMeasurements(result.Measurements);
-                    }
-                    else {
-                        alert(result.Message);
-                    }
-                },
-                error: function(req, status, error) {
-                    alert('Error: ', error);
-                }
-            });
-        }
-
-        function GetMassMeasurements() {
-            $.ajax({
-                async: true,
-                type: "GET",
-                dataType: "json",
-                url: "/Measurements/GetMassMeasurements",
-                success: function(result) {
-                    if (result.Code == 1) {
-                        SetComboBoxMassMeasurements(result.Measurements);
+                        SetComboBoxMeasurements(result.Measurements);
                     }
                     else {
                         alert(result.Message);
@@ -314,17 +298,18 @@
             });
         }
 
-        function SetComboBoxHeightMeasurements(measurements) {
-            $.each(measurements, function(i, item) {
-                $('#register-select-height-measurements').append(`<option value="${measurements[i].guidID}">${measurements[i].name}</option>`);
-                $('#register-select-width-measurements').append(`<option value="${measurements[i].guidID}">${measurements[i].name}</option>`);
-                $('#register-select-length-measurements').append(`<option value="${measurements[i].guidID}">${measurements[i].name}</option>`);
-            });
-        }
+        function SetComboBoxMeasurements(measurements) {
+            var mass = measurements.filter(function(value) { return value.measurementTypeID == 1 });
+            var height = measurements.filter(function(value) { return value.measurementTypeID == 2 });
 
-        function SetComboBoxMassMeasurements(measurements) {
-            $.each(measurements, function(i, item) {
-                $('#register-select-mass-measurements').append(`<option value="${measurements[i].guidID}">${measurements[i].name}</option>`);
+            $.each(height, function(i, item) {
+                $('#register-select-height-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
+                $('#register-select-width-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
+                $('#register-select-length-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
+            });
+
+            $.each(mass, function(i, item) {
+                $('#register-select-mass-measurements').append(`<option value="${mass[i].guidID}">${mass[i].name}</option>`);
             });
         }
 

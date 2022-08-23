@@ -19,10 +19,14 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         public int Discount { get; private set; }
 		public int SubcategoryID { get; private set; }
 		public int ManufacturerID { get; private set; }
+        public int? WeightMeasurementTypeID { get; private set; }
 		public decimal? Weight { get; private set; }
+        public int? HeightMeasurementTypeID { get; private set; }
 		public decimal? Height { get; private set; }
+        public int? WidthMeasurementTypeID { get;  private set; }
 		public decimal? Width { get; private set; }
-		public decimal? Length { get; private set; }
+        public int? LengthMeasurementTypeID { get; private set; }
+        public decimal? Length { get; private set; }
 		public int Stock { get; private set; }
 		public bool Active { get; private set; }
 		public bool Deleted { get; private set; }
@@ -69,9 +73,13 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                     Discount = model.Discount,
                     SubcategoryID = model.SubcategoryID.Value,
                     ManufacturerID = model.ManufacturerID.Value,
+                    WeightMeasurementTypeID = model.WeightMeasurementTypeID,
                     Weight = model.WeightConverted,
+                    HeightMeasurementTypeID = model.HeightMeasurementTypeID,
                     Height = model.HeightConverted,
+                    WidthMeasurementTypeID = model.WidthMeasurementTypeID,
                     Width = model.WidthConverted,
+                    LengthMeasurementTypeID = model.LengthMeasurementTypeID,
                     Length = model.LengthConverted,
                     Stock = model.Stock,
                     Active = model.Active,

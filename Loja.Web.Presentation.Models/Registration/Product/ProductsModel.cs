@@ -9,31 +9,49 @@
 		public string Name { get; set; }
 		
 		public string Description { get; set; }
-		
-		public string Price { get; set; }
-		public decimal? PriceConverted { get; set; } = null;
 
-		public int? CurrencyID { get; set; }
+        #region Monetary
+        public string Price { get; set; }
+		public decimal? PriceConverted { get; set; } = null;
+        
+        public int? CurrencyID { get; set; }
 
 		public int Discount { get; set; } = 0;
-		
+		#endregion
+
 		public int? SubcategoryID { get; set; }
 		
 		public int? ManufacturerID { get; set; }
-		
-		public string Weight { get; set; }
+
+        #region Measurements
+
+        #region Weight
+        public string Weight { get; set; }
 		public decimal? WeightConverted { get; set; } = null;
+		public int? WeightMeasurementTypeID { get; set; } = null;
+        #endregion
 
-		public string Height { get; set; }
+        #region Height
+        public string Height { get; set; }
 		public decimal? HeightConverted { get; set; } = null;
+		public int? HeightMeasurementTypeID { get; set; } = null;
+        #endregion
 
-		public string Width { get; set; }
+        #region Width
+        public string Width { get; set; }
 		public decimal? WidthConverted { get; set; } = null;
+		public int? WidthMeasurementTypeID { get; set; } = null;
+		#endregion
 
+		#region Length
 		public string Length { get; set; }
 		public decimal? LengthConverted { get; set; } = null;
+		public int? LengthMeasurementTypeID { get; set; } = null;
+        #endregion
 
-		public int Stock { get; set; }
+        #endregion
+
+        public int Stock { get; set; }
 
 		public bool Active { get; set; } = true;
 

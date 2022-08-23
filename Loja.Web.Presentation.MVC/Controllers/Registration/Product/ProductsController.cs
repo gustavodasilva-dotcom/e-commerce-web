@@ -13,6 +13,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         private readonly IManufacturerApplication _manufacturerApplication;
         private readonly ISubcategoryApplication _subcategoryApplication;
         private readonly ICurrencyApplication _currenciesApplication;
+        private readonly IMeasurementApplication _measurementApplication;
         #endregion
 
         #region << CONSTRUCTOR >>
@@ -20,12 +21,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
             IProductApplication productApplication,
             IManufacturerApplication manufacturerApplication,
             ISubcategoryApplication subcategoryApplication,
-            ICurrencyApplication currencyApplication)
+            ICurrencyApplication currencyApplication,
+            IMeasurementApplication measurementApplication)
         {
             _productApplication = productApplication;
             _manufacturerApplication = manufacturerApplication;
             _subcategoryApplication = subcategoryApplication;
             _currenciesApplication = currencyApplication;
+            _measurementApplication = measurementApplication;
         }
         #endregion
 
@@ -83,51 +86,99 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         {
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.GetString("Role") == "Employee")
                 {
-                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                    if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                    {
+                        model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                    }
+                    await ValidateKeys(model);
+                    if (await _productApplication.InsertAsync(model) != null)
+                    {
+                        return Redirect("~/Home/Index");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "An error occurred while executing the process. Please, contact the system administrator.";
+                    }
                 }
-                var currencies = await _currenciesApplication.GetAllAsync();
-                try
-                {
-                    model.CurrencyID = currencies?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["currencies"]))?.ID;
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a currency.");
-                }
-                var manufacturers = await _manufacturerApplication.GetAllAsync();
-                try
-                {
-                    model.ManufacturerID = manufacturers?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["manufacturers"]))?.ID;
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a manufacturer.");
-                }
-                var subcategories = await _subcategoryApplication.GetAllAsync();
-                try
-                {
-                    model.SubcategoryID = subcategories?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["subcategories"]))?.ID;
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a subcategory.");
-                }
-                if (await _productApplication.InsertAsync(model) != null)
-                {
-                    return Redirect("~/Home/Index");
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "An error occurred while executing the process. Please, contact the system administrator.";
-                }
+                return Unauthorized();
             }
             catch (Exception e)
             {
                 ViewBag.ErrorMessage = e.Message;
             }
             return View();
+        }
+        #endregion
+
+        #endregion
+
+        #region << VALIDATIONS >>
+
+        #region ValidateKeys
+        private async Task ValidateKeys(ProductsModel model)
+        {
+            var currencies = await _currenciesApplication.GetAllAsync();
+            try
+            {
+                model.CurrencyID = currencies?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["currencies"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a currency.");
+            }
+            var manufacturers = await _manufacturerApplication.GetAllAsync();
+            try
+            {
+                model.ManufacturerID = manufacturers?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["manufacturers"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a manufacturer.");
+            }
+            var subcategories = await _subcategoryApplication.GetAllAsync();
+            try
+            {
+                model.SubcategoryID = subcategories?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["subcategories"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a subcategory.");
+            }
+            var measurements = await _measurementApplication.GetAllMeasurementsAsync();
+            try
+            {
+                model.WeightMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["weight-measure"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a weight.");
+            }
+            try
+            {
+                model.HeightMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["height-measure"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a height.");
+            }
+            try
+            {
+                model.WidthMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["width-measure"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a width.");
+            }
+            try
+            {
+                model.LengthMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["length-measure"]))?.ID;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Please, select a length.");
+            }
         }
         #endregion
 

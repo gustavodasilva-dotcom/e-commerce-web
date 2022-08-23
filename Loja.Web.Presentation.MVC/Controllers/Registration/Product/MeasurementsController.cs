@@ -20,16 +20,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 
         #region << METHODS >>
 
-        #region GetHeightMeasurements
+        #region Get
         [HttpGet]
-        public async Task<JsonResult> GetHeightMeasurements()
+        public async Task<JsonResult> Get()
         {
             dynamic result = new ExpandoObject();
             try
             {
                 var measurements = await _measurementApplication.GetAllMeasurementsAsync();
-                var measurementTypes = await _measurementApplication.GetAllMeasurementTypesAsync();
-                measurementTypes = measurementTypes.OrderBy(x => x?.Name);
                 if (measurements.Any())
                 {
                     var measurementsObj = new List<MeasurementsModel>();
@@ -50,59 +48,12 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                         });
                     }
                     result.Code = 1;
-                    result.Measurements = measurementsObj.Where(x => x.MeasurementTypeID == measurementTypes?.First()?.ID);
+                    result.Measurements = measurementsObj.OrderBy(x => x.MeasurementTypeID);
                 }
                 else
                 {
                     result.Code = 0;
-                    result.Message = "There's no height measurements registered.";
-                }
-            }
-            catch (Exception e)
-            {
-                result.Code = 0;
-                result.Message = e.Message;
-            }
-            return Json(result);
-        }
-        #endregion
-
-        #region GetMassMeasurements
-        [HttpGet]
-        public async Task<JsonResult> GetMassMeasurements()
-        {
-            dynamic result = new ExpandoObject();
-            try
-            {
-                var measurements = await _measurementApplication.GetAllMeasurementsAsync();
-                var measurementTypes = await _measurementApplication.GetAllMeasurementTypesAsync();
-                measurementTypes = measurementTypes.OrderBy(x => x?.Name);
-                if (measurements.Any())
-                {
-                    var measurementsObj = new List<MeasurementsModel>();
-                    foreach (var measurement in measurements)
-                    {
-                        measurementsObj.Add(new MeasurementsModel
-                        {
-                            ID = measurement?.ID,
-                            GuidID = measurement.GuidID,
-                            Name = measurement.Name,
-                            MeasurementTypeID = measurement.MeasurementTypeID,
-                            Active = measurement.Active,
-                            Deleted = measurement.Deleted,
-                            Created_at = measurement.Created_at,
-                            Created_by = measurement.Created_by,
-                            Deleted_at = measurement.Deleted_at,
-                            Deleted_by = measurement.Deleted_by
-                        });
-                    }
-                    result.Code = 1;
-                    result.Measurements = measurementsObj.Where(x => x.MeasurementTypeID == measurementTypes?.Last()?.ID);
-                }
-                else
-                {
-                    result.Code = 0;
-                    result.Message = "There's no mass measurements registered.";
+                    result.Message = "There's no measurements registered.";
                 }
             }
             catch (Exception e)
