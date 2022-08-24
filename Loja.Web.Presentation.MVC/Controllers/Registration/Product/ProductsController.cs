@@ -3,6 +3,7 @@ using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Presentation.Models.Registration.Product;
 using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
@@ -76,13 +77,35 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #endregion
 
         #region Register
-        public IActionResult Register()
+        public async Task<IActionResult> Process(bool edit, Guid? guidID = null)
         {
-            return View();
+            if (HttpContext.Session.GetString("Role") == "Employee")
+            {
+                if (edit)
+                {
+                    if (guidID is null)
+                    {
+                        return BadRequest();
+                    }
+                    var products = await _productApplication.GetAllAsync();
+                    var product = products.FirstOrDefault(x => x?.GuidID == guidID);
+                    if (product is null)
+                    {
+                        return BadRequest();
+                    }
+                    // TODO: create return of the model.
+                    return View(product);
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            return Unauthorized();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(ProductsModel model)
+        public async Task<IActionResult> Process(ProductsModel model)
         {
             try
             {
@@ -93,9 +116,10 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                         model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
                     }
                     await ValidateKeys(model);
-                    if (await _productApplication.InsertAsync(model) != null)
+                    var product = await _productApplication.InsertAsync(model);
+                    if (model != null)
                     {
-                        return Redirect("~/Home/Index");
+                        return Redirect(string.Format("~/Products/Details?guidID={0}", model.GuidID));
                     }
                     else
                     {
@@ -109,6 +133,55 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                 ViewBag.ErrorMessage = e.Message;
             }
             return View();
+        }
+        #endregion
+
+        #region Details
+        public IActionResult Details(Guid guidID)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDetails(Guid productID)
+        {
+            dynamic result = new ExpandoObject();
+            try
+            {
+                var products = await _productApplication.GetAllAsync();
+                var product = products.FirstOrDefault(x => x?.GuidID == productID);
+                if (product is null || !product.Active || product.Deleted)
+                {
+                    throw new Exception("There's no product with the id informed.");
+                }
+                result.Code = 1;
+                result.Product = new
+                {
+                    product.GuidID,
+                    product.Name,
+                    product.Description,
+                    product.Price,
+                    product.CurrencyID,
+                    product.Discount,
+                    product.SubcategoryID,
+                    product.ManufacturerID,
+                    product.Weight,
+                    product.WeightMeasurementTypeID,
+                    product.Height,
+                    product.HeightMeasurementTypeID,
+                    product.Width,
+                    product.WidthMeasurementTypeID,
+                    product.Length,
+                    product.LengthMeasurementTypeID,
+                    product.Stock
+                };
+            }
+            catch (Exception e)
+            {
+                result.Code = 0;
+                result.Message = e.Message;
+            }
+            return Json(result);
         }
         #endregion
 

@@ -62,6 +62,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("The product's description cannot be null or empty.");
             }
+            model.Description = ValidateDescription(model.@Description);
             if (string.IsNullOrEmpty(model.Price))
             {
                 throw new Exception("Please, inform the product's price.");
@@ -135,6 +136,11 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("The product's stock cannot be less then 0.");
             }
+        }
+
+        private static string ValidateDescription(string description)
+        {
+            return description.Replace("\r\n", "<br>");
         }
         #endregion
 

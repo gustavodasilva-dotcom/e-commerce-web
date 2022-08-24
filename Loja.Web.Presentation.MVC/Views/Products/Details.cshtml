@@ -1,0 +1,155 @@
+﻿@{
+    ViewData["Title"] = "Details | Products";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Details/Products.css" />
+</head>
+<body>
+    <div class="product-details-wrapper-details">
+
+        <div class="product-details-left">
+
+            <div class="product-details-big-image">
+                <img src="~/css/test-imgs/big-img.jpg" />
+            </div>
+
+            <div class="product-details-images">
+                <div class="product-details-small-image">
+                    <img src="~/css/test-imgs/small-img-1.jpg" onmouseover="popImage(this.src)" />
+                </div>
+                <div class="product-details-small-image">
+                    <img src="~/css/test-imgs/small-img-2.jpg" onmouseover="popImage(this.src)" />
+                </div>
+                <div class="product-details-small-image">
+                    <img src="~/css/test-imgs/small-img-3.jpg" onmouseover="popImage(this.src)" />
+                </div>
+                <div class="product-details-small-image">
+                    <img src="~/css/test-imgs/small-img-4.jpg" onmouseover="popImage(this.src)" />
+                </div>
+                <div class="product-details-small-image">
+                    <img src="~/css/test-imgs/small-img-5.jpg" onmouseover="popImage(this.src)" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="product-details-right">
+
+            <div class="product-details-path">Home > Products > Electronics > Accessories & Supplies</div>
+            
+            <div class="product-details-name"></div>
+            
+            <div class="product-details-ratings">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half"></i>
+            </div>
+
+            <div class="product-details-description"></div>
+
+            <div class="product-details-price-stock">
+                <div class="product-details-price"></div>
+                <div class="product-details-original-price"></div>
+                <div class="product-details-discount"></div>
+                <div class="product-details-stock"></div>
+            </div>
+
+            <div class="product-details-sizes">
+                <p>Sizes: </p>
+                <div class="product-details-display-size-active">M</div>
+                <div class="product-details-display-size">L</div>
+                <div class="product-details-display-size">X</div>
+                <div class="product-details-display-size">XL</div>
+            </div>
+
+            <div class="product-details-quantity">
+                <p>Quantity: </p>
+                <input type="number" min="1" value="1" />
+            </div>
+
+            <div class="product-details-btn-box">
+                <button class="product-details-btn-second">Add to cart</button>
+                <button class="product-details-btn-first">Buy now</button>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+@section Scripts {
+
+    <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+    <script>
+
+        let bigImage = document.querySelector('.product-details-big-image img');
+
+        function popImage(image) {
+            bigImage.src = image;
+        }
+
+        $(document).ready(function() {
+            let urlLocation = window.location.href;
+            let params = (new URL(urlLocation)).searchParams;
+            let productID = params.get('guidID');
+
+            GetProductDetails(productID);
+        });
+
+        function GetProductDetails(guidID) {
+            $.ajax({
+                async: true,
+                type: "GET",
+                dataType: "json",
+                url: "/Products/GetDetails",
+                data: { productID: guidID },
+                success: function(result) {
+                    if (result.Code == 1) {
+                        SetDetails(result.Product);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                },
+                error: function(req, status, error) {
+                    alert('Error: ', error);
+                }
+            });
+        }
+
+        function SetDetails(product) {
+            $('.product-details-name').text(product.name);
+            $('.product-details-description').html(product.description);
+
+            if (product.discount > 0) {
+                let priceDiscounted = (product.price / 100) * product.discount;
+                $('.product-details-price').text(priceDiscounted.toFixed(2));
+                $('.product-details-original-price').text(product.price);
+            }
+            else {
+                $('.product-details-price').text(product.price);
+            }
+
+            if (product.stock >= 1) {
+                $('.product-details-stock').text('In stock');
+                $('.product-details-stock').css('color', '#0081A7');
+            }
+            else {
+                $('.product-details-stock').text('Not in stock');
+                $('.product-details-stock').css('color', '#F07167');
+            }
+
+            if (product.discount > 0) {
+                $('.product-details-discount').text('-' + product.discount + '%');
+            }
+        }
+
+    </script>
+
+}
