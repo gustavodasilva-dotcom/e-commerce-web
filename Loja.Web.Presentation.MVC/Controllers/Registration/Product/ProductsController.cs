@@ -79,42 +79,44 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region Register
         public IActionResult Process()
         {
-            //if (HttpContext.Session.GetString("Role") == "Employee")
-            //{
+            if (HttpContext.Session.GetString("Role") == "Employee")
+            {
                 return View();
-            //}
-            //return Unauthorized();
+            }
+            return Unauthorized();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Process(ProductsModel model)
+        public async Task<JsonResult> Process(ProductsModel model)
         {
+            dynamic result = new ExpandoObject();
             try
             {
-                if (HttpContext.Session.GetString("Role") == "Employee")
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
                 {
-                    if (HttpContext.Session.Keys.Any(k => k == "UserID"))
-                    {
-                        model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
-                    }
-                    await ValidateKeys(model);
-                    var product = await _productApplication.InsertAsync(model);
-                    if (model != null)
-                    {
-                        return Redirect(string.Format("~/Products/Details?guidID={0}", model.GuidID));
-                    }
-                    else
-                    {
-                        ViewBag.ErrorMessage = "An error occurred while executing the process. Please, contact the system administrator.";
-                    }
+                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    model.Created_by_Guid = Guid.Parse(
+                        createdByGuid != null ? createdByGuid :
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
                 }
-                return Unauthorized();
+                var product = await _productApplication.ProcessAsync(model);
+                if (product != null)
+                {
+                    result.Code = 1;
+                    result.GuidID = product.GuidID;
+                }
+                else
+                {
+                    result.Code = 0;
+                    result.Message = "An error occurred while executing the process. Please, contact the system administrator.";
+                }
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = e.Message;
+                result.Code = 0;
+                result.Message = e.Message;
             }
-            return View();
+            return Json(result);
         }
         #endregion
 
@@ -164,76 +166,6 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                 result.Message = e.Message;
             }
             return Json(result);
-        }
-        #endregion
-
-        #endregion
-
-        #region << VALIDATIONS >>
-
-        #region ValidateKeys
-        private async Task ValidateKeys(ProductsModel model)
-        {
-            var currencies = await _currenciesApplication.GetAllAsync();
-            try
-            {
-                model.CurrencyID = currencies?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["currencies"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a currency.");
-            }
-            var manufacturers = await _manufacturerApplication.GetAllAsync();
-            try
-            {
-                model.ManufacturerID = manufacturers?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["manufacturers"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a manufacturer.");
-            }
-            var subcategories = await _subcategoryApplication.GetAllAsync();
-            try
-            {
-                model.SubcategoryID = subcategories?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["subcategories"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a subcategory.");
-            }
-            var measurements = await _measurementApplication.GetAllMeasurementsAsync();
-            try
-            {
-                model.WeightMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["weight-measure"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a weight.");
-            }
-            try
-            {
-                model.HeightMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["height-measure"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a height.");
-            }
-            try
-            {
-                model.WidthMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["width-measure"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a width.");
-            }
-            try
-            {
-                model.LengthMeasurementTypeID = measurements?.FirstOrDefault(x => x?.GuidID == Guid.Parse(Request.Form["length-measure"]))?.ID;
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a length.");
-            }
         }
         #endregion
 

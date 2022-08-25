@@ -1,32 +1,43 @@
-﻿$(document).ready(function () {
-    var route = window.location.href;
-    var params = new URL(route).searchParams;
-    var edit = params.get('edit');
-    var guidID = params.get('guidID');
+﻿let guidID;
+let isEdit = false;
 
-    if (edit == null || edit == '') window.location.href = '/Home';
-    if (edit !== '0' && edit !== '1') window.location.href = '/Home';
-    if (edit === '1' && (guidID == null || guidID == '')) window.location.href = '/Home';
+$(document).ready(function () {
+    CheckRoute();
 
-    $('#register-input-price').maskMoney();
-    $('#register-input-weight').mask("#0.000", { reverse: true });
-    $('#register-input-height').mask("#0.000", { reverse: true });
-    $('#register-input-width').mask("#0.000", { reverse: true });
-    $('#register-input-length').mask("#0.000", { reverse: true });
+    SetMasks();
 
     GetManufacturers();
     GetSubcategories();
     GetCurrencies();
     GetMeasurements();
 
-    if (edit == '1') {
-        GetProductDetails(guidID);
-    }
+    if (isEdit) GetProductDetails(guidID);
 });
+
+function CheckRoute() {
+    var route = window.location.href;
+    var params = new URL(route).searchParams;
+    var edit = params.get('edit');
+    guidID = params.get('guidID');
+
+    if (edit == null || edit == '') window.location.href = '/Home';
+    if (edit !== '0' && edit !== '1') window.location.href = '/Home';
+    if (edit === '1' && (guidID == null || guidID == '')) window.location.href = '/Home';
+
+    isEdit = edit == '1' ? true : false;
+}
+
+function SetMasks() {
+    $('#register-input-price').maskMoney();
+    $('#register-input-weight').mask("#0.000", { reverse: true });
+    $('#register-input-height').mask("#0.000", { reverse: true });
+    $('#register-input-width').mask("#0.000", { reverse: true });
+    $('#register-input-length').mask("#0.000", { reverse: true });
+}
 
 function GetManufacturers() {
     $.ajax({
-        async: true,
+        async: false,
         type: "GET",
         dataType: "json",
         url: "/Manufacturers/Get",
@@ -46,7 +57,7 @@ function GetManufacturers() {
 
 function GetSubcategories() {
     $.ajax({
-        async: true,
+        async: false,
         type: "GET",
         dataType: "json",
         url: "/Subcategories/Get",
@@ -66,7 +77,7 @@ function GetSubcategories() {
 
 function GetCurrencies() {
     $.ajax({
-        async: true,
+        async: false,
         type: "GET",
         dataType: "json",
         url: "/Currencies/Get",
@@ -86,7 +97,7 @@ function GetCurrencies() {
 
 function GetMeasurements() {
     $.ajax({
-        async: true,
+        async: false,
         type: "GET",
         dataType: "json",
         url: "/Measurements/Get",
@@ -106,7 +117,7 @@ function GetMeasurements() {
 
 function GetProductDetails(guidID) {
     $.ajax({
-        async: true,
+        async: false,
         type: "GET",
         dataType: "json",
         url: "/Products/GetDetails",
@@ -124,6 +135,58 @@ function GetProductDetails(guidID) {
         }
     });
 }
+
+$('.register-btn-submit').click(function () {
+    let productModel = {};
+
+    if (isEdit) productModel.GuidID = guidID
+
+    productModel.Name = $('#register-input-name').val();
+
+    productModel.Description = $('#register-input-description').val();
+
+    productModel.Price = $('#register-input-price').val();
+
+    productModel.CurrencyID = parseInt($('#register-select-currencies').val());
+
+    productModel.Discount = parseInt($('#register-input-discount').val());
+
+    productModel.SubcategoryID = parseInt($('#register-select-subcategories').val());
+
+    productModel.ManufacturerID = parseInt($('#register-select-manufacturers').val());
+
+    productModel.Weight = $('#register-input-weight').val();
+    productModel.WeightMeasurementTypeID = parseInt($('#register-select-mass-measurements').val());
+
+    productModel.Height = $('#register-input-height').val();
+    productModel.HeightMeasurementTypeID = parseInt($('#register-select-height-measurements').val());
+
+    productModel.Width = $('#register-input-width').val();
+    productModel.WidthMeasurementTypeID = parseInt($('#register-select-width-measurements').val());
+
+    productModel.Length = $('#register-input-length').val();
+    productModel.LengthMeasurementTypeID = parseInt($('#register-select-length-measurements').val());
+
+    productModel.Stock = parseInt($('#register-input-stock').val());
+
+    productModel.IsEdit = isEdit;
+
+    $.ajax({
+        async: false,
+        type: "POST",
+        dataType: "json",
+        url: "/Products/Process",
+        data: { model: productModel },
+        success: function (result) {
+            if (result.Code == 1) {
+                window.location.href = '/Products/Details?guidID=' + result.GuidID;
+            }
+            else {
+                alert(result.Message);
+            }
+        }
+    });
+});
 
 function SetComboBoxManufacturers(manufacturers) {
     $.each(manufacturers, function (i, item) {
@@ -161,7 +224,7 @@ function SetComboBoxMeasurements(measurements) {
 function SetDetails(product) {
     $('#register-input-name').val(product.name);
     $('#register-input-description').text(product.description);
-    $('#register-input-price').val(product.price);
+    $('#register-input-price').val(product.price).trigger('mask.maskMoney');
     $('#register-input-discount').val(product.discount);
     $('#register-input-weight').val(product.weight);
     $('#register-input-height').val(product.height);

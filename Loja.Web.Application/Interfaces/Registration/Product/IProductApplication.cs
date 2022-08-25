@@ -6,6 +6,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Product
     public interface IProductApplication
     {
         Task<IEnumerable<Products?>> GetAllAsync();
-        Task<Products> InsertAsync(ProductsModel model);
+        Task<Products> ProcessAsync(ProductsModel model);
     }
 }

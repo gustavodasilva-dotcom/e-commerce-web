@@ -101,6 +101,52 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         }
         #endregion
 
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(ProductsModel model)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Products
+                {
+                    ID = model.ID.Value,
+                    GuidID = model.GuidID,
+                    Name = model.Name.Trim(),
+                    Description = model.Description.Trim(),
+                    Price = model.PriceConverted.Value,
+                    CurrencyID = model.CurrencyID.Value,
+                    Discount = model.Discount,
+                    SubcategoryID = model.SubcategoryID.Value,
+                    ManufacturerID = model.ManufacturerID.Value,
+                    WeightMeasurementTypeID = model.WeightMeasurementTypeID,
+                    Weight = model.WeightConverted,
+                    HeightMeasurementTypeID = model.HeightMeasurementTypeID,
+                    Height = model.HeightConverted,
+                    WidthMeasurementTypeID = model.WidthMeasurementTypeID,
+                    Width = model.WidthConverted,
+                    LengthMeasurementTypeID = model.LengthMeasurementTypeID,
+                    Length = model.LengthConverted,
+                    Stock = model.Stock,
+                    Active = model.Active,
+                    Deleted = model.Deleted,
+                    Created_at = model.Created_at,
+                    Created_by = model.Created_by,
+                    Deleted_at = model.Deleted_at,
+                    Deleted_by = model.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
         #endregion
     }
 }
