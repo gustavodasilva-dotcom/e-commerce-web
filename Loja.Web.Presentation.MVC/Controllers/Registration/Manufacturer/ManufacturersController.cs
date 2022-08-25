@@ -89,6 +89,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
                     {
                         manufacturersObj.Add(new ManufacturersModel
                         {
+                            ID = manufacturer?.ID,
                             GuidID = manufacturer.GuidID,
                             Name = manufacturer.Name,
                             BrazilianCompany = manufacturer.BrazilianCompany,

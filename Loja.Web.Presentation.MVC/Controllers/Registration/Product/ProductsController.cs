@@ -77,31 +77,13 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #endregion
 
         #region Register
-        public async Task<IActionResult> Process(bool edit, Guid? guidID = null)
+        public IActionResult Process()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
-            {
-                if (edit)
-                {
-                    if (guidID is null)
-                    {
-                        return BadRequest();
-                    }
-                    var products = await _productApplication.GetAllAsync();
-                    var product = products.FirstOrDefault(x => x?.GuidID == guidID);
-                    if (product is null)
-                    {
-                        return BadRequest();
-                    }
-                    // TODO: create return of the model.
-                    return View(product);
-                }
-                else
-                {
-                    return View();
-                }
-            }
-            return Unauthorized();
+            //if (HttpContext.Session.GetString("Role") == "Employee")
+            //{
+                return View();
+            //}
+            //return Unauthorized();
         }
 
         [HttpPost]
