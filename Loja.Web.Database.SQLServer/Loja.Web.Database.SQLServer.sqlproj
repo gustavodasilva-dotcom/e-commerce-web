@@ -79,6 +79,8 @@
     <Build Include="dbo\Currencies.sql" />
     <Build Include="dbo\Measurements.sql" />
     <Build Include="dbo\MeasurementTypes.sql" />
+    <Build Include="dbo\Images.sql" />
+    <Build Include="dbo\ProductsImages.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\MeasuramentTypes_Script.sql" />

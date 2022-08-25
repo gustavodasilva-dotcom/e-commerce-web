@@ -5,7 +5,7 @@
 	[Name]			VARCHAR(60)			NOT NULL,
 	[CategoryID]	INT					NOT NULL,
 	[Active]		BIT					CONSTRAINT [DF_Subcategory_Active]		DEFAULT (1) NOT NULL,
-	[Deleted]		BIT					CONSTRAINT [DF_Subcategory_Deleted]	DEFAULT (0) NOT NULL,
+	[Deleted]		BIT					CONSTRAINT [DF_Subcategory_Deleted]		DEFAULT (0) NOT NULL,
 	[Created_at]	DATETIME			CONSTRAINT [DF_Subcategory_Created_at]	DEFAULT (GETDATE()) NOT NULL,
 	[Created_by]	INT					NULL,
 	[Deleted_at]	DATETIME			NULL,
