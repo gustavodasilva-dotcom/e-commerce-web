@@ -46,11 +46,8 @@ function GetManufacturers() {
                 SetComboBoxManufacturers(result.Manufacturers);
             }
             else {
-                alert(result.Message);
+                ShowMessageError(result.Message);
             }
-        },
-        error: function (req, status, error) {
-            alert('Error: ', error);
         }
     });
 }
@@ -66,11 +63,8 @@ function GetSubcategories() {
                 SetComboBoxSubcategories(result.Subcategories);
             }
             else {
-                alert(result.Message);
+                ShowMessageError(result.Message);
             }
-        },
-        error: function (req, status, error) {
-            alert('Error: ', error);
         }
     });
 }
@@ -86,11 +80,8 @@ function GetCurrencies() {
                 SetComboBoxCurrencies(result.Currencies);
             }
             else {
-                alert(result.Message);
+                ShowMessageError(result.Message);
             }
-        },
-        error: function (req, status, error) {
-            alert('Error: ', error);
         }
     });
 }
@@ -106,11 +97,8 @@ function GetMeasurements() {
                 SetComboBoxMeasurements(result.Measurements);
             }
             else {
-                alert(result.Message);
+                ShowMessageError(result.Message);
             }
-        },
-        error: function (req, status, error) {
-            alert('Error: ', error);
         }
     });
 }
@@ -127,11 +115,8 @@ function GetProductDetails(guidID) {
                 SetDetails(result.Product);
             }
             else {
-                alert(result.Message);
+                ShowMessageError(result.Message);
             }
-        },
-        error: function (req, status, error) {
-            alert('Error: ', error);
         }
     });
 }
@@ -182,7 +167,7 @@ $('.register-btn-submit').click(function () {
                 window.location.href = '/Products/Details?guidID=' + result.GuidID;
             }
             else {
-                alert(result.Message);
+                ShowMessageError(result.Message);
             }
         }
     });

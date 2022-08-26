@@ -66,28 +66,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <script>
-        $('#logout-button').click(function() {
-            $.ajax({
-                    async: false,
-                    type: "POST",
-                    dataType: "json",
-                    url: "/Accounts/Logout",
-                    success: function(result) {
-                        if (result.Code == 1) {
-                            window.location.href = '/Home/Index';
-                        }
-                        else {
-                            alert(result.Message);
-                        }
-                    },
-                    error: function(req, status, error) {
-                        alert('Error: ', error);
-                    }
-                });
-        });
-    </script>
+    <script src="~/js/Global/00_Global.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

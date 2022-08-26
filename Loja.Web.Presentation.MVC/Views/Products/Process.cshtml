@@ -21,19 +21,11 @@
             <h1 class="register-title">Register</h1>
         </div>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-
+        <form>
+            
             <div class="register-form">
 
-                <div class="register-alert" style="display: none;">
-                    <p>@ViewBag.ErrorMessage</p>
-                </div>
-
-                <div class="register-success" style="display: none;">
-                    <p>@ViewBag.SuccessMessage</p>
-                </div>
+                <div class="register-alert" style="display: none;"><p></p></div>
 
                 <div class="register-input-field">
                     <input type="text" class="register-input" id="register-input-name" placeholder="Name" />
@@ -119,12 +111,15 @@
                     <input type="number" class="register-input" id="register-input-stock" min="0" pattern="^[0-9]*$" placeholder="Quantity" />
                 </div>
 
+                <div class="register-alert" style="display: none;"><p></p></div>
+
                 <div class="register-input-field">
                     <button type="button" class="register-btn-submit" name="register" id="register">Register</button>
                 </div>
 
             </div>
-        }
+
+        </form>
 
     </div>
 </body>
