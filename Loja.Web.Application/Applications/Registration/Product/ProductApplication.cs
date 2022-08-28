@@ -97,7 +97,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
             {
                 throw new Exception("Please, inform the product's price.");
             }
-            if (!decimal.TryParse(model.Price, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal price))
+            if (!decimal.TryParse(model.Price.Replace(",", ""), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal price))
             {
                 throw new Exception("The product's price is not numeric.");
             }

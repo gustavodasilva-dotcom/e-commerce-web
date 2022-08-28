@@ -76,7 +76,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
-        #region Register
+        #region Process
         public IActionResult Process()
         {
             if (HttpContext.Session.GetString("Role") == "Employee")
@@ -90,6 +90,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         public async Task<JsonResult> Process(ProductsModel model)
         {
             dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
                 if (HttpContext.Session.Keys.Any(k => k == "UserID"))
@@ -103,17 +104,35 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                 if (product != null)
                 {
                     result.Code = 1;
-                    result.GuidID = product.GuidID;
+                    result.Product = new
+                    {
+                        product.ID,
+                        product.GuidID,
+                        product.Name,
+                        product.Description,
+                        product.Price,
+                        product.CurrencyID,
+                        product.Discount,
+                        product.SubcategoryID,
+                        product.ManufacturerID,
+                        product.WeightMeasurementTypeID,
+                        product.Weight,
+                        product.HeightMeasurementTypeID,
+                        product.Height,
+                        product.WidthMeasurementTypeID,
+                        product.Width,
+                        product.LengthMeasurementTypeID,
+                        product.Length,
+                        product.Stock
+                    };
                 }
                 else
                 {
-                    result.Code = 0;
                     result.Message = "An error occurred while executing the process. Please, contact the system administrator.";
                 }
             }
             catch (Exception e)
             {
-                result.Code = 0;
                 result.Message = e.Message;
             }
             return Json(result);

@@ -1,5 +1,6 @@
 ﻿let guidID;
 let isEdit = false;
+let imagesIDs = [];
 
 $(document).ready(function () {
     CheckRoute();
@@ -122,6 +123,15 @@ function GetProductDetails(guidID) {
 }
 
 $('.register-btn-submit').click(function () {
+    if (imagesIDs.length == 0) {
+        imagesIDs = UploadImages();
+
+        if (imagesIDs.length != 6) {
+            ShowMessageError("There has to be exactly 6 files to upload.");
+            return;
+        }
+    }
+
     let productModel = {};
 
     if (isEdit) productModel.GuidID = guidID
@@ -164,7 +174,8 @@ $('.register-btn-submit').click(function () {
         data: { model: productModel },
         success: function (result) {
             if (result.Code == 1) {
-                window.location.href = '/Products/Details?guidID=' + result.GuidID;
+                InsertProductsImages(result.Product.id, imagesIDs);
+                window.location.href = '/Products/Details?guidID=' + result.Product.guidID;
             }
             else {
                 ShowMessageError(result.Message);

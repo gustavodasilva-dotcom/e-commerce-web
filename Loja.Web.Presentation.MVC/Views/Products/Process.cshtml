@@ -10,116 +10,122 @@
 
 }
 
-<head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
-</head>
-<body>
-    <div class="register-wrapper">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+    </head>
+    <body>
+        <div class="register-wrapper">
 
-        <div>
-            <h1 class="register-title">Register</h1>
-        </div>
-
-        <form>
-            
-            <div class="register-form">
-
-                <div class="register-alert" style="display: none;"><p></p></div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-name" placeholder="Name" />
-                </div>
-
-                <div class="register-input-field">
-                    <textarea placeholder="Description" id="register-input-description"></textarea>
-                </div>
-
-                <div class="register-select-field">
-                    <select name="subcategories" class="register-select" id="register-select-subcategories">
-                        <option value="">Select a subcategory</option>
-                    </select>
-                </div>
-
-                <div class="register-select-field">
-                    <select name="manufacturers" class="register-select" id="register-select-manufacturers">
-                        <option value="">Select a manufacturer</option>
-                    </select>
-                </div>
-
-                <h2 class="register-title-2">Product prices</h2>
-
-                <div class="register-select-field">
-                    <select name="currencies" class="register-select" id="register-select-currencies">
-                        <option value="">Select a currency</option>
-                    </select>
-                </div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-price" placeholder="Price" />
-                </div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-discount" pattern="^[0-9]*$" placeholder="Discount" />
-                </div>
-
-                <h2 class="register-title-2">Product measures</h2>
-
-                <div class="register-select-field">
-                    <select name="weight-measure" class="register-select" id="register-select-mass-measurements">
-                        <option value="">Select mass measurement</option>
-                    </select>
-                </div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-weight" placeholder="Weight" />
-                </div>
-
-                <div class="register-select-field">
-                    <select name="height-measure" class="register-select" id="register-select-height-measurements">
-                        <option value="">Select height measurement</option>
-                    </select>
-                </div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-height" placeholder="Height" />
-                </div>
-
-                <div class="register-select-field">
-                    <select name="width-measure" class="register-select" id="register-select-width-measurements">
-                        <option value="">Select width measurement</option>
-                    </select>
-                </div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-width" placeholder="Width" />
-                </div>
-
-                <div class="register-select-field">
-                    <select name="length-measure" class="register-select" id="register-select-length-measurements">
-                        <option value="">Select length measurement</option>
-                    </select>
-                </div>
-
-                <div class="register-input-field">
-                    <input type="text" class="register-input" id="register-input-length" placeholder="Length" />
-                </div>
-
-                <h2 class="register-title-2">Stock details</h2>
-
-                <div class="register-input-field">
-                    <input type="number" class="register-input" id="register-input-stock" min="0" pattern="^[0-9]*$" placeholder="Quantity" />
-                </div>
-
-                <div class="register-alert" style="display: none;"><p></p></div>
-
-                <div class="register-input-field">
-                    <button type="button" class="register-btn-submit" name="register" id="register">Register</button>
-                </div>
-
+            <div>
+                <h1 class="register-title">Register</h1>
             </div>
 
-        </form>
+            <form>
 
-    </div>
-</body>
+                <div class="register-form">
+
+                    <div class="register-alert" style="display: none;"><p></p></div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-name" placeholder="Name" />
+                    </div>
+
+                    <div class="register-input-field">
+                        <textarea placeholder="Description" id="register-input-description"></textarea>
+                    </div>
+
+                    <div class="register-select-field">
+                        <select name="subcategories" class="register-select" id="register-select-subcategories">
+                            <option value="">Select a subcategory</option>
+                        </select>
+                    </div>
+
+                    <div class="register-select-field">
+                        <select name="manufacturers" class="register-select" id="register-select-manufacturers">
+                            <option value="">Select a manufacturer</option>
+                        </select>
+                    </div>
+
+                    <h2 class="register-title-2">Product's prices</h2>
+
+                    <div class="register-select-field">
+                        <select name="currencies" class="register-select" id="register-select-currencies">
+                            <option value="">Select a currency</option>
+                        </select>
+                    </div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-price" placeholder="Price" />
+                    </div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-discount" pattern="^[0-9]*$" placeholder="Discount" />
+                    </div>
+
+                    <h2 class="register-title-2">Product's measures</h2>
+
+                    <div class="register-select-field">
+                        <select name="weight-measure" class="register-select" id="register-select-mass-measurements">
+                            <option value="">Select mass measurement</option>
+                        </select>
+                    </div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-weight" placeholder="Weight" />
+                    </div>
+
+                    <div class="register-select-field">
+                        <select name="height-measure" class="register-select" id="register-select-height-measurements">
+                            <option value="">Select height measurement</option>
+                        </select>
+                    </div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-height" placeholder="Height" />
+                    </div>
+
+                    <div class="register-select-field">
+                        <select name="width-measure" class="register-select" id="register-select-width-measurements">
+                            <option value="">Select width measurement</option>
+                        </select>
+                    </div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-width" placeholder="Width" />
+                    </div>
+
+                    <div class="register-select-field">
+                        <select name="length-measure" class="register-select" id="register-select-length-measurements">
+                            <option value="">Select length measurement</option>
+                        </select>
+                    </div>
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" id="register-input-length" placeholder="Length" />
+                    </div>
+
+                    <h2 class="register-title-2">Stock details</h2>
+
+                    <div class="register-input-field">
+                        <input type="number" class="register-input" id="register-input-stock" min="0" pattern="^[0-9]*$" placeholder="Quantity" />
+                    </div>
+
+                    <h2 class="register-title-2">Product's image</h2>
+
+                    <div class="register-input-field">
+                        <input type="file" class="register-input-file" multiple="multiple" accept=".gif,.jpg,.jpeg,.png" />
+                    </div>
+
+                    <div class="register-alert" style="display: none;"><p></p></div>
+
+                    <div class="register-input-field">
+                        <button type="button" class="register-btn-submit" name="register" id="register">Register</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </body>
