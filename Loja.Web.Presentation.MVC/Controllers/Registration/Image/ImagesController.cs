@@ -20,6 +20,31 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Image
 
         #region << METHODS >>
 
+        [HttpGet]
+        public async Task<JsonResult> GetBases64ByProductID(Guid productID)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                var bases64 = await _imageApplication.GetBases64ByProductIDAsync(productID);
+                if (bases64.Any())
+                {
+                    result.Code = 1;
+                    result.Bases64 = bases64;
+                }
+                else
+                {
+                    result.Message = "This product has no images.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+
         #region InsertImage
         [HttpPost]
         public async Task<JsonResult> UploadImages()
@@ -36,13 +61,13 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Image
                         bases64.Add(_imageApplication.ConvertToBase64(file));
                     }
                     var images = await _imageApplication.InsertAsync(bases64);
-                    result.Code = 1;
                     result.Images = images.Select(x => new
                     {
                         x.ID,
                         x.GuidID,
                         x.Base64
                     });
+                    result.Code = 1;
                 }
                 else
                 {

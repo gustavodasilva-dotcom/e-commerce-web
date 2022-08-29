@@ -32,8 +32,8 @@ body {
 
 .product-details-wrapper-details .product-details-left .product-details-big-image {
     width: 255px;
-    margin-bottom: 35px;
-    margin-left: 50px;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .product-details-wrapper-details .product-details-left .product-details-big-image img {
@@ -46,14 +46,15 @@ body {
 
 .product-details-wrapper-details .product-details-left .product-details-images {
     display: flex;
-    justify-content: space-between;
-    width: 50%;
-    margin-top: 15px;
+    /*justify-content: space-between;*/
+    width: 65%;
+    /*margin-top: 15px;*/
+    margin-left: 40px;
 }
 
 .product-details-wrapper-details .product-details-left .product-details-images .product-details-small-image {
     width: 100px;
-    margin-left: 30px;
+    /*margin-left: 30px;*/
 }
 
 .product-details-wrapper-details .product-details-left .product-details-images .product-details-small-image img {

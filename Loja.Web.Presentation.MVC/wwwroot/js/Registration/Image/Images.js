@@ -57,3 +57,22 @@ function InsertProductsImages(productId, imagesId) {
         },
     });
 }
+
+async function GetBases64ByProductIDAsync(productID) {
+    window.Bases64 = {};
+
+    $.ajax({
+        async: false,
+        type: "GET",
+        dataType: "json",
+        url: "/Images/GetBases64ByProductID",
+        data: { productID: productID },
+        success: function (result) {
+            if (result.Code == 1) {
+                window.Bases64 = result.Bases64;
+            } else {
+                ShowMessageError(result.Message);
+            }
+        },
+    });
+}

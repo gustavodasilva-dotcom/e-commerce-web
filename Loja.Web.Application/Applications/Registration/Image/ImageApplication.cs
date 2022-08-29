@@ -1,5 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Image;
 using Loja.Web.Domain.Entities.Registration.Image;
+using Loja.Web.Domain.Entities.Registration.Product;
 using Loja.Web.Presentation.Models.Registration.Image;
 using Microsoft.AspNetCore.Http;
 
@@ -10,6 +11,7 @@ namespace Loja.Web.Application.Applications.Registration.Image
         #region << PROPERTIES >>
         private readonly Images _images = new();
         private readonly ProductsImages _productsImages = new();
+        private readonly Products _products = new();
         #endregion
 
         #region << METHODS >>
@@ -18,6 +20,35 @@ namespace Loja.Web.Application.Applications.Registration.Image
         public async Task<IEnumerable<Images?>> GetAllAsync()
         {
             return await _images.GetAllAsync();
+        }
+        #endregion
+
+        #region GetBases64ByProductIDAsync
+        public async Task<IEnumerable<string?>> GetBases64ByProductIDAsync(Guid productID)
+        {
+            List<string> bases64 = new();
+            var products = await _products.GetAllAsync();
+            var product = products?.FirstOrDefault(x => x?.GuidID == productID);
+            if (product is null)
+            {
+                throw new Exception("This product does not exists.");
+            }
+            var allProductsImages = await _productsImages.GetAllAsync();
+            var productsImages = allProductsImages.Where(x => x?.ProductID == product.ID);
+            if (productsImages is null)
+            {
+                throw new Exception("This product has no images.");
+            }
+            var images = await _images.GetAllAsync();
+            foreach (var productImage in productsImages)
+            {
+                var base64 = images.FirstOrDefault(x => x?.ID == productImage?.ImageID);
+                if (base64 != null)
+                {
+                    bases64.Add(base64.Base64);
+                }
+            }
+            return bases64;
         }
         #endregion
 

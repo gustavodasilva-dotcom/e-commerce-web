@@ -160,6 +160,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                 result.Code = 1;
                 result.Product = new
                 {
+                    product.ID,
                     product.GuidID,
                     product.Name,
                     product.Description,

@@ -4,6 +4,9 @@
     let productID = params.get('guidID');
 
     GetProductDetails(productID);
+
+    GetBases64ByProductIDAsync(productID);
+    ConvertBase64ToImage();
 });
 
 let bigImage = document.querySelector('.product-details-big-image img');
@@ -14,7 +17,7 @@ function popImage(image) {
 
 function GetProductDetails(guidID) {
     $.ajax({
-        async: true,
+        async: false,
         type: "GET",
         dataType: "json",
         url: "/Products/GetDetails",
@@ -22,6 +25,7 @@ function GetProductDetails(guidID) {
         success: function (result) {
             if (result.Code == 1) {
                 SetDetails(result.Product);
+                SetDescription(result.Product.description);
             }
             else {
                 alert(result.Message);
@@ -35,7 +39,7 @@ function GetProductDetails(guidID) {
 
 function SetDetails(product) {
     $('.product-details-name').text(product.name);
-    $('.product-details-description').text(product.description);
+    //$('.product-details-description').text(product.description);
 
     if (product.discount > 0) {
         let priceDiscounted = (product.price / 100) * product.discount;
@@ -59,5 +63,36 @@ function SetDetails(product) {
 
     if (product.discount > 0) {
         $('.product-details-discount').text('-' + product.discount + '%');
+    }
+}
+
+function SetDescription(description) {
+    if (description.length > 200) {
+        let firstPart = description.substring(0, 200);
+        let secondPart = description.substring(200, description.length - 1);
+
+        let htmlDescription = firstPart + '<span id="dots">...</span><span id="more">' + secondPart;
+
+        $('.product-details-description').html(htmlDescription);
+
+        SetReadMore();
+    }    
+}
+
+function ConvertBase64ToImage() {
+    if (window.Bases64.length > 0) {
+        for (let i = 0; i < window.Bases64.length; i++) {
+            var image = document.getElementById('img-' + (i + 1));
+            image.src = 'data:image/png;base64,' + window.Bases64[i];
+
+            if (i == 0) {
+                image.className = "product-details-big-image";
+
+                var smallImage1 = document.getElementById('img-1-small');
+                smallImage1.src = 'data:image/png;base64,' + window.Bases64[i];
+            } else {
+                image.className = "product-details-small-image";
+            }
+        }
     }
 }

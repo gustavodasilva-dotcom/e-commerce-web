@@ -19,3 +19,15 @@ function ShowMessageError(message) {
     $('.register-alert').show();
     $('.register-alert p').text(message);
 }
+
+function SetReadMore() {
+    $('.btn-read-more').text('Read more');
+    $('#dot').css('display', 'inline');
+    $('#more').css('display', 'none');
+}
+
+$('.btn-read-more').click(function () {
+    $('.btn-read-more').css('display', 'none');
+    $('#dot').css('display', 'none');
+    $('#more').css('display', 'inline');
+});
