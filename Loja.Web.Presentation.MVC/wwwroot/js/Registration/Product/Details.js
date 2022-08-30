@@ -43,6 +43,7 @@ function SetDetails(product) {
 
     if (product.discount > 0) {
         let priceDiscounted = (product.price / 100) * product.discount;
+        priceDiscounted = product.price - priceDiscounted;
         $('.product-details-price').text(priceDiscounted.toFixed(2));
         $('.product-details-original-price').text(product.price);
     }
