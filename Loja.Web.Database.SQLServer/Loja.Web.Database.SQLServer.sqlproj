@@ -81,6 +81,13 @@
     <Build Include="dbo\MeasurementTypes.sql" />
     <Build Include="dbo\Images.sql" />
     <Build Include="dbo\ProductsImages.sql" />
+    <Build Include="dbo\Orders.sql" />
+    <Build Include="dbo\OrdersProducts.sql" />
+    <Build Include="dbo\PaymentMethods.sql" />
+    <Build Include="dbo\CardsInfos.sql" />
+    <Build Include="dbo\OrdersStatus.sql" />
+    <Build Include="dbo\OrdersCardsInfos.sql" />
+    <Build Include="dbo\BankingBrands.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\MeasuramentTypes_Script.sql" />
