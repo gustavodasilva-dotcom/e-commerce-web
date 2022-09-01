@@ -1,4 +1,5 @@
-﻿using Loja.Web.Application.Interfaces.Registration.ShoppingCart;
+﻿using Loja.Web.Application.Interfaces.Registration.Product;
+using Loja.Web.Application.Interfaces.Registration.ShoppingCart;
 using Loja.Web.Presentation.Models.Registration.ShoppingCart;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
@@ -7,18 +8,31 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
 {
     public class ShoppingCartsController : Controller
     {
+        #region << PROPERTIES >>
+        private readonly IProductApplication _productApplication;
         private readonly IShoppingCartApplication _shoppingCartApplication;
+        #endregion
 
-        public ShoppingCartsController(IShoppingCartApplication shoppingCartApplication)
+        #region << CONSTRUCTOR >>
+        public ShoppingCartsController(
+            IProductApplication productApplication,
+            IShoppingCartApplication shoppingCartApplication)
         {
+            _productApplication = productApplication;
             _shoppingCartApplication = shoppingCartApplication;
         }
+        #endregion
 
+        #region << METHODS >>
+
+        #region Details
         public IActionResult Details()
         {
             return View();
         }
+        #endregion
 
+        #region AddToCart
         [HttpPost]
         public async Task<JsonResult> AddToCart(ShoppingCartsModel model)
         {
@@ -58,5 +72,68 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
             }
             return Json(result);
         }
+        #endregion
+
+        #region GetByUserID
+        [HttpGet]
+        public async Task<JsonResult> GetByUserID()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            result.RedirectToLogin = false;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    var userID = HttpContext.Session.GetString("UserID") ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                    if (Guid.TryParse(userID, out Guid userGuid))
+                    {
+                        result.Products = null;
+                        var productsCart = await _shoppingCartApplication.GetShoppingCartByUserGuidAsync(userGuid);
+                        if (productsCart.Any())
+                        {
+                            var shoppingCartProducts = productsCart.Select(x => new ShoppingCartsViewModel
+                            {
+                                ID = x.ID,
+                                GuidID = x.GuidID,
+                                Quantity = x.Quantity,
+                                ProductID = x.ProductID,
+                                ShoppingCartID = x.ShoppingCartID,
+                                Active = x.Active,
+                                Deleted = x.Deleted,
+                                Created_at = x.Created_at
+                            }).ToList();
+                            var products = await _productApplication.GetAllAsync();
+                            foreach (var cartProduct in shoppingCartProducts)
+                            {
+                                var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
+                                cartProduct.Name = productDetails?.Name;
+                                cartProduct.Description = productDetails?.Description;
+                                cartProduct.Price = productDetails?.Price;
+                            }
+                            result.Products = shoppingCartProducts;
+                        }
+                        result.Code = 1;
+                    }
+                    else
+                    {
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                    }
+                }
+                else
+                {
+                    result.RedirectToLogin = true;
+                }
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
+        #endregion
     }
 }

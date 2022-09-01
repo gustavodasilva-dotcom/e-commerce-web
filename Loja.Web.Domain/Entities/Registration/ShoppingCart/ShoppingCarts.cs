@@ -71,6 +71,36 @@ namespace Loja.Web.Domain.Entities.Registration.ShoppingCart
         }
         #endregion
 
+        #region InsertAsync
+        public async Task<long?> InsertAsync(int userID)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new ShoppingCarts
+                {
+                    GuidID = Guid.NewGuid(),
+                    UserID = userID,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Created_by = userID,
+                    Deleted_at = null,
+                    Deleted_by = null
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
+        }
+        #endregion
+
         #endregion
     }
 }

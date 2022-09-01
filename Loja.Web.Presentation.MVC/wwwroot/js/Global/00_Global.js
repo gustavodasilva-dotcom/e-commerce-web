@@ -1,4 +1,15 @@
-﻿$('#logout-button').click(function () {
+﻿function ShowMessageError(message) {
+    $('.register-alert').show();
+    $('.register-alert p').text(message);
+}
+
+function SetReadMore() {
+    $('.btn-read-more').text('Read more');
+    $('#dot').css('display', 'inline');
+    $('#more').css('display', 'none');
+}
+
+$('#logout-button').click(function () {
     $.ajax({
         async: false,
         type: "POST",
@@ -14,17 +25,6 @@
         }
     });
 });
-
-function ShowMessageError(message) {
-    $('.register-alert').show();
-    $('.register-alert p').text(message);
-}
-
-function SetReadMore() {
-    $('.btn-read-more').text('Read more');
-    $('#dot').css('display', 'inline');
-    $('#more').css('display', 'none');
-}
 
 $('.btn-read-more').click(function () {
     if ($('.btn-read-more').text() === 'Read more') {

@@ -6,5 +6,6 @@ namespace Loja.Web.Application.Interfaces.Registration.ShoppingCart
     public interface IShoppingCartApplication
     {
         Task<ShoppingCartsProducts?> AddToCartAsync(ShoppingCartsModel model);
+        Task<IEnumerable<ShoppingCartsProducts?>> GetShoppingCartByUserGuidAsync(Guid userGuid);
     }
 }

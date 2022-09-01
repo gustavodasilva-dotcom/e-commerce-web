@@ -43,8 +43,15 @@
                     }
                     else
                     {
-                        // TODO: create function to clean the sessions.
-                        <button type="button" class="login-upper-button" id="logout-button">Log out</button>
+                        <div class="user-content">
+                            <span class="user-logged">User name</span>
+                            <div class="dropdown-content">
+                                <a href="/ShoppingCarts/Details">Shopping cart</a>
+                                <a href="#" id="logout-button">Log out</a>
+                            </div>  
+                        </div>
+
+                        @*<button type="button" class="login-upper-button" id="logout-button">Log out</button>*@
                     }
                 </div>
             </div>
@@ -61,13 +68,13 @@
             &copy; 2022 - Loja
         </div>
     </footer>
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
     <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.js" type="text/javascript"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/Global/00_Global.js"></script>
-    <script src="~/js/Global/ShoppingCarts.js"></script>
     <script src="~/js/Registration/Image/Images.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

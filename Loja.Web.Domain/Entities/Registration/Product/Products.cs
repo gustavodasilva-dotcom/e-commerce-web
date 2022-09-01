@@ -14,7 +14,7 @@ namespace Loja.Web.Domain.Entities.Registration.Product
 		public Guid GuidID { get; private set; }
 		public string Name { get; private set; }
 		public string Description { get; private set; }
-		public decimal Price { get; private set; }
+		public decimal? Price { get; private set; }
         public int CurrencyID { get; private set; }
         public int Discount { get; private set; }
 		public int SubcategoryID { get; private set; }
