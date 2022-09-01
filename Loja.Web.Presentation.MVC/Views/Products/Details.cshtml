@@ -12,6 +12,9 @@
 
         <div class="product-details-left">
 
+            <input type="hidden" id="product-id" />
+            <input type="hidden" id="product-quantity" />
+
             <div class="product-details-big-image">
                 <img id="img-1" />
             </div>
@@ -75,11 +78,11 @@
 
             <div class="product-details-quantity">
                 <p>Quantity: </p>
-                <input type="number" min="1" value="1" />
+                <input type="number" id="input-product-quantity" min="1" value="1" />
             </div>
 
             <div class="product-details-btn-box">
-                <button class="product-details-btn-second">Add to cart</button>
+                <button class="product-details-btn-second" id="add-to-cart">Add to cart</button>
                 <button class="product-details-btn-first">Buy now</button>
             </div>
 
@@ -93,6 +96,5 @@
     <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="~/js/Registration/Product/Details.js"></script>
-    <script src="~/js/Global/00_Global.js"></script>
 
 }

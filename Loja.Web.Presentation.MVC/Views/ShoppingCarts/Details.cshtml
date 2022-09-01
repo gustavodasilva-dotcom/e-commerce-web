@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Details/ShoppingCarts.css" />
+</head>
+<body>
+    <div class="shop-cart-wrapper">
+        <h1>@ViewData["Title"]</h1>
+
+        <div id="tabs">
+            <ul class="tab-list">
+                <li><a class="tab-option" href="#tab-items">Items</a></li>
+                <li><a class="tab-option" href="#tab-buy-again">Buy again</a></li>
+            </ul>
+
+            <hr />
+
+            <div id="tab-items">
+
+            </div>
+
+            <div id="tab-buy-again">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+
+    <script src="~/js/Registration/ShoppingCart/Details.js"></script>
+
+}

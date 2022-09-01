@@ -27,7 +27,13 @@ function SetReadMore() {
 }
 
 $('.btn-read-more').click(function () {
-    $('.btn-read-more').css('display', 'none');
-    $('#dot').css('display', 'none');
-    $('#more').css('display', 'inline');
+    if ($('.btn-read-more').text() === 'Read more') {
+        $('.btn-read-more').text('Read less');
+        $('#dot').css('display', 'none');
+        $('#more').css('display', 'inline');
+    } else {
+        $('.btn-read-more').text('Read more');
+        $('#dot').css('display', 'inline');
+        $('#more').css('display', 'none');
+    }
 });

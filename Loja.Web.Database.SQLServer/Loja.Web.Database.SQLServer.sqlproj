@@ -88,6 +88,8 @@
     <Build Include="dbo\OrdersStatus.sql" />
     <Build Include="dbo\OrdersCardsInfos.sql" />
     <Build Include="dbo\BankingBrands.sql" />
+    <Build Include="dbo\ShoppingCarts.sql" />
+    <Build Include="dbo\ShoppingCartsProducts.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\MeasuramentTypes_Script.sql" />

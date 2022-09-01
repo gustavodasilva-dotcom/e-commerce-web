@@ -30,16 +30,14 @@ function GetProductDetails(guidID) {
             else {
                 alert(result.Message);
             }
-        },
-        error: function (req, status, error) {
-            alert('Error: ', error);
         }
     });
 }
 
 function SetDetails(product) {
+    $('#product-id').val(product.id);
+
     $('.product-details-name').text(product.name);
-    //$('.product-details-description').text(product.description);
 
     if (product.discount > 0) {
         let priceDiscounted = (product.price / 100) * product.discount;
@@ -62,6 +60,8 @@ function SetDetails(product) {
         $('.product-details-stock').css('color', '#F07167');
     }
 
+    $('#product-quantity').val(product.stock);
+
     if (product.discount > 0) {
         $('.product-details-discount').text('-' + product.discount + '%');
     }
@@ -77,7 +77,7 @@ function SetDescription(description) {
         $('.product-details-description').html(htmlDescription);
 
         SetReadMore();
-    }    
+    }
 }
 
 function ConvertBase64ToImage() {

@@ -20,6 +20,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Image
 
         #region << METHODS >>
 
+        #region GetBases64ByProductID
         [HttpGet]
         public async Task<JsonResult> GetBases64ByProductID(Guid productID)
         {
@@ -44,6 +45,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Image
             }
             return Json(result);
         }
+        #endregion
 
         #region InsertImage
         [HttpPost]
