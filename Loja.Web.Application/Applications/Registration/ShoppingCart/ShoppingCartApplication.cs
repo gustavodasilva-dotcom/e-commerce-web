@@ -110,10 +110,6 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
             {
                 throw new Exception("The product informed is invalid. Please, contact the system administrator.");
             }
-            if (model.ShoppingCartID == null || model.ShoppingCartID == 0)
-            {
-                throw new Exception("The shopping cart informed is invalid. Please, contact the system administrator.");
-            }
         }
         #endregion
 

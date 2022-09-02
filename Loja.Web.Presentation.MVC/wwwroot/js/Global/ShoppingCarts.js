@@ -1,9 +1,9 @@
-﻿function AddToCart() {
-    if (parseInt($('#product-quantity').val()) > 0) {
+﻿function AddToCart(quantity, productID, productQuantity) {
+    if (productQuantity > 0) {
         let shoppingCart = {};
 
-        shoppingCart.Quantity = parseInt($('#input-product-quantity').val());
-        shoppingCart.ProductID = parseInt($('#product-id').val());
+        shoppingCart.Quantity = quantity;
+        shoppingCart.ProductID = productID;
 
         $.ajax({
             async: false,

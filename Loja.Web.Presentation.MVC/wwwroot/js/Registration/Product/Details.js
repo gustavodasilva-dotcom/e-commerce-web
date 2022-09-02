@@ -1,9 +1,9 @@
-﻿let bigImage = document.querySelector('.product-details-big-image img');
+﻿let productID;
+let bigImage = document.querySelector('.product-details-big-image img');
 
 $(document).ready(function () {
-    let urlLocation = window.location.href;
-    let params = (new URL(urlLocation)).searchParams;
-    let productID = params.get('guidID');
+    let params = (new URL(window.location.href)).searchParams;
+    productID = params.get('guidID');
 
     GetProductDetails(productID);
 
@@ -98,6 +98,20 @@ function ConvertBase64ToImage() {
     }
 }
 
-$('#add-to-cart').click(function () {
-    AddToCart();
+function AddItemToCart() {
+    let quantity = parseInt($('#input-product-quantity').val());
+    let productID = parseInt($('#product-id').val());
+
+    let productQuantity = parseInt($('#product-quantity').val());
+
+    AddToCart(quantity, productID, productQuantity);
+}
+
+$('#btn-add-to-cart').click(function () {
+    AddItemToCart();
+});
+
+$('#btn-buy-now').click(function () {
+    AddItemToCart();
+    window.location.href = '/Orders/SelectPay?oneItemOnly=1&productGuidID=' + productID;
 });
