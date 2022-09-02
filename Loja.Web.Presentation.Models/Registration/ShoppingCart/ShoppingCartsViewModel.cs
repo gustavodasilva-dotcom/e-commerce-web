@@ -4,6 +4,7 @@
     {
         public int? ID { get; set; }
         public Guid? GuidID { get; set; }
+        public Guid? ProductGuid { get; set; }
         public int ProductID { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }

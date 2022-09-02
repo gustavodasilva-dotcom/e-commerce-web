@@ -1,9 +1,4 @@
-﻿$(document).ready(function () {
-    GetShoppingCartItems();
-    SetCards();
-});
-
-$('#add-to-cart').click(function () {
+﻿function AddToCart() {
     if (parseInt($('#product-quantity').val()) > 0) {
         let shoppingCart = {};
 
@@ -32,7 +27,7 @@ $('#add-to-cart').click(function () {
     } else {
         alert('A product that is not in stock cannot be added to the shopping cart.');
     }
-});
+}
 
 function GetShoppingCartItems() {
     $.ajax({
@@ -54,16 +49,4 @@ function GetShoppingCartItems() {
             }
         }
     });
-}
-
-function SetCards() {
-    let htmlCard = '<div class="shop-cart-card">';
-    $.each(window.ShoppingCart, function (i, item) {
-        htmlCard += '<h3 class="shop-cart-title">' + window.ShoppingCart[i].name + '</h3>';
-        htmlCard += '<p class="shop-cart-price">' + window.ShoppingCart[i].price + '</p>';
-        htmlCard += '<p class="shop-cart-descr">' + window.ShoppingCart[i].description + '</p>';
-        htmlCard += '<hr>';
-        htmlCard += '</div>';
-    });
-    $('.shop-cart-card').html(htmlCard);
 }

@@ -108,6 +108,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
                             foreach (var cartProduct in shoppingCartProducts)
                             {
                                 var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
+                                cartProduct.ProductGuid = productDetails?.GuidID;
                                 cartProduct.Name = productDetails?.Name;
                                 cartProduct.Description = productDetails?.Description;
                                 cartProduct.Price = productDetails?.Price;

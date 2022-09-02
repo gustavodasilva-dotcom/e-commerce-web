@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿let bigImage = document.querySelector('.product-details-big-image img');
+
+$(document).ready(function () {
     let urlLocation = window.location.href;
     let params = (new URL(urlLocation)).searchParams;
     let productID = params.get('guidID');
@@ -8,8 +10,6 @@
     GetBases64ByProductIDAsync(productID);
     ConvertBase64ToImage();
 });
-
-let bigImage = document.querySelector('.product-details-big-image img');
 
 function popImage(image) {
     bigImage.src = image;
@@ -97,3 +97,7 @@ function ConvertBase64ToImage() {
         }
     }
 }
+
+$('#add-to-cart').click(function () {
+    AddToCart();
+});
