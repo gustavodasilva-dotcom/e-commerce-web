@@ -50,3 +50,25 @@ function GetShoppingCartItems() {
         }
     });
 }
+
+function EmptyShoppingCart(shoppingCartID) {
+    $.ajax({
+        async: false,
+        type: "POST",
+        dataType: "json",
+        data: { shoppingCartID: shoppingCartID },
+        url: "/ShoppingCarts/EmptyShoppingCart",
+        success: function (result) {
+            if (result.Code == 1) {
+                window.location.reload();
+            }
+            else {
+                if (result.RedirectToLogin) {
+                    window.location.href = '/Accounts/Login';
+                } else {
+                    alert(result.Message);
+                }
+            }
+        }
+    });
+}

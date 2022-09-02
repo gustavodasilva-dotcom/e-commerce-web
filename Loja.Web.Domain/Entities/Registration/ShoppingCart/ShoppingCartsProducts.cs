@@ -75,6 +75,26 @@ namespace Loja.Web.Domain.Entities.Registration.ShoppingCart
         }
         #endregion
 
+        #region DeleteAsync
+        public async Task<bool> DeleteAsync(List<ShoppingCartsProducts> cartProducts)
+        {
+            var deleted = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                deleted = await connect.DeleteAsync(cartProducts);
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return deleted;
+        }
+        #endregion
+
         #endregion
     }
 }

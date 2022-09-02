@@ -32,6 +32,67 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
         }
         #endregion
 
+        #region GetByUserID
+        [HttpGet]
+        public async Task<JsonResult> GetByUserID()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            result.RedirectToLogin = false;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    var userID = HttpContext.Session.GetString("UserID") ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                    if (Guid.TryParse(userID, out Guid userGuid))
+                    {
+                        result.Products = null;
+                        var productsCart = await _shoppingCartApplication.GetShoppingCartByUserGuidAsync(userGuid);
+                        if (productsCart.Any())
+                        {
+                            var shoppingCartProducts = productsCart.Select(x => new ShoppingCartsViewModel
+                            {
+                                ID = x?.ID,
+                                GuidID = x?.GuidID,
+                                Quantity = x.Quantity,
+                                ProductID = x.ProductID,
+                                ShoppingCartID = x.ShoppingCartID,
+                                Active = x.Active,
+                                Deleted = x.Deleted,
+                                Created_at = x.Created_at
+                            }).ToList();
+                            var products = await _productApplication.GetAllAsync();
+                            foreach (var cartProduct in shoppingCartProducts)
+                            {
+                                var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
+                                cartProduct.ProductGuid = productDetails?.GuidID;
+                                cartProduct.Name = productDetails?.Name;
+                                cartProduct.Description = productDetails?.Description;
+                                cartProduct.Price = productDetails?.Price;
+                            }
+                            result.Products = shoppingCartProducts;
+                        }
+                        result.Code = 1;
+                    }
+                    else
+                    {
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                    }
+                }
+                else
+                {
+                    result.RedirectToLogin = true;
+                }
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #region AddToCart
         [HttpPost]
         public async Task<JsonResult> AddToCart(ShoppingCartsModel model)
@@ -74,57 +135,22 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
         }
         #endregion
 
-        #region GetByUserID
-        [HttpGet]
-        public async Task<JsonResult> GetByUserID()
+        #region EmptyShoppingCart
+        [HttpPost]
+        public async Task<JsonResult> EmptyShoppingCart(int shoppingCartID)
         {
             dynamic result = new ExpandoObject();
             result.Code = 0;
-            result.RedirectToLogin = false;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (await _shoppingCartApplication.EmptyShoppingCartAsync(shoppingCartID))
                 {
-                    var userID = HttpContext.Session.GetString("UserID") ??
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                    if (Guid.TryParse(userID, out Guid userGuid))
-                    {
-                        result.Products = null;
-                        var productsCart = await _shoppingCartApplication.GetShoppingCartByUserGuidAsync(userGuid);
-                        if (productsCart.Any())
-                        {
-                            var shoppingCartProducts = productsCart.Select(x => new ShoppingCartsViewModel
-                            {
-                                ID = x.ID,
-                                GuidID = x.GuidID,
-                                Quantity = x.Quantity,
-                                ProductID = x.ProductID,
-                                ShoppingCartID = x.ShoppingCartID,
-                                Active = x.Active,
-                                Deleted = x.Deleted,
-                                Created_at = x.Created_at
-                            }).ToList();
-                            var products = await _productApplication.GetAllAsync();
-                            foreach (var cartProduct in shoppingCartProducts)
-                            {
-                                var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
-                                cartProduct.ProductGuid = productDetails?.GuidID;
-                                cartProduct.Name = productDetails?.Name;
-                                cartProduct.Description = productDetails?.Description;
-                                cartProduct.Price = productDetails?.Price;
-                            }
-                            result.Products = shoppingCartProducts;
-                        }
-                        result.Code = 1;
-                    }
-                    else
-                    {
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                    }
+                    result.Code = 1;
+                    result.Deleted = true;
                 }
                 else
                 {
-                    result.RedirectToLogin = true;
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
                 }
             }
             catch (Exception e)

@@ -16,21 +16,20 @@
         <div class="shop-cart-wrapper">
             <h1>@ViewData["Title"]</h1>
 
-            <div id="tabs">
-                <ul class="tab-list">
-                    <li><a class="tab-option" href="#tab-items">Items</a></li>
-                    <li><a class="tab-option" href="#tab-buy-again">Buy again</a></li>
-                </ul>
+            <input type="hidden" id="shopping-cart-id" />
+
+            <div class="shop-cart-content">
+                <div class="btn-actions">
+                    <button type="button" id="btn-ept-cart">Empty cart</button>
+                    <button type="button" id="btn-buy-cart">Buy cart</button>
+                </div>
 
                 <hr />
 
-                <div id="tab-items">
+                <div role="tab" id="tab-items">
                     <div class="shop-cart-card">
                         @* Body rendered with Javascript. *@
                     </div>
-                </div>
-
-                <div id="tab-buy-again">
                 </div>
             </div>
         </div>

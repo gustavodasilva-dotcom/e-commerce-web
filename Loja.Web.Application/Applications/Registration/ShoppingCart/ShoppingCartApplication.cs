@@ -19,6 +19,27 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
 
         #region PUBLIC
 
+        #region GetShoppingCartByUserGuidAsync
+        public async Task<IEnumerable<ShoppingCartsProducts?>> GetShoppingCartByUserGuidAsync(Guid userGuid)
+        {
+            int? shoppingCartID = null;
+            var users = await _users.GetAllAsync();
+            var user = users.FirstOrDefault(x => x.GuidID == userGuid);
+            if (user is null)
+            {
+                throw new Exception("User invalid.");
+            }
+            var shoppingCarts = await _shoppingCarts.GetAllAsync();
+            var userShoppingCart = shoppingCarts.FirstOrDefault(x => x.UserID == user.ID);
+            if (userShoppingCart is null)
+            {
+                shoppingCartID = (int)await _shoppingCarts.InsertAsync(user.ID);
+            }
+            shoppingCartID = userShoppingCart?.ID;
+            return await _shoppingCartsProducts.GetAllAsync();
+        }
+        #endregion
+
         #region AddToCartAsync
         public async Task<ShoppingCartsProducts?> AddToCartAsync(ShoppingCartsModel model)
         {
@@ -61,24 +82,16 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
         }
         #endregion
 
-        #region GetShoppingCartByUserGuidAsync
-        public async Task<IEnumerable<ShoppingCartsProducts?>> GetShoppingCartByUserGuidAsync(Guid userGuid)
+        #region EmptyShoppingCartAsync
+        public async Task<bool> EmptyShoppingCartAsync(int shoppingCartID)
         {
-            int? shoppingCartID = null;
-            var users = await _users.GetAllAsync();
-            var user = users.FirstOrDefault(x => x.GuidID == userGuid);
-            if (user is null)
+            var shoppingCartsProducts = await _shoppingCartsProducts.GetAllAsync();
+            var cartProducts = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCartID);
+            if (!cartProducts.Any())
             {
-                throw new Exception("User invalid.");
+                throw new Exception("Shopping cart is alredy empty.");
             }
-            var shoppingCarts = await _shoppingCarts.GetAllAsync();
-            var userShoppingCart = shoppingCarts.FirstOrDefault(x => x.UserID == user.ID);
-            if (userShoppingCart is null)
-            {
-                shoppingCartID = (int)await _shoppingCarts.InsertAsync(user.ID);
-            }
-            shoppingCartID = userShoppingCart?.ID;
-            return await _shoppingCartsProducts.GetAllAsync();
+            return await _shoppingCartsProducts.DeleteAsync(cartProducts.ToList());
         }
         #endregion
 
