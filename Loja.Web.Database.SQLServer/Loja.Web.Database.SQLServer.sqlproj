@@ -92,6 +92,6 @@
     <Build Include="dbo\ShoppingCartsProducts.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dbo\Scripts\MeasuramentTypes_Script.sql" />
+    <None Include="dbo\Scripts\Default_Script.sql" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+        <link rel="stylesheet" href="~/css/Details/SelectPay.css" />
     </head>
     <body>
         <div class="register-wrapper">
@@ -24,6 +25,39 @@
                 <div class="register-form">
 
                     <div id="register-items-card"></div>
+
+                    <div class="register-select-field">
+                        <select name="payment-types" class="register-select" id="register-select-payment-types">
+                            <option value="">Select a payment type</option>
+                        </select>
+                    </div>
+
+                    <div id="card-details" style="display: none;">
+                        <div class="card-input-field">
+                            <label for="">Card number</label>
+                            <input type="number" class="card-info-input" id="card-number" pattern="^[0-9]*$" />
+                        </div>
+
+                        <div class="card-input-field">
+                            <label for="">Name at the card</label>
+                            <input type="text" class="card-info-input" id="card-name" />
+                        </div>
+
+                        <div class="card-input-field">
+                            <label for="">Expiration date</label>
+                            <input type="number" class="card-info-input-sm" id="card-month" pattern="^[0-9]*$" maxlength="2" />
+                            <input type="number" class="card-info-input-sm" id="card-year" pattern="^[0-9]*$" />
+                        </div>
+
+                        <div class="card-input-field">
+                            <label for="">CVV</label>
+                            <input type="number" class="card-info-input" id="card-cvv" pattern="^[0-9]*$" maxlength="3" />
+                        </div>
+                    </div>
+
+                    <div class="register-input-field">
+                        <button type="button" class="register-btn-submit" name="move-next" id="btn-move-next">Move next</button>
+                    </div>
 
                 </div>
 
