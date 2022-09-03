@@ -38,6 +38,7 @@ function SetDetails(product) {
     $('#product-id').val(product.id);
 
     $('.product-details-name').text(product.name);
+    document.title = product.name;
 
     if (product.discount > 0) {
         let priceDiscounted = (product.price / 100) * product.discount;
