@@ -11,7 +11,7 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         [Key]
 		public int ID { get; private set; }
 		public Guid GuidID { get; private set; }
-		public decimal Total { get; private set; }
+		public decimal? Total { get; private set; }
 		public int UserID { get; private set; }
 		public int PaymentMethodID { get; private set; }
 		public int OrderStatusID { get; private set; }
@@ -40,6 +40,39 @@ namespace Loja.Web.Domain.Entities.Registration.Order
 #endif
                 throw new Exception(e.Message);
             }
+        }
+        #endregion
+
+        #region InsertAsync
+        public async Task<long?> InsertAsync(int userID, int paymentMethodID, int orderStatusID)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new Orders
+                {
+                    GuidID = Guid.NewGuid(),
+                    Total = null,
+                    UserID = userID,
+                    PaymentMethodID = paymentMethodID,
+                    OrderStatusID = orderStatusID,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Created_by = userID,
+                    Deleted_at = null,
+                    Deleted_by = null
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
         }
         #endregion
 
