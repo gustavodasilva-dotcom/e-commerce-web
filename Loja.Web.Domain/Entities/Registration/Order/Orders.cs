@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
+using Loja.Web.Presentation.Models.Registration.Order;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Order
@@ -12,9 +13,9 @@ namespace Loja.Web.Domain.Entities.Registration.Order
 		public int ID { get; private set; }
 		public Guid GuidID { get; private set; }
 		public decimal? Total { get; private set; }
-		public int UserID { get; private set; }
-		public int PaymentMethodID { get; private set; }
-		public int OrderStatusID { get; private set; }
+		public int? UserID { get; private set; }
+		public int? PaymentMethodID { get; private set; }
+		public int? OrderStatusID { get; private set; }
 		public bool Active { get; private set; }
 		public bool Deleted { get; private set; }
 		public DateTime Created_at { get; private set; }
@@ -44,7 +45,7 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         #endregion
 
         #region InsertAsync
-        public async Task<long?> InsertAsync(int userID, int paymentMethodID, int orderStatusID)
+        public async Task<long?> InsertAsync(StepOneModel model)
         {
             long? id = null;
             try
@@ -54,13 +55,13 @@ namespace Loja.Web.Domain.Entities.Registration.Order
                 {
                     GuidID = Guid.NewGuid(),
                     Total = null,
-                    UserID = userID,
-                    PaymentMethodID = paymentMethodID,
-                    OrderStatusID = orderStatusID,
+                    UserID = model.UserID,
+                    PaymentMethodID = model.PaymentMethodID,
+                    OrderStatusID = model.OrderStatusID,
                     Active = true,
                     Deleted = false,
                     Created_at = DateTime.Now,
-                    Created_by = userID,
+                    Created_by = model.UserID,
                     Deleted_at = null,
                     Deleted_by = null
                 });

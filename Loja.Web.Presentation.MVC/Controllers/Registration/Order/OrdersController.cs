@@ -35,7 +35,27 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
             result.Code = 0;
             try
             {
-
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    model.UserGuid = Guid.Parse(
+                        createdByGuid != null ? createdByGuid :
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                    var order = await _orderApplication.StepOneAsync(model);
+                    if (order is null)
+                    {
+                        result.Code = 1;
+                        result.Order = order;
+                    }
+                    else
+                    {
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                    }
+                }
+                else
+                {
+                    result.RedirectToLogin = true;
+                }
             }
             catch (Exception e)
             {

@@ -15,3 +15,22 @@
         }
     });
 }
+
+function StepOne(stepOne) {
+    $.ajax({
+        async: false,
+        type: "POST",
+        dataType: "json",
+        data: { model: stepOne },
+        url: "/Orders/StepOne",
+        success: function (result) {
+            if (result.Code == 1) {
+                window.StepOne = {};
+                window.StepOne = result.Order;
+            }
+            else {
+                alert(result.Message);
+            }
+        }
+    });
+}

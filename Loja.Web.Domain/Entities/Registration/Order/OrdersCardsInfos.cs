@@ -37,6 +37,33 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         }
         #endregion
 
+        #region InsertAsync
+        public async Task<long?> InsertAsync(int orderID, int cardInfoID)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new OrdersCardsInfos
+                {
+                    OrderID = orderID,
+                    CardInfoID = cardInfoID,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
+        }
+        #endregion
+
         #endregion
     }
 }

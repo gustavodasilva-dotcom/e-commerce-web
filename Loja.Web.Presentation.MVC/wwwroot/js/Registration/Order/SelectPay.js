@@ -1,5 +1,6 @@
 ﻿let singleItem;
 let productGuidID;
+let paymentSelected;
 let paymentTypes = [];
 let shoppingCart = [];
 let oneItemOnly = false;
@@ -54,7 +55,7 @@ function SetComboBoxPaymentTypes() {
 }
 
 $('#register-select-payment-types').change(function () {
-    let paymentSelected = paymentTypes.find(x => x.guidID == $(this).val());
+    paymentSelected = paymentTypes.find(x => x.guidID == $(this).val());
 
     if (paymentSelected != null && paymentSelected != undefined) {
         if (paymentSelected.isCard == true) {
@@ -68,5 +69,25 @@ $('#register-select-payment-types').change(function () {
 });
 
 $('#btn-move-next').click(function () {
-    alert('Ok.');
+    let stepOneModel = {};
+    let cardInfoModel = {};
+
+    stepOneModel.IsCard = paymentSelected.isCard;
+
+    stepOneModel.ProductGuid = {};
+    stepOneModel.ProductGuid = productGuidID;
+
+    stepOneModel.PaymentGuid = $('#register-select-payment-types').val();
+
+    cardInfoModel.CardNumber = $('#card-number').val();
+    cardInfoModel.NameAtTheCard = $('#card-name').val();
+    cardInfoModel.Month = parseInt($('#card-month').val());
+    cardInfoModel.Year = parseInt($('#card-year').val());
+    cardInfoModel.CVV = $('#card-cvv').val();
+    cardInfoModel.Quantity = 0; // for tests only.
+    cardInfoModel.BankingBrandID = 1; // for tests only.
+
+    stepOneModel.CardInfo = cardInfoModel;
+
+    StepOne(stepOneModel);
 });

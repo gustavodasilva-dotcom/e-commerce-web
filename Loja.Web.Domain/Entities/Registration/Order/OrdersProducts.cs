@@ -1,5 +1,7 @@
 ﻿using Dapper.Contrib.Extensions;
+using Loja.Web.Domain.Entities.Registration.ShoppingCart;
 using Loja.Web.Infra.Data.Repositories;
+using Loja.Web.Presentation.Models.Registration.Order;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Order
@@ -41,6 +43,40 @@ namespace Loja.Web.Domain.Entities.Registration.Order
 #endif
                 throw new Exception(e.Message);
             }
+        }
+        #endregion
+
+        #region InsertAsync
+        public async Task<long?> InsertAsync(ShoppingCartsProducts product, StepOneModel model, int orderID, decimal price)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new OrdersProducts
+                {
+                    GuidID = Guid.NewGuid(),
+                    Quantity = product.Quantity,
+                    Amount = price * product.Quantity,
+                    Unitary = price,
+                    OrderID = orderID,
+                    ProductID = product.ProductID,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Created_by = model.UserID,
+                    Deleted_at = null,
+                    Deleted_by = null
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
         }
         #endregion
 

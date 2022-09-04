@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
+using Loja.Web.Presentation.Models.Registration.Order;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Payment
@@ -16,7 +17,7 @@ namespace Loja.Web.Domain.Entities.Registration.Payment
         public int ExpYear { get; private set; }
         public int Quantity { get; private set; }
         public int BankingBrandID { get; private set; }
-        public int UserID { get; private set; }
+        public int? UserID { get; private set; }
         public bool Active { get; private set; }
         public bool Deleted { get; private set; }
         public DateTime Created_at { get; private set; }
@@ -42,6 +43,41 @@ namespace Loja.Web.Domain.Entities.Registration.Payment
 #endif
                 throw new Exception(e.Message);
             }
+        }
+        #endregion
+
+        #region InsertAsync
+        public async Task<long?> InsertAsync(CardInfoModel model)
+        {
+            long? id = null;
+            try
+            {
+                var connect = await ConnectAsync();
+                id = await connect.InsertAsync(new CardsInfos
+                {
+                    GuidID = Guid.NewGuid(),
+                    CVV = model.CVV,
+                    ExpMonth = model.Month,
+                    ExpYear = model.Year,
+                    Quantity = model.Quantity,
+                    BankingBrandID = model.BankingBrandID,
+                    UserID = model.UserID,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Created_by = model.UserID,
+                    Deleted_at = null,
+                    Deleted_by = null
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return id;
         }
         #endregion
 
