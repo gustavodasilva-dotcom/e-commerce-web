@@ -81,8 +81,15 @@ namespace Loja.Web.Domain.Entities.Registration.ShoppingCart
             var deleted = false;
             try
             {
+                foreach (var product in cartProducts)
+                {
+                    product.Active = false;
+                    product.Deleted = true;
+                    product.Deleted_by = product.Created_by;
+                    product.Deleted_at = DateTime.Now;
+                }
                 var connect = await ConnectAsync();
-                deleted = await connect.DeleteAsync(cartProducts);
+                deleted = await connect.UpdateAsync(cartProducts);
             }
             catch (Exception e)
             {

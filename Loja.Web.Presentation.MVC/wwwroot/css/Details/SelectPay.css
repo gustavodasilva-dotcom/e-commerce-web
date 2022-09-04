@@ -38,6 +38,7 @@
 
 #card-details {
     margin: 20px auto;
+    width: 100%;
 }
 
 .card-input-field {
@@ -52,11 +53,16 @@
 }
 
 .card-info-input,
+.card-info-select,
 .card-info-input-sm {
     outline: none;
     padding: 4px 5px;
     border: 1px solid #d5dbd9;
     border-radius: 5px;
+}
+
+.card-info-select {
+    width: 44%;
 }
 
 .card-info-input-sm {

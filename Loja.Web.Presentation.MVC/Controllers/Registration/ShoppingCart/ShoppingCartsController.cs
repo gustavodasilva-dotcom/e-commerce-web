@@ -61,7 +61,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
                                 Active = x.Active,
                                 Deleted = x.Deleted,
                                 Created_at = x.Created_at
-                            }).ToList();
+                            }).ToList().Where(x => x.Active && !x.Deleted);
                             var products = await _productApplication.GetAllAsync();
                             foreach (var cartProduct in shoppingCartProducts)
                             {

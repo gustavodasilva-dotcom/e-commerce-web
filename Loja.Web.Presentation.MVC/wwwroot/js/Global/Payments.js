@@ -30,6 +30,7 @@ function StepOne(stepOne) {
             }
             else {
                 alert(result.Message);
+                return;
             }
         }
     });

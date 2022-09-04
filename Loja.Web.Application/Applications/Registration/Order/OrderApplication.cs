@@ -57,15 +57,17 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 throw new Exception("There's no products registered. Please, contact the system administrator.");
 
             model.UserID = user.ID;
+            model.CardInfo.UserID = user.ID;
             model.PaymentMethodID = paymentMethod.ID;
-            model.OrderStatusID = ordersStatus.First().ID;
+            model.OrderStatusID = ordersStatus.Last().ID;
 
             var orderID = await _orders.InsertAsync(model) ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             var shoppingCartsProducts = await _shoppingCartsProducts.GetAllAsync();
 
-            var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID);
+            var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID && x.Active && !x.Deleted) ??
+                throw new Exception("The user's shopping cart is empty. Please, contact the system administrator.");
 
             foreach (var cartProd in userShoppingCarProds)
             {
@@ -85,6 +87,11 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             var orders = await _orders.GetAllAsync() ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+            if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.ToList()))
+            {
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+            }
 
             return orders.FirstOrDefault(x => x.ID == orderID);
         }

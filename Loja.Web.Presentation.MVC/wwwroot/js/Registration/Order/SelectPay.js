@@ -19,7 +19,7 @@ function SetShoppingCartItems() {
     shoppingCart = window.ShoppingCart;
 
     let htmlCards;
-
+        
     if (oneItemOnly) {
         singleItem = shoppingCart.find(x => x.productGuid == productGuidID.toLowerCase());
 
@@ -54,12 +54,25 @@ function SetComboBoxPaymentTypes() {
     });
 }
 
+function SetQuantitySelect() {
+    $('#card-quantity-field').css('display', 'block');
+
+    if (!($('#card-quantity')[0].length > 1)) {
+        for (let i = 1; i <= 12; i++) $('#card-quantity').append(`<option value="${i}">${i}x</option>`);
+    }    
+}
+
 $('#register-select-payment-types').change(function () {
     paymentSelected = paymentTypes.find(x => x.guidID == $(this).val());
 
     if (paymentSelected != null && paymentSelected != undefined) {
-        if (paymentSelected.isCard == true) {
+        if (paymentSelected.isCard) {
             $('#card-details').css('display', 'block');
+
+            if (paymentSelected.name.toLowerCase().includes('credit'))
+                SetQuantitySelect();
+            else
+                $('#card-quantity-field').css('display', 'none');
         } else {
             $('#card-details').css('display', 'none');
         }
@@ -84,10 +97,12 @@ $('#btn-move-next').click(function () {
     cardInfoModel.Month = parseInt($('#card-month').val());
     cardInfoModel.Year = parseInt($('#card-year').val());
     cardInfoModel.CVV = $('#card-cvv').val();
-    cardInfoModel.Quantity = 0; // for tests only.
-    cardInfoModel.BankingBrandID = 1; // for tests only.
+
+    if (paymentSelected.name.toLowerCase().includes('credit')) cardInfoModel.Quantity = parseInt($('#card-quantity').val());
 
     stepOneModel.CardInfo = cardInfoModel;
 
     StepOne(stepOneModel);
+
+    window.location.href = '/Home/Index';
 });

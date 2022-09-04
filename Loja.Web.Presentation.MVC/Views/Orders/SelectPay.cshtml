@@ -34,24 +34,31 @@
 
                     <div id="card-details" style="display: none;">
                         <div class="card-input-field">
-                            <label for="">Card number</label>
+                            <label for="card-number">Card number</label>
                             <input type="number" class="card-info-input" id="card-number" pattern="^[0-9]*$" />
                         </div>
 
                         <div class="card-input-field">
-                            <label for="">Name at the card</label>
+                            <label for="card-name">Name at the card</label>
                             <input type="text" class="card-info-input" id="card-name" />
                         </div>
 
                         <div class="card-input-field">
-                            <label for="">Expiration date</label>
+                            <label for="card-month">Expiration date</label>
                             <input type="number" class="card-info-input-sm" id="card-month" pattern="^[0-9]*$" maxlength="2" />
                             <input type="number" class="card-info-input-sm" id="card-year" pattern="^[0-9]*$" />
                         </div>
 
                         <div class="card-input-field">
-                            <label for="">CVV</label>
+                            <label for="card-cvv">CVV</label>
                             <input type="number" class="card-info-input" id="card-cvv" pattern="^[0-9]*$" maxlength="3" />
+                        </div>
+
+                        <div class="card-input-field" id="card-quantity-field" style="display: none;">
+                            <label for="card-quantity">Quantity</label>
+                            <select name="card-quantity" class="card-info-select" id="card-quantity">
+                                <option value=""></option>
+                            </select>
                         </div>
                     </div>
 

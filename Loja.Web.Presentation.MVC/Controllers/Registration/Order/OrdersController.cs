@@ -23,7 +23,11 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         #region SelectPay
         public IActionResult SelectPay()
         {
-            return View();
+            if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            {
+                return View();
+            }
+            return Unauthorized();
         }
         #endregion
 
@@ -42,10 +46,20 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
                     var order = await _orderApplication.StepOneAsync(model);
-                    if (order is null)
+                    if (order is not null)
                     {
                         result.Code = 1;
-                        result.Order = order;
+                        result.Order = new
+                        {
+                            order.GuidID,
+                            order.Total,
+                            order.UserID,
+                            order.PaymentMethodID,
+                            order.OrderStatusID,
+                            order.Active,
+                            order.Deleted,
+                            order.Created_at
+                        };
                     }
                     else
                     {

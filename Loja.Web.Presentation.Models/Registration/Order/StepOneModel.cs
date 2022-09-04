@@ -6,7 +6,7 @@
         public List<Guid> ProductGuid { get; set; }
         public bool IsCard { get; set; }
         public Guid PaymentGuid { get; set; }
-        public CardInfoModel? CardInfo { get; set; }
+        public CardInfoModel CardInfo { get; set; }
         #endregion
 
         #region Back-end filled

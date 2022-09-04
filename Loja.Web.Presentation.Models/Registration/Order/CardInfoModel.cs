@@ -12,9 +12,7 @@
 
         public string? CVV { get; set; }
 
-        public int Quantity { get; set; }
-
-        public int BankingBrandID { get; set; }
+        public int? Quantity { get; set; } = null;
 
         public int? UserID { get; set; } = null;
     }
