@@ -127,7 +127,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
             if (!model.IsForeign)
             {
                 viaCEP = await RequestViaCepAsync(model.PostalCode);
-                if (viaCEP is null)
+                if (viaCEP?.cep is null)
                 {
                     throw new Exception("The address informed is invalid.");
                 }

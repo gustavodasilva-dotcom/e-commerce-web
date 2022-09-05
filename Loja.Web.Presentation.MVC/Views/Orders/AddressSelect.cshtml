@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Select address | Orders";
+}
+
+@section Scripts {
+
+    <script src="~/js/Registration/Order/AddressSelect.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+}
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+        <link rel="stylesheet" href="~/css/Details/AddressSelect.css" />
+    </head>
+    <body>
+
+        <div class="register-wrapper">
+
+            <div>
+                <h1 class="register-title">Select address</h1>
+            </div>
+
+            <form>
+
+                <div class="register-form">
+
+                    <div id="user-addresses">
+                        No addresses registered.
+                    </div>
+
+                    <button type="button" id="btn-register-address">Registered new address</button>
+
+                    <div id="register-new-address" style="display: none;">
+
+                        <div class="register-input-field">
+                            <label>Brazilian address?</label>
+                            <div>
+                                <input type="radio" class="register-input-radio" name="localition" id="localition_brazil" value="true" />
+                                <label for="localition_brazil">Yes</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" class="register-input-radio" name="localition" id="localition_foreign" value="false" />
+                                <label for="localition_foreign">No</label>
+                            </div>
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-postal-code" placeholder="Postal code" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-name" placeholder="Name" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-number" placeholder="Number" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-comment" placeholder="Comment" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-neighborhood" placeholder="Neighborhood" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-state" placeholder="State" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <input type="text" class="register-input" id="address-country" placeholder="Country" />
+                        </div>
+
+                        <div class="register-input-field">
+                            <button type="button" class="register-btn-submit" name="register" id="register-address">Register address</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </body>

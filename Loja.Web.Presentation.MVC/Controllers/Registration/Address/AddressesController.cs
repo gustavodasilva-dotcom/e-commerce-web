@@ -1,6 +1,7 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Address;
 using Microsoft.AspNetCore.Mvc;
+using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
 {
@@ -103,6 +104,26 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
                 State = state,
                 Country = country
             });
+        }
+        #endregion
+
+        #region RegisterUserAddress
+        [HttpPost]
+        public async Task<JsonResult> RegisterUserAddress(string postalCode)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                // TODO: create table UsersAddress.
+                // TODO: add column DeliveryAddressID at the Order table.
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
         }
         #endregion
 

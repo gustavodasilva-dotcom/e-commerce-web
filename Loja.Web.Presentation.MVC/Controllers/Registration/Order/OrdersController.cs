@@ -31,6 +31,17 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         }
         #endregion
 
+        #region AddressSelect
+        public IActionResult AddressSelect()
+        {
+            //if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            //{
+                return View();
+            //}
+            //return Unauthorized();
+        }
+        #endregion
+
         #region StepOne
         [HttpPost]
         public async Task<JsonResult> StepOne(StepOneModel model)

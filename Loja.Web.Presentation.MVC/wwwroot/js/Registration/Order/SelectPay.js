@@ -104,5 +104,5 @@ $('#btn-move-next').click(function () {
 
     StepOne(stepOneModel);
 
-    window.location.href = '/Home/Index';
+    window.location.href = '/Orders/AddressSelect?orderID=' + window.StepOne.guidID;
 });
