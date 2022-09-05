@@ -77,18 +77,33 @@ function SetAddressInputValues(model) {
     $('#address-country').prop('readonly', true);
 }
 
-function RegisterUserAddress(postalCode) {
+function RegisterUserAddress(addressModel) {
     $.ajax({
         async: false,
         type: "POST",
         dataType: "json",
         url: "/Addresses/RegisterUserAddress",
-        data: { postalCode: postalCode },
+        data: { model: addressModel },
+        success: function (result) {
+            if (result.Code != 1) {
+                alert(result.Message);
+                return;
+            }
+        }
+    });
+}
+
+function GetUserAddresses() {
+    $.ajax({
+        async: false,
+        type: "GET",
+        dataType: "json",
+        url: "/Addresses/GetUserAddresses",
         success: function (result) {
             if (result.Code == 1) {
-                
-            }
-            else {
+                window.Addresses = {};
+                window.Addresses = result.Addresses;
+            } else {
                 alert(result.Message);
             }
         }

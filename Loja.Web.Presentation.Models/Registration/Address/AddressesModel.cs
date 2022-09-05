@@ -32,7 +32,9 @@
         public bool Active { get; set; } = true;
 
         public bool Deleted { get; set; } = false;
-        
+
+        public Guid? UserGuid { get; set; } = null;
+
         public DateTime Created_at { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
     }
 }

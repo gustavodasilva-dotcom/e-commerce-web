@@ -1,14 +1,18 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Address;
+using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Infra.CrossCutting.Config;
 using Loja.Web.Presentation.Models.Registration.Address;
 using Newtonsoft.Json;
+using System.Dynamic;
 
 namespace Loja.Web.Application.Applications.Registration.Address
 {
     public class AddressApplication : IAddressApplication
     {
         #region << PROPERTIES >>
+        private readonly Users _users = new();
+        private readonly UsersAddresses _usersAddresses = new();
         private readonly Streets _streets = new();
         private readonly Addresses _addresses = new();
         private readonly Countries _countries = new();
@@ -95,6 +99,53 @@ namespace Loja.Web.Application.Applications.Registration.Address
         }
         #endregion
 
+        #endregion
+
+        #region
+        public async Task<dynamic?> GetUserAddressesAsync(Guid userGuid)
+        {
+            dynamic? userAddressesResult = new ExpandoObject();
+
+            var users = await _users.GetAllAsync();
+            var user = users.FirstOrDefault(x => x.GuidID == userGuid && x.Active && !x.Deleted) ??
+                throw new Exception("No user was found with the session data. Please, contact the system administrator.");
+
+            var usersAddresses = await _usersAddresses.GetAllAsync() ??
+                throw new Exception("No users addresses was found. Please, contact the system administrator.");
+
+            var userAddresses = usersAddresses.Where(x => x.UserID == user.ID).ToList();
+
+            if (userAddresses is null) return null;
+
+            var streets = await _streets.GetAllAsync();
+            var addresses = await _addresses.GetAllAsync();
+            var countries = await _countries.GetAllAsync();
+            var states = await _states.GetAllAsync();
+            var cities = await _cities.GetAllAsync();
+            var neighborhoods = await _neighborhoods.GetAllAsync();
+
+            foreach (UsersAddresses userAddrs in userAddresses)
+            {
+                var addressResult = addresses.First(x => x.ID == userAddrs.AddressID);
+                var streetResult = streets.First(x => x.ID == addressResult.StreetID);
+                var neighborhoodResult = neighborhoods.First(x => x.ID == streetResult.NeighborhoodID);
+                var cityResult = cities.First(x => x.ID == neighborhoodResult.CityID);
+                var stateResult = states.First(x => x.ID == cityResult.StateID);
+                var countryResult = countries.First(x => x.ID == stateResult.CountryID);
+
+                userAddressesResult = new
+                {
+                    Address = addressResult,
+                    Street = streetResult,
+                    Neighborhood = neighborhoodResult,
+                    City = cityResult,
+                    State = stateResult,
+                    Country = countryResult
+                };
+            }
+
+            return userAddressesResult;
+        }
         #endregion
 
         #region InsertAsync
@@ -217,6 +268,36 @@ namespace Loja.Web.Application.Applications.Registration.Address
         }
         #endregion
 
+        #region InsertUsersAddressesAsync
+        public async Task<Addresses?> InsertUsersAddressesAsync(AddressesModel model)
+        {
+            Validate(ref model);
+            var users = await _users.GetAllAsync();
+            var user = users.FirstOrDefault(x => x.GuidID == model.UserGuid && x.Active && !x.Deleted) ??
+                throw new Exception("No user was found with the session data. Please, contact the system administrator.");
+
+            var streets = await _streets.GetAllAsync();
+            var street = streets.FirstOrDefault(x => x.PostalCode == model.PostalCode && x.Active && !x.Deleted) ??
+                throw new Exception("No street was found. Please, contact the system administrator.");
+
+            model.StreetID = street.ID;
+
+            var addressID = await _addresses.InsertAsync(model);
+
+            var addresses = await _addresses.GetAllAsync();
+            var address = addresses.FirstOrDefault(x => x.ID == addressID) ??
+                throw new Exception("An error ocurred while executing the process.");
+
+            var userAddressID = await _usersAddresses.InsertAsync(user.ID, address.ID);
+
+            var usersAddresses = await _usersAddresses.GetAllAsync();
+            var userAddress = usersAddresses.FirstOrDefault(x => x.ID == userAddressID) ??
+                throw new Exception("An error ocurred while executing the process.");
+
+            return address;
+        }
+        #endregion
+
         #endregion
 
         #region PRIVATE
@@ -255,9 +336,12 @@ namespace Loja.Web.Application.Applications.Registration.Address
         private static void Validate(ref AddressesModel model)
         {
             ValidatePostalCode(ref model);
-            if (string.IsNullOrEmpty(model.Name))
+            if (model.IsForeign)
             {
-                throw new Exception("Invalid address name.");
+                if (string.IsNullOrEmpty(model.Name))
+                {
+                    throw new Exception("Invalid address name.");
+                }
             }
             if (!int.TryParse(model.Number, out int _))
             {
