@@ -1,7 +1,7 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Application.Interfaces.Registration.Contact;
 using Loja.Web.Application.Interfaces.Registration.Manufacturer;
-using Loja.Web.Presentation.Models.Registration.Address;
+using Loja.Web.Presentation.Models.Registration.Address.Model;
 using Loja.Web.Presentation.Models.Registration.Contact;
 using Loja.Web.Presentation.Models.Registration.Manufacturer;
 using Microsoft.AspNetCore.Mvc;

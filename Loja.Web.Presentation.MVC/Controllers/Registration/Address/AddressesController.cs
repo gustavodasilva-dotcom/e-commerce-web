@@ -1,6 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Address;
-using Loja.Web.Presentation.Models.Registration.Address;
+using Loja.Web.Presentation.Models.Registration.Address.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 

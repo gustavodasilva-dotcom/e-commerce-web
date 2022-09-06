@@ -1,12 +1,13 @@
 ﻿using Loja.Web.Domain.Entities.Registration.Address;
-using Loja.Web.Presentation.Models.Registration.Address;
+using Loja.Web.Presentation.Models.Registration.Address.Model;
+using Loja.Web.Presentation.Models.Registration.Address.ViewModel;
 
 namespace Loja.Web.Application.Interfaces.Registration.Address
 {
     public interface IAddressApplication
     {
         Task<Streets?> GetStreetByPostalCodeAsync(string postalCode);
-        Task<dynamic?> GetUserAddressesAsync(Guid userGuid);
+        Task<List<AddressesViewModel?>> GetUserAddressesAsync(Guid userGuid);
         Task<IEnumerable<Addresses?>> GetAllAddressesAsync();
         Task<IEnumerable<Streets?>> GetAllStreetsAsync();
         Task<Neighborhoods?> GetNeighborhoodAsync(int neighborhoodID);

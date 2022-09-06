@@ -1,4 +1,4 @@
-﻿using Loja.Web.Presentation.Models.Registration.Address;
+﻿using Loja.Web.Presentation.Models.Registration.Address.Model;
 using Loja.Web.Presentation.Models.Registration.Contact;
 
 namespace Loja.Web.Presentation.Models.Registration.Manufacturer

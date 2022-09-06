@@ -88,6 +88,8 @@ function RegisterUserAddress(addressModel) {
             if (result.Code != 1) {
                 alert(result.Message);
                 return;
+            } else {
+                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
             }
         }
     });
@@ -104,6 +106,7 @@ function GetUserAddresses() {
                 window.Addresses = {};
                 window.Addresses = result.Addresses;
             } else {
+                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
                 alert(result.Message);
             }
         }
