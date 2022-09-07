@@ -1,0 +1,26 @@
+﻿using Loja.Web.Presentation.Models.Registration.Order.Model;
+using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
+
+namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
+{
+    public class OrderViewModel
+    {
+        public Guid GuidID { get; set; }
+
+        public decimal? Total { get; set; }
+
+        public bool IsCard { get; set; }
+
+        public CardInfoModel? CardInfo { get; set; }
+
+        public OrderStatusViewModel? OrderStatus { get; set; }
+
+        public List<ProductViewModel>? Products { get; set; }
+
+        public bool Active { get; set; }
+        
+        public bool Deleted { get; set; }
+        
+        public DateTime Created_at { get; set; }
+    }
+}

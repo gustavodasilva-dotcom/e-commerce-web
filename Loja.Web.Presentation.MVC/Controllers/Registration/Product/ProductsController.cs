@@ -1,7 +1,7 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Finance;
 using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Application.Interfaces.Registration.Product;
-using Loja.Web.Presentation.Models.Registration.Product;
+using Loja.Web.Presentation.Models.Registration.Product.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 

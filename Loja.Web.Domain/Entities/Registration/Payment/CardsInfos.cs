@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
-using Loja.Web.Presentation.Models.Registration.Order;
+using Loja.Web.Presentation.Models.Registration.Order.Model;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Payment
@@ -14,8 +14,8 @@ namespace Loja.Web.Domain.Entities.Registration.Payment
         public Guid GuidID { get; private set; }
         public string? CardNumber { get; private set; }
         public string? NameAtTheCard { get; private set; }
-        public int ExpMonth { get; private set; }
-        public int ExpYear { get; private set; }
+        public int? ExpMonth { get; private set; }
+        public int? ExpYear { get; private set; }
         public string? CVV { get; private set; }
         public int? Quantity { get; private set; }
         public int? UserID { get; private set; }

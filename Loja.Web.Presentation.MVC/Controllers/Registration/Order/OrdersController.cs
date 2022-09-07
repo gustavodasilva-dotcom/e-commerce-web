@@ -1,5 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Order;
-using Loja.Web.Presentation.Models.Registration.Order;
+using Loja.Web.Presentation.Models.Registration.Order.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 
@@ -39,6 +39,36 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
                 return View();
             }
             return Unauthorized();
+        }
+        #endregion
+
+        #region Overview
+        public IActionResult Overview()
+        {
+            if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            {
+                return View();
+            }
+            return Unauthorized();
+        }
+        #endregion
+
+        #region Get
+        [HttpGet]
+        public async Task<JsonResult> GetOrderDetails(Guid orderGuid)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.Order = await _orderApplication.GetOrderDetailsAsync(orderGuid);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
         }
         #endregion
 

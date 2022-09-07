@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
-using Loja.Web.Presentation.Models.Registration.Product;
+using Loja.Web.Presentation.Models.Registration.Product.Model;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Product

@@ -39,7 +39,7 @@ $('#btn-move-next').click(function () {
 
     SetDeliveryAddress(orderID, addressID);
 
-    window.location.href = '/Accounts/Login';
+    window.location.href = '/Orders/Overview?orderID=' + orderID;
 });
 
 function SetAddressesCards() {

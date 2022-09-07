@@ -2,7 +2,7 @@
 using Loja.Web.Domain.Entities.Registration.Finance;
 using Loja.Web.Domain.Entities.Registration.Manufacturer;
 using Loja.Web.Domain.Entities.Registration.Product;
-using Loja.Web.Presentation.Models.Registration.Product;
+using Loja.Web.Presentation.Models.Registration.Product.Model;
 using System.Globalization;
 
 namespace Loja.Web.Application.Applications.Registration.Product

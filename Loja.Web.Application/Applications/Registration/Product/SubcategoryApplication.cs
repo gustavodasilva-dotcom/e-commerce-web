@@ -1,7 +1,7 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Product;
 using Loja.Web.Domain.Entities.Security;
-using Loja.Web.Presentation.Models.Registration.Product;
+using Loja.Web.Presentation.Models.Registration.Product.Model;
 
 namespace Loja.Web.Application.Applications.Registration.Product
 {

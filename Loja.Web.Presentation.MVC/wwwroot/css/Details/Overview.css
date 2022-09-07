@@ -1,0 +1,22 @@
+﻿/*
+    Palette: https://coolors.co/palette/0081a7-00afb9-fdfcdc-fed9b7-f07167
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+.overview-wrapper {
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 30px;
+    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.140);
+}
+
+#overview-left {
+    width: 50%;
+}
+
+#overview-right {
+    width: 50%;
+}
