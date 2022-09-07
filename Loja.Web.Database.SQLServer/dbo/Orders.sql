@@ -6,6 +6,7 @@
 	[UserID]			INT					NOT NULL,
 	[PaymentMethodID]	INT					NOT NULL,
 	[OrderStatusID]		INT					NOT NULL,
+	[DeliveryAddressID]	INT,
 	[Active]			BIT					CONSTRAINT [DF_Order_Active]		DEFAULT (1) NOT NULL,
 	[Deleted]			BIT					CONSTRAINT [DF_Order_Deleted]		DEFAULT (0) NOT NULL,
 	[Created_at]		DATETIME			CONSTRAINT [DF_Order_Created_at]	DEFAULT (GETDATE()) NOT NULL,
@@ -20,4 +21,7 @@
 
 	CONSTRAINT [FK_Orders_OrderStatusID] FOREIGN KEY([OrderStatusID])
 	REFERENCES OrdersStatus([ID]),
+
+	CONSTRAINT [FK_Addresses_DeliveryAddressID] FOREIGN KEY([DeliveryAddressID])
+	REFERENCES Addresses([ID])
 )

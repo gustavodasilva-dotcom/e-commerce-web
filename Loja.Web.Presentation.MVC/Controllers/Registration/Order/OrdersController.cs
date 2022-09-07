@@ -34,15 +34,15 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         #region AddressSelect
         public IActionResult AddressSelect()
         {
-            //if (HttpContext.Session.Keys.Any(k => k == "UserID"))
-            //{
+            if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            {
                 return View();
-            //}
-            //return Unauthorized();
+            }
+            return Unauthorized();
         }
         #endregion
 
-        #region StepOne
+        #region StepOne -- Payment
         [HttpPost]
         public async Task<JsonResult> StepOne(StepOneModel model)
         {
@@ -76,6 +76,36 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
                     {
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
                     }
+                }
+                else
+                {
+                    result.RedirectToLogin = true;
+                }
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
+        #region StepTwo -- DeliveryAddress
+        [HttpPost]
+        public async Task<JsonResult> StepTwo(Guid orderGuid, Guid addressGuid)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            result.Success = false;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                {
+                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var userGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                    result.Success = await _orderApplication.StepTwoAsync(orderGuid, addressGuid, userGuid);
+                    result.Code = 1;
                 }
                 else
                 {

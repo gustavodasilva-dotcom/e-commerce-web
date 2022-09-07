@@ -10,6 +10,7 @@ $(document).ready(function () {
 
 $('#btn-register-address').click(function () {
     $('#register-new-address').css('display', 'block');
+    $('#btn-move-next').css('display', 'none');
 });
 
 $('#register-address').click(function () {
@@ -33,6 +34,14 @@ $('#register-address').click(function () {
     window.location.reload();
 });
 
+$('#btn-move-next').click(function () {
+    let addressID = $('input[name="address-chk"]:checked').val();
+
+    SetDeliveryAddress(orderID, addressID);
+
+    window.location.href = '/Accounts/Login';
+});
+
 function SetAddressesCards() {
     if (window.Addresses.length > 0) {
         let addresses = window.Addresses;
@@ -54,5 +63,3 @@ function SetAddressesCards() {
         $('#user-addresses').html(htmlCards);
     }
 }
-
-/*$('input[name="address-chk"]:checked').val();*/

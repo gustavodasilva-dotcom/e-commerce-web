@@ -112,3 +112,20 @@ function GetUserAddresses() {
         }
     });
 }
+
+function SetDeliveryAddress(orderID, addressID) {
+    $.ajax({
+        async: false,
+        type: "POST",
+        dataType: "json",
+        data: { orderGuid: orderID, addressGuid: addressID },
+        url: "/Orders/StepTwo",
+        success: function (result) {
+            if (result.Code != 1) {
+                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
+                alert(result.Message);
+                return;
+            }
+        }
+    });
+}

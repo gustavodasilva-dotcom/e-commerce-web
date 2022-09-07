@@ -1,4 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Order;
+using Loja.Web.Domain.Entities.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Order;
 using Loja.Web.Domain.Entities.Registration.Payment;
 using Loja.Web.Domain.Entities.Registration.Product;
@@ -21,11 +22,12 @@ namespace Loja.Web.Application.Applications.Registration.Order
         private readonly PaymentMethods _paymentMethods = new();
         private readonly CardsInfos _cardsInfos = new();
         private readonly Products _products = new();
+        private readonly Addresses _addresses = new();
         #endregion
 
         #region << METHODS >>
 
-        #region StepOneAsync
+        #region StepOneAsync -- Payment
         public async Task<Orders?> StepOneAsync(StepOneModel model)
         {
             var users = await _users.GetAllAsync();
@@ -94,6 +96,25 @@ namespace Loja.Web.Application.Applications.Registration.Order
             }
 
             return orders.FirstOrDefault(x => x.ID == orderID);
+        }
+        #endregion
+
+        #region StepTwoAsync -- DeliveryAddress
+        public async Task<bool> StepTwoAsync(Guid orderGuid, Guid addressGuid, Guid userGuid)
+        {
+            var users = await _users.GetAllAsync();
+            var user = users.FirstOrDefault(x => x.GuidID == userGuid && x.Active && !x.Deleted) ??
+                throw new Exception("No user was found with the session data. Please, contact the system administrator.");
+
+            var addresses = await _addresses.GetAllAsync();
+            var userAddress = addresses.FirstOrDefault(x => x.GuidID == addressGuid && x.Active && !x.Deleted) ??
+                throw new Exception("No address was found. Please, contact the system administrator.");
+
+            var orders = await _orders.GetAllAsync();
+            var order  = orders.FirstOrDefault(x => x.GuidID == orderGuid && x.Active && !x.Deleted) ??
+                throw new Exception("No order was found. Please, contact the system administrator.");
+
+            return await _orders.UpdateAsync(order, userAddress.ID);
         }
         #endregion
 
