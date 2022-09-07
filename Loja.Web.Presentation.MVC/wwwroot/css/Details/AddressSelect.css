@@ -26,3 +26,37 @@
 #btn-register-address:hover {
     background: #00AFB9;
 }
+
+.card-address {
+    text-align: left;
+    margin-left: 25px;
+    margin: 20px auto;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.card-address:hover {
+    background: #D7F6F7;
+}
+
+.address-name {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.address-name,
+.address-number,
+.address-city {
+    margin-bottom: 1px;
+}
+
+.address-number,
+.address-city,
+.address-country {
+    font-size: 15px;
+}
+
+.address-country {
+    margin-bottom: 5px;
+}

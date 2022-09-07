@@ -5,6 +5,7 @@ $(document).ready(function () {
     orderID = params.get('orderID');
 
     GetUserAddresses();
+    SetAddressesCards();
 });
 
 $('#btn-register-address').click(function () {
@@ -31,3 +32,27 @@ $('#register-address').click(function () {
 
     window.location.reload();
 });
+
+function SetAddressesCards() {
+    if (window.Addresses.length > 0) {
+        let addresses = window.Addresses;
+
+        let htmlCards = '';
+
+        $.each(addresses, function (i, item) {
+            htmlCards += '<div class="card-address">';
+            htmlCards += '<input type="radio" name="address-chk" class="address-chk" value="' + addresses[i].guidID + '">';
+            htmlCards += '<p class="address-name">' + addresses[i].street.name + '</p>';
+            htmlCards += '<p class="address-number">' + addresses[i].number;
+            htmlCards += addresses[i].comment == null || addresses[i].comment == '' ? '' : ', ' + addresses[i].comment + '</p>';
+            htmlCards += '<p class="address-city">' + addresses[i].city.name + ' - ' + addresses[i].state.initials + '</p>';
+            htmlCards += '<p class="address-country">' + addresses[i].street.postalCode + ' - ' + addresses[i].country.name + '</p>';
+            htmlCards += '</div>';
+            htmlCards += '<hr />';
+        });
+
+        $('#user-addresses').html(htmlCards);
+    }
+}
+
+/*$('input[name="address-chk"]:checked').val();*/
