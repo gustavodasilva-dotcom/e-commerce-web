@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
-    public class SubcategoriesController : Controller
+    public class SubcategoriesController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly ISubcategoryApplication _subcategoryApplication;
@@ -25,7 +25,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region Index
         public async Task<IActionResult> Index()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 List<SubcategoriesModel>? result = new();
                 try
@@ -125,7 +125,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region Register
         public IActionResult Register()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 return View();
             }
@@ -137,9 +137,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         {
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString(SessionUserID));
                 }
                 var categories = await _categoryApplication.GetAllAsync();
                 try

@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Image
 {
-    public class ImagesController : Controller
+    public class ImagesController : DefaultController
     {
         #region << PROPRIEDADES >>
         private readonly IImageApplication _imageApplication;

@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
-    public class CategoriesController : Controller
+    public class CategoriesController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly ICategoryApplication _categoryApplication;
@@ -97,7 +97,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region Register
         public IActionResult Register()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 return View();
             }
@@ -109,9 +109,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         {
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString("UserID"));
+                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString(SessionUserID));
                 }
                 if (await _categoryApplication.InsertAsync(model) != null)
                 {

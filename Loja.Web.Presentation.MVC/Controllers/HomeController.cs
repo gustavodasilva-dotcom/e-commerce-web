@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Loja.Web.Presentation.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : DefaultController
     {
         private readonly ILogger<HomeController> _logger;
 

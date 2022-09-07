@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
-    public class MeasurementsController : Controller
+    public class MeasurementsController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IMeasurementApplication _measurementApplication;

@@ -7,7 +7,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
 {
-    public class ProductsController : Controller
+    public class ProductsController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IProductApplication _productApplication;
@@ -79,7 +79,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region Process
         public IActionResult Process()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 return View();
             }
@@ -93,9 +93,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
             result.Code = 0;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
                     model.Created_by_Guid = Guid.Parse(
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));

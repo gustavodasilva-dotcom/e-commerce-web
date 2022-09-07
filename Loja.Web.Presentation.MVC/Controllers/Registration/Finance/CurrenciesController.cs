@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Finance
 {
-    public class CurrenciesController : Controller
+    public class CurrenciesController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly ICurrencyApplication _currencyApplication;

@@ -5,16 +5,10 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Security
 {
-    public class AccountsController : Controller
+    public class AccountsController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly ISecurityApplication _securityApplication;
-
-        const string SessionName = "Name";
-        const string SessionEmail = "Email";
-        const string SessionLogin = "Login";
-        const string SessionUserID = "UserID";
-        const string SessionRole = "Role";
         #endregion
 
         #region << CONSTRUCTOR >>

@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
 {
-    public class OrdersController : Controller
+    public class OrdersController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IOrderApplication _orderApplication;
@@ -23,7 +23,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         #region SelectPay
         public IActionResult SelectPay()
         {
-            if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
             {
                 return View();
             }
@@ -34,7 +34,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         #region AddressSelect
         public IActionResult AddressSelect()
         {
-            if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
             {
                 return View();
             }
@@ -45,7 +45,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         #region Overview
         public IActionResult Overview()
         {
-            if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+            if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
             {
                 return View();
             }
@@ -80,9 +80,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
             result.Code = 0;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
                     model.UserGuid = Guid.Parse(
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
@@ -129,9 +129,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
             result.Success = false;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
                     var userGuid = Guid.Parse(createdByGuid ??
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
                     result.Success = await _orderApplication.StepTwoAsync(orderGuid, addressGuid, userGuid);

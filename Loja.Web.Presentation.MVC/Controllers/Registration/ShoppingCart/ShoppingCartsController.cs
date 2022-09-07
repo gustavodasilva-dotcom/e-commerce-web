@@ -6,7 +6,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
 {
-    public class ShoppingCartsController : Controller
+    public class ShoppingCartsController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IProductApplication _productApplication;
@@ -41,9 +41,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
             result.RedirectToLogin = false;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var userID = HttpContext.Session.GetString("UserID") ??
+                    var userID = HttpContext.Session.GetString(SessionUserID) ??
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
                     if (Guid.TryParse(userID, out Guid userGuid))
                     {
@@ -102,9 +102,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
             result.RedirectToLogin = false;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
                     model.UserGuid = Guid.Parse(
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));

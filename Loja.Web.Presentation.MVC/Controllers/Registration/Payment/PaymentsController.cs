@@ -4,7 +4,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Payment
 {
-    public class PaymentsController : Controller
+    public class PaymentsController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IPaymentApplication _paymentApplication;

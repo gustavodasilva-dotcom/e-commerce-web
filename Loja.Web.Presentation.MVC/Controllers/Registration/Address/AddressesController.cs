@@ -6,7 +6,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
 {
-    public class AddressesController : Controller
+    public class AddressesController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IAddressApplication _addressApplication;
@@ -116,9 +116,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
             result.Code = 0;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
                     var userGuid = Guid.Parse(
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
@@ -146,9 +146,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
             result.Code = 0;
             try
             {
-                if (HttpContext.Session.Keys.Any(k => k == "UserID"))
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var createdByGuid = HttpContext.Session.GetString("UserID");
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
                     model.UserGuid = Guid.Parse(
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));

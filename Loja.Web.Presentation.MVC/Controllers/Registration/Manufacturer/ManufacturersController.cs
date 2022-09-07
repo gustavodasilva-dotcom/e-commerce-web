@@ -9,7 +9,7 @@ using System.Dynamic;
 
 namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
 {
-    public class ManufacturersController : Controller
+    public class ManufacturersController : DefaultController
     {
         #region << PROPERTIES >>
         private readonly IManufacturerApplication _manufacturerApplication;
@@ -34,7 +34,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         #region Index
         public async Task<ActionResult<IEnumerable<ManufacturersModel>>> Index()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 try
                 {
@@ -131,7 +131,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         #region Register
         public IActionResult Register()
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 return View();
             }
@@ -166,7 +166,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         #region Details
         public async Task<ActionResult<ManufacturersModel>> Details(Guid guid)
         {
-            if (HttpContext.Session.GetString("Role") == "Employee")
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
             {
                 try
                 {
