@@ -9,7 +9,7 @@ namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
 
         public decimal? Total { get; set; }
 
-        public bool IsCard { get; set; }
+        public PaymentMethodViewModel? PaymentMethod { get; set; }
 
         public CardInfoModel? CardInfo { get; set; }
 

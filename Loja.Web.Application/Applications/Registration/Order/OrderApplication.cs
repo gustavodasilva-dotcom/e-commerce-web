@@ -94,6 +94,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                     Height = product.Height,
                     Width = product.Width,
                     Length = product.Length,
+                    Quantity = prod.Quantity,
                     Stock = product.Stock,
                     Active = product.Active,
                     Deleted = product.Deleted,
@@ -105,7 +106,12 @@ namespace Loja.Web.Application.Applications.Registration.Order
             {
                 GuidID = order.GuidID,
                 Total = order.Total,
-                IsCard = paymentMethod.IsCard,
+                PaymentMethod = new PaymentMethodViewModel
+                {
+                    GuidID = paymentMethod.GuidID,
+                    Name = paymentMethod.Name,
+                    IsCard = paymentMethod.IsCard
+                },
                 CardInfo = new CardInfoModel
                 {
                     CardNumber = cardInfo?.CardNumber,

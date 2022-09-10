@@ -1,5 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Address;
+using Loja.Web.Domain.Entities.Registration.Order;
 using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Infra.CrossCutting.Config;
 using Loja.Web.Presentation.Models.Registration.Address.Model;
@@ -19,6 +20,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
         private readonly States _states = new();
         private readonly Cities _cities = new();
         private readonly Neighborhoods _neighborhoods = new();
+        private readonly Orders _orders = new();
 
         #region ViaCep
         public class ViaCEP
@@ -101,7 +103,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
 
         #endregion
 
-        #region
+        #region GetUserAddressesAsync
         public async Task<List<AddressesViewModel?>> GetUserAddressesAsync(Guid userGuid)
         {
             var result = new List<AddressesViewModel?>();
@@ -200,6 +202,96 @@ namespace Loja.Web.Application.Applications.Registration.Address
             }
 
             return result;
+        }
+        #endregion
+
+        #region GetOrderAddressAsync
+        public async Task<AddressesViewModel> GetOrderAddressAsync(Guid orderGuid)
+        {
+            var orders = await _orders.GetAllAsync() ??
+                throw new Exception("No order was found. Please, contact the system administrator.");
+
+            var order = orders.FirstOrDefault(x => x.GuidID == orderGuid && x.Active && !x.Deleted) ??
+                throw new Exception("The order was not found. Please, contact the system administrator.");
+
+            var addresses = await _addresses.GetAllAsync() ??
+                throw new Exception("No addresses was found. Please, contact the system administrator.");
+
+            var address = addresses.FirstOrDefault(x => x.ID == order.DeliveryAddressID && x.Active && !x.Deleted) ??
+                throw new Exception("The delivery address was not found. Please, contact the system administrator.");
+
+            var streets = await _streets.GetAllAsync() ??
+                throw new Exception("No streets was found. Please, contact the system administrator.");
+
+            var countries = await _countries.GetAllAsync() ??
+                throw new Exception("No countries was found. Please, contact the system administrator.");
+
+            var states = await _states.GetAllAsync() ??
+                throw new Exception("No states was found. Please, contact the system administrator.");
+
+            var cities = await _cities.GetAllAsync() ??
+                throw new Exception("No cities was found. Please, contact the system administrator.");
+
+            var neighborhoods = await _neighborhoods.GetAllAsync() ??
+                throw new Exception("No neighborhoods was found. Please, contact the system administrator.");
+
+            var street = streets.First(x => x.ID == address.StreetID && x.Active && !x.Deleted) ??
+                throw new Exception("No streets was found. Please, contact the system administrator.");
+
+            var neighborhood = neighborhoods.First(x => x.ID == street.NeighborhoodID && x.Active && !x.Deleted) ??
+                throw new Exception("No neighborhoods was found. Please, contact the system administrator.");
+
+            var city = cities.First(x => x.ID == neighborhood.CityID && x.Active && !x.Deleted) ??
+                throw new Exception("No cities was found. Please, contact the system administrator.");
+
+            var state = states.First(x => x.ID == city.StateID && x.Active && !x.Deleted) ??
+                throw new Exception("No states was found. Please, contact the system administrator.");
+
+            var country = countries.First(x => x.ID == state.CountryID && x.Active && !x.Deleted) ??
+                throw new Exception("No countries was found. Please, contact the system administrator.");
+
+            return new AddressesViewModel
+            {
+                ID = address.ID,
+                GuidID = address.GuidID,
+                Number = address.Number,
+                Comment = address.Comment,
+                Street = new StreetsViewModel
+                {
+                    ID = street.ID,
+                    GuidID = street.GuidID,
+                    PostalCode = street.PostalCode,
+                    Name = street.Name,
+                    NeighborhoodID = street.NeighborhoodID,
+                },
+                Neighborhood = new NeighborhoodsViewModel
+                {
+                    ID = neighborhood.ID,
+                    GuidID = neighborhood.GuidID,
+                    Name = neighborhood.Name,
+                    CityID = neighborhood.CityID
+                },
+                City = new CitiesViewModel
+                {
+                    ID = city.ID,
+                    GuidID = city.GuidID,
+                    Name = city.Name,
+                    StateID = city.StateID
+                },
+                State = new StatesViewModel
+                {
+                    ID = state.ID,
+                    GuidID = state.GuidID,
+                    Initials = state.Initials,
+                    CountryID = state.CountryID
+                },
+                Country = new CountriesViewModel
+                {
+                    ID = country.ID,
+                    GuidID = country.GuidID,
+                    Name = country.Name
+                }
+            };
         }
         #endregion
 

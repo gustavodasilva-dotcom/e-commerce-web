@@ -20,6 +20,8 @@
 
         public decimal? Length { get; set; }
         
+        public int Quantity { get; set; }
+
         public int Stock { get; set; }
         
         public bool Active { get; set; }

@@ -138,6 +138,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
         }
         #endregion
 
+        #region GetOrderAddress
+        [HttpGet]
+        public async Task<JsonResult> GetOrderAddress(Guid orderGuid)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.Address = await _addressApplication.GetOrderAddressAsync(orderGuid);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #region RegisterUserAddress
         [HttpPost]
         public async Task<JsonResult> RegisterUserAddress(AddressesModel model)

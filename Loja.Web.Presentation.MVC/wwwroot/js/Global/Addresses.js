@@ -129,3 +129,21 @@ function SetDeliveryAddress(orderID, addressID) {
         }
     });
 }
+
+function GetOrderAddress(orderID) {
+    $.ajax({
+        async: false,
+        type: "GET",
+        dataType: "json",
+        data: { orderGuid: orderID },
+        url: "/Addresses/GetOrderAddress",
+        success: function (result) {
+            if (result.Code == 1) {
+                window.Address = {};
+                window.Address = result.Address;
+            } else {
+                alert(result.Message);
+            }
+        }
+    });
+}
