@@ -57,17 +57,17 @@ namespace Loja.Web.Domain.Entities.Registration.Payment
                 id = await connect.InsertAsync(new CardsInfos
                 {
                     GuidID = Guid.NewGuid(),
-                    CardNumber = model.CardNumber,
-                    NameAtTheCard = model.NameAtTheCard,
-                    ExpMonth = model.Month,
-                    ExpYear = model.Year,
-                    CVV = model.CVV,
-                    Quantity = model.Quantity,
-                    UserID = model.UserID,
+                    CardNumber = model?.CardNumber?.Trim(),
+                    NameAtTheCard = model?.NameAtTheCard?.Trim(),
+                    ExpMonth = model?.Month,
+                    ExpYear = model?.Year,
+                    CVV = model?.CVV?.Trim(),
+                    Quantity = model?.Quantity,
+                    UserID = model?.UserID,
                     Active = true,
                     Deleted = false,
                     Created_at = DateTime.Now,
-                    Created_by = model.UserID,
+                    Created_by = model?.UserID,
                     Deleted_at = null,
                     Deleted_by = null
                 });
@@ -80,6 +80,43 @@ namespace Loja.Web.Domain.Entities.Registration.Payment
                 throw new Exception(e.Message);
             }
             return id;
+        }
+        #endregion
+
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(CardsInfos cardInfo, int? quantity = null)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new CardsInfos
+                {
+                    ID = cardInfo.ID,
+                    GuidID = cardInfo.GuidID,
+                    CardNumber = cardInfo.CardNumber,
+                    NameAtTheCard = cardInfo.NameAtTheCard,
+                    ExpMonth = cardInfo.ExpMonth,
+                    ExpYear = cardInfo.ExpYear,
+                    CVV = cardInfo.CVV,
+                    Quantity = quantity != null ? quantity : cardInfo.Quantity,
+                    UserID = cardInfo.UserID,
+                    Active = cardInfo.Active,
+                    Deleted = cardInfo.Deleted,
+                    Created_at = cardInfo.Created_at,
+                    Created_by = cardInfo.Created_by,
+                    Deleted_at = cardInfo.Deleted_at,
+                    Deleted_by = cardInfo.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
         }
         #endregion
 

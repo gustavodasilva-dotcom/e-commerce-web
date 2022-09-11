@@ -17,7 +17,7 @@
     });
 }
 
-function FinishOrder(orderID, orderTotal, finishOrder) {
+function ProcessOrder(orderID, orderTotal, finishOrder) {
     $.ajax({
         async: false,
         type: "POST",
@@ -27,7 +27,7 @@ function FinishOrder(orderID, orderTotal, finishOrder) {
             total: orderTotal,
             finishOrder: finishOrder
         },
-        url: "/Orders/FinishOrder",
+        url: "/Orders/ProcessOrder",
         success: function (result) {
             if (result.Code == 1) {
                 window.TrackingNumber = null;

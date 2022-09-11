@@ -79,13 +79,13 @@ namespace Loja.Web.Application.Applications.Registration.Order
             var products = await _products.GetAllAsync() ??
                 throw new Exception("No products was found. Please, contact the system administrator.");
 
-            List<ProductViewModel>? productsModel = new(); 
+            List<ProductViewModel>? productsModel = new();
 
             foreach (OrdersProducts prod in orderProducts.ToList())
             {
                 var product = products.FirstOrDefault(x => x.ID == prod.ProductID && x.Active && !x.Deleted) ??
                     throw new Exception("No product was found. Please, contact the system administrator.");
-                
+
                 productsModel.Add(new ProductViewModel
                 {
                     GuidID = product.GuidID,
@@ -186,8 +186,30 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             if (model.IsCard)
             {
-                var cardInfoID = await _cardsInfos.InsertAsync(model.CardInfo ??
-                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                long? cardInfoID = null;
+
+                var cardsInfos = await _cardsInfos.GetAllAsync() ??
+                    throw new Exception("There's no cards infos registered. Please, contact the system administrator.");
+
+                var cardInfo = cardsInfos.FirstOrDefault(x => x.UserID == model.UserID &&
+                    x.CardNumber == model?.CardInfo?.CardNumber?.Trim() &&
+                    x.NameAtTheCard == model?.CardInfo?.NameAtTheCard?.Trim() &&
+                    x.ExpMonth == model?.CardInfo?.Month &&
+                    x.ExpYear == model?.CardInfo.Year &&
+                    x.CVV == model?.CardInfo.CVV);
+
+                if (cardInfo is null)
+                {
+                    cardInfoID = await _cardsInfos.InsertAsync(model.CardInfo ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                }
+                else
+                {
+                    cardInfoID = cardInfo.ID;
+
+                    if (!await _cardsInfos.UpdateAsync(cardInfo, model.CardInfo.Quantity))
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                }
 
                 if (cardInfoID is null)
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
@@ -198,7 +220,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
             var orders = await _orders.GetAllAsync() ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
-            if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.ToList()))
+            if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.Where(x => x.Active && !x.Deleted).ToList()))
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             return orders.FirstOrDefault(x => x.ID == orderID);
@@ -227,7 +249,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
         #region FinishOrderAsync
         public async Task<string> ProcessOrderAsync(Guid orderGuid, string total, bool finishOrder)
         {
-            int? orderStatusID; 
+            int? orderStatusID;
 
             var orders = await _orders.GetAllAsync() ??
                 throw new Exception("No order was found. Please, contact the system administrator.");
@@ -238,6 +260,12 @@ namespace Loja.Web.Application.Applications.Registration.Order
             var ordersStatus = await _ordersStatus.GetAllAsync() ??
                 throw new Exception("There's no order status registered. Please, contact the system administrator.");
 
+            if (finishOrder && !string.IsNullOrEmpty(order.Tracking) && order.OrderStatusID == ordersStatus.First().ID)
+                throw new Exception("The order is already cancelled.");
+
+            if (!finishOrder && !string.IsNullOrEmpty(order.Tracking) && order.OrderStatusID == ordersStatus.OrderBy(x => x.Name).First().ID)
+                throw new Exception("The order is already finished.");
+
             var ordersProducts = await _ordersProducts.GetAllAsync() ??
                 throw new Exception("No orders products was found. Please, contact the system administrator.");
 
@@ -246,12 +274,6 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             var products = await _products.GetAllAsync() ??
                 throw new Exception("No products was found. Please, contact the system administrator.");
-
-            if (finishOrder && !string.IsNullOrEmpty(order.Tracking) && order.OrderStatusID == ordersStatus.First().ID)
-                throw new Exception("The order is already cancelled.");
-
-            if (!finishOrder && !string.IsNullOrEmpty(order.Tracking) && order.OrderStatusID == ordersStatus.OrderBy(x => x.Name).First().ID)
-                throw new Exception("The order is already finished.");
 
             if (finishOrder)
                 orderStatusID = ordersStatus.First().ID;
@@ -288,7 +310,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
             var random = new Random();
-            
+
             return new string(Enumerable.Repeat(chars, 15).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 

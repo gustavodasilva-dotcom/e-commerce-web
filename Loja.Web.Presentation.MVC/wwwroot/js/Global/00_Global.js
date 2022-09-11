@@ -9,6 +9,15 @@ function SetReadMore() {
     $('#more').css('display', 'none');
 }
 
+function DisableButton(buttonID, disable) {
+    if (disable) {
+        $('#' + buttonID).prop('disabled', true);
+
+        $('#' + buttonID).css('background-color', '#B8C5C6');
+        $('#' + buttonID).css('font-weight', 'normal');
+    }
+}
+
 $('#logout-button').click(function () {
     $.ajax({
         async: false,

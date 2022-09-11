@@ -29,9 +29,9 @@ function SetHtmlElementsLeft(order) {
 
     orderTotal = CalculateOrderTotal(order);
 
-    for (let i = 0; i < order.products.length; i++) {
-        htmlCode += '<h2 class="overview-title-2">Products:</h2>';
+    htmlCode += '<h2 class="overview-title-2">Products:</h2>';
 
+    for (let i = 0; i < order.products.length; i++) {
         htmlCode += '<div class="product-card">';
         
         htmlCode +=     `<input type="hidden" id="${order.products[i].guidID}" value="${order.products[i].guidID}" >`;
@@ -54,20 +54,34 @@ function SetHtmlElementsLeft(order) {
 
         htmlCode += '</div>';
 
-        htmlCode += '<div class="overview-price">';
-
-        htmlCode +=     `<label>Order total:</label><p>${orderTotal}</p>`;
-
-        htmlCode += '</div>'
-
         if (order.products.length > 1) htmlCode += '<hr />';
     }
+
+    htmlCode += '<div class="overview-price">';
+
+    htmlCode +=     `<label>Order total:</label><p>${orderTotal}</p>`;
+
+    htmlCode += '</div>'
 
     $('.product-details-left').html(htmlCode);
 }
 
 function SetHtmlElementsRight(address, order) {
     let htmlCode = '';
+
+    htmlCode += '<h2 class="overview-title-2">Status:</h2>';
+
+    htmlCode += `<p>${order.orderStatus.name}</p>`;
+
+    if (order.orderStatus.name === 'Completed') {
+        DisableButton('btn-alter-order', true);
+        DisableButton('btn-finish-order', true);
+    }
+
+    if (order.orderStatus.name === 'Cancelled') {
+        DisableButton('btn-alter-order', true);
+        DisableButton('btn-cancel-order', true);
+    }
 
     htmlCode += '<h2 class="overview-title-2">Delivery address:</h2>';
 
@@ -89,7 +103,13 @@ function SetHtmlElementsRight(address, order) {
 }
 
 $('#btn-finish-order').click(function () {
-    FinishOrder(orderID, orderTotal, true);
+    ProcessOrder(orderID, orderTotal, true);
 });
 
-// TODO: create cancel order script.
+$('#btn-cancel-order').click(function () {
+    ProcessOrder(orderID, orderTotal, false);
+});
+
+$('#btn-alter-order').click(function () {
+    alert('To be developed.');
+});
