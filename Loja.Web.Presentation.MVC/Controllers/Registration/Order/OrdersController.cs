@@ -150,6 +150,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         }
         #endregion
 
+        #region FinishOrder
+        [HttpPost]
+        public async Task<JsonResult> FinishOrder(Guid orderGuid, string total, bool finishOrder)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.TrackingNumber = await _orderApplication.ProcessOrderAsync(orderGuid, total, finishOrder);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #endregion
     }
 }

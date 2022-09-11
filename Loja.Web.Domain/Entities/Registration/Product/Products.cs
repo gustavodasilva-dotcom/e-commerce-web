@@ -27,7 +27,7 @@ namespace Loja.Web.Domain.Entities.Registration.Product
 		public decimal? Width { get; private set; }
         public int? LengthMeasurementTypeID { get; private set; }
         public decimal? Length { get; private set; }
-		public int Stock { get; private set; }
+		public int? Stock { get; private set; }
 		public bool Active { get; private set; }
 		public bool Deleted { get; private set; }
 		public DateTime Created_at { get; private set; }
@@ -134,6 +134,52 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                     Created_by = model.Created_by,
                     Deleted_at = model.Deleted_at,
                     Deleted_by = model.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(Products product, int? quantity = null)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Products
+                {
+                    ID = product.ID,
+                    GuidID = product.GuidID,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    CurrencyID = product.CurrencyID,
+                    Discount = product.Discount,
+                    SubcategoryID = product.SubcategoryID,
+                    ManufacturerID = product.ManufacturerID,
+                    WeightMeasurementTypeID = product.WeightMeasurementTypeID,
+                    Weight = product.Weight,
+                    HeightMeasurementTypeID = product.HeightMeasurementTypeID,
+                    Height = product.Height,
+                    WidthMeasurementTypeID = product.WidthMeasurementTypeID,
+                    Width = product.Width,
+                    LengthMeasurementTypeID = product.LengthMeasurementTypeID,
+                    Length = product.Length,
+                    Stock = quantity != null ? quantity : product.Stock,
+                    Active = product.Active,
+                    Deleted = product.Deleted,
+                    Created_at = product.Created_at,
+                    Created_by = product.Created_by,
+                    Deleted_at = product.Deleted_at,
+                    Deleted_by = product.Deleted_by
                 });
             }
             catch (Exception e)

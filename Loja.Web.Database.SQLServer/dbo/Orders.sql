@@ -2,6 +2,7 @@
 (
 	[ID]				INT					NOT NULL IDENTITY(1, 1),
 	[GuidID]			UNIQUEIDENTIFIER	NOT NULL,
+	[Tracking]			VARCHAR(15),
 	[Total]				MONEY,					
 	[UserID]			INT					NOT NULL,
 	[PaymentMethodID]	INT					NOT NULL,

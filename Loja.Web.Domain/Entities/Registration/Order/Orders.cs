@@ -12,7 +12,8 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         [Key]
 		public int ID { get; private set; }
 		public Guid GuidID { get; private set; }
-		public decimal? Total { get; private set; }
+        public string? Tracking { get; private set; }
+        public decimal? Total { get; private set; }
 		public int? UserID { get; private set; }
 		public int? PaymentMethodID { get; private set; }
 		public int? OrderStatusID { get; private set; }
@@ -55,6 +56,7 @@ namespace Loja.Web.Domain.Entities.Registration.Order
                 id = await connect.InsertAsync(new Orders
                 {
                     GuidID = Guid.NewGuid(),
+                    Tracking = null,
                     Total = null,
                     UserID = model.UserID,
                     PaymentMethodID = model.PaymentMethodID,
@@ -79,7 +81,12 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         #endregion
 
         #region UpdateAsync
-        public async Task<bool> UpdateAsync(Orders order, int? deliveryAddressID = null, decimal? total = null)
+        public async Task<bool> UpdateAsync(
+            Orders order,
+            int? deliveryAddressID = null,
+            int? orderStatusID = null,
+            string? tracking = null,
+            decimal? total = null)
         {
             var updated = false;
             try
@@ -89,10 +96,11 @@ namespace Loja.Web.Domain.Entities.Registration.Order
                 {
                     ID = order.ID,
                     GuidID = order.GuidID,
+                    Tracking = tracking ?? null,
                     Total = total != null ? total : order.Total,
                     UserID = order.UserID,
                     PaymentMethodID = order.PaymentMethodID,
-                    OrderStatusID = order.OrderStatusID,
+                    OrderStatusID = orderStatusID != null ? orderStatusID : order.OrderStatusID,
                     DeliveryAddressID = deliveryAddressID != null ? deliveryAddressID : order.DeliveryAddressID,
                     Active = order.Active,
                     Deleted = order.Deleted,

@@ -1,4 +1,5 @@
 ﻿let orderID;
+let orderTotal;
 
 $(document).ready(function () {
     let params = (new URL(window.location.href)).searchParams;
@@ -26,6 +27,8 @@ function SetHtmlElements() {
 function SetHtmlElementsLeft(order) {
     let htmlCode = '';
 
+    orderTotal = CalculateOrderTotal(order);
+
     for (let i = 0; i < order.products.length; i++) {
         htmlCode += '<h2 class="overview-title-2">Products:</h2>';
 
@@ -34,12 +37,28 @@ function SetHtmlElementsLeft(order) {
         htmlCode +=     `<input type="hidden" id="${order.products[i].guidID}" value="${order.products[i].guidID}" >`;
         htmlCode +=     `<h3 class="overview-title-3">${order.products[i].name}</h3>`;
 
-        htmlCode +=     `<p>Unitary: ${order.products[i].price}</p>`;
-        htmlCode +=     `<p>Amount: ${order.products[i].price * order.products[i].quantity}</p>`;
-        htmlCode +=     `<label for="product-${i}">Quantity:</label>`;
-        htmlCode +=     `<input type="number" id="product-${i}" value="${order.products[i].quantity}">`;
+        htmlCode +=     '<div class="product-details">';
+
+        htmlCode +=         '<br />';
+
+        htmlCode +=         '<label>Unitary: </label>';
+        htmlCode +=         `<p>${order.products[i].price}</p>`;
+
+        htmlCode +=         '<label style="margin-left: 20px;">Amount: </label>';
+        htmlCode +=         `<p>${order.products[i].price * order.products[i].quantity}</p>`;
+
+        htmlCode +=         `<label style="margin-left: 20px;">Quantity:</label>`;
+        htmlCode +=         `<p>${order.products[i].quantity}</p>`;
+
+        htmlCode +=     '</div>'
 
         htmlCode += '</div>';
+
+        htmlCode += '<div class="overview-price">';
+
+        htmlCode +=     `<label>Order total:</label><p>${orderTotal}</p>`;
+
+        htmlCode += '</div>'
 
         if (order.products.length > 1) htmlCode += '<hr />';
     }
@@ -54,22 +73,23 @@ function SetHtmlElementsRight(address, order) {
 
     htmlCode += '<div class="address-card">';
     
-    htmlCode +=     `<h3 class="overview-title-3">${address.street.name}</h3>`;
+    htmlCode +=     `<h3 class="overview-title-3">${address.street.name}, ${address.number}</h3>`;
 
-    htmlCode +=     `<p>${address.number}`;
     htmlCode +=     address.comment == null || address.comment == '' ? '' : ', ' + address.comment + '</p>';
     htmlCode +=     `<p>${address.city.name} - ${address.state.initials}</p>`;
     htmlCode +=     `<p>${address.street.postalCode} - ${address.country.name}</p>`;
 
     htmlCode += '</div>';
 
-    htmlCode += '<h2 class="overview-title-2">Payment method:</h2>';
+    htmlCode += '<h2 class="overview-title-2" style="margin-top: 20px;">Payment method:</h2>';
 
-    htmlCode += `<h3 class="overview-title-3">${order.paymentMethod.name}</h3>`;
-
-    if (order.paymentMethod.isCard) {
-
-    }
+    htmlCode += `<p style="font-size: 20px;"><b>${order.paymentMethod.name}</b></p>`;
 
     $('.product-details-right').html(htmlCode);
 }
+
+$('#btn-finish-order').click(function () {
+    FinishOrder(orderID, orderTotal, true);
+});
+
+// TODO: create cancel order script.

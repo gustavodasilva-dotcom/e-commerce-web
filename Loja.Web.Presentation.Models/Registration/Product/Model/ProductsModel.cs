@@ -51,7 +51,7 @@
 
         #endregion
 
-        public int Stock { get; set; }
+        public int? Stock { get; set; }
 
         public bool IsEdit { get; set; }
 

@@ -4,6 +4,7 @@
 
 @section Scripts {
 
+    <script src="~/lib/plentz-jquery-maskmoney-cdbeeac/dist/jquery.maskMoney.js" type="text/javascript"></script>
     <script src="~/js/Global/Orders.js"></script>
     <script src="~/js/Registration/Order/Overview.js"></script>
 
@@ -17,7 +18,7 @@
     </head>
     <body>
 
-        <div class="product-details-wrapper-details">
+        <div class="product-details-wrapper-details" style="max-width: 1200px;">
 
             <input type="hidden" id="orderGuid">
             <input type="hidden" id="addressGuid">
@@ -25,7 +26,13 @@
 
             <div class="product-details-left"></div>
 
-            <div class="product-details-right"></div>
+            <div class="product-details-right" style="width: 40%; margin-left: 100px;"></div>
+
+            <div class="overview-btns">
+                <button type="button" name="finish-order" id="btn-finish-order">Finish order</button><br />
+                <button type="button" name="alter-order" id="btn-alter-order">Alter order</button><br />
+                <button type="button" name="cancel-order" id="btn-cancel-order">Cancel order</button>
+            </div>
 
         </div>
 

@@ -9,5 +9,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Order
         Task<OrderViewModel> GetOrderDetailsAsync(Guid orderGuid);
         Task<Orders?> StepOneAsync(StepOneModel model);
         Task<bool> StepTwoAsync(Guid orderGuid, Guid addressGuid, Guid userGuid);
+        Task<string> ProcessOrderAsync(Guid orderGuid, string total, bool finishOrder);
     }
 }

@@ -8,6 +8,7 @@ using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Presentation.Models.Registration.Order.Model;
 using Loja.Web.Presentation.Models.Registration.Order.ViewModel;
 using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
+using System.Globalization;
 
 namespace Loja.Web.Application.Applications.Registration.Order
 {
@@ -28,6 +29,8 @@ namespace Loja.Web.Application.Applications.Registration.Order
         #endregion
 
         #region << METHODS >>
+
+        #region PUBLIC
 
         #region GetOrderDetailsAsync
         public async Task<OrderViewModel> GetOrderDetailsAsync(Guid orderGuid)
@@ -179,9 +182,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 throw new Exception("The user's shopping cart is empty. Please, contact the system administrator.");
 
             foreach (var cartProd in userShoppingCarProds)
-            {
                 await _ordersProducts.InsertAsync(cartProd, model, (int)orderID, products.First(x => x.ID == cartProd.ProductID).Price ?? 0);
-            }
 
             if (model.IsCard)
             {
@@ -198,9 +199,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.ToList()))
-            {
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-            }
 
             return orders.FirstOrDefault(x => x.ID == orderID);
         }
@@ -223,6 +222,90 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             return await _orders.UpdateAsync(order, userAddress.ID);
         }
+        #endregion
+
+        #region FinishOrderAsync
+        public async Task<string> ProcessOrderAsync(Guid orderGuid, string total, bool finishOrder)
+        {
+            int? orderStatusID; 
+
+            var orders = await _orders.GetAllAsync() ??
+                throw new Exception("No order was found. Please, contact the system administrator.");
+
+            var order = orders.FirstOrDefault(x => x.GuidID == orderGuid && x.Active && !x.Deleted) ??
+                throw new Exception("The order was not found. Please, contact the system administrator.");
+
+            var ordersStatus = await _ordersStatus.GetAllAsync() ??
+                throw new Exception("There's no order status registered. Please, contact the system administrator.");
+
+            var ordersProducts = await _ordersProducts.GetAllAsync() ??
+                throw new Exception("No orders products was found. Please, contact the system administrator.");
+
+            var orderProducts = ordersProducts.Where(x => x.OrderID == order.ID && x.Active && !x.Deleted) ??
+                throw new Exception("No order's products was found. Please, contact the system administrator.");
+
+            var products = await _products.GetAllAsync() ??
+                throw new Exception("No products was found. Please, contact the system administrator.");
+
+            if (finishOrder && !string.IsNullOrEmpty(order.Tracking) && order.OrderStatusID == ordersStatus.First().ID)
+                throw new Exception("The order is already cancelled.");
+
+            if (!finishOrder && !string.IsNullOrEmpty(order.Tracking) && order.OrderStatusID == ordersStatus.OrderBy(x => x.Name).First().ID)
+                throw new Exception("The order is already finished.");
+
+            if (finishOrder)
+                orderStatusID = ordersStatus.First().ID;
+            else
+                orderStatusID = ordersStatus.OrderBy(x => x.Name).First().ID;
+
+            foreach (OrdersProducts orderProduct in orderProducts.ToList())
+            {
+                var product = products.FirstOrDefault(x => x.ID == orderProduct.ProductID && x.Active && !x.Deleted) ??
+                    throw new Exception("No product was found. Please, contact the system administrator.");
+
+                if (!await _products.UpdateAsync(product, quantity: product.Stock - orderProduct.Quantity))
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+            }
+
+            var tracking = GenerateTracking();
+
+            ConvertPriceStringToDecimal(total, out decimal totalConverted);
+
+            if (!await _orders.UpdateAsync(order, tracking: tracking, orderStatusID: orderStatusID, total: totalConverted))
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+            return tracking;
+        }
+        #endregion
+
+        #endregion
+
+        #region PRIVATE
+
+        #region GenerateTracking
+        private static string GenerateTracking()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            var random = new Random();
+            
+            return new string(Enumerable.Repeat(chars, 15).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private static decimal ConvertPriceStringToDecimal(string priceString, out decimal price)
+        {
+            if (!decimal.TryParse(
+                priceString.Replace(",", ""),
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out decimal convertedPrice))
+            {
+                throw new Exception("The product's price is not numeric.");
+            }
+            return price = convertedPrice;
+        }
+        #endregion
+
         #endregion
 
         #endregion

@@ -4,3 +4,92 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
+/******** Buttons: ********/
+
+#btn-finish-order,
+#btn-alter-order,
+#btn-cancel-order {
+    padding: 8px 25px;
+    border: none;
+    width: 100%;
+    outline: none;
+    color: #ffffff;
+    cursor: pointer;
+    margin-right: 25px;
+}
+
+#btn-finish-order {
+    font-size: 18px;
+    font-weight: bold;
+    height: 50px;
+    background-color: #00BA84;
+    margin-bottom: 25px;
+}
+
+#btn-finish-order:hover {
+    background: #19D6A1;
+}
+
+#btn-alter-order {
+    font-size: 15px;
+    background-color: #0081A7;
+    margin-bottom: 25px;
+}
+
+#btn-alter-order:hover {
+    background: #00AFB9;
+    font-weight: bold;
+}
+
+#btn-cancel-order {
+    font-size: 13px;
+    background-color: #F07167;
+}
+
+#btn-cancel-order:hover {
+    background: #F38E87;
+    font-weight: bold;
+}
+
+/******** Buttons: ********/
+
+
+.overview-title-3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.product-card .overview-title-3 {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.product-card .overview-title-3:hover {
+    color: #0081A7;
+}
+
+.product-details {
+    display: flex;
+}
+
+.product-details label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.overview-price {
+    margin-top: 30px;
+}
+
+.overview-price label {
+    font-size: 30px;
+}
+
+.overview-price p {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.address-card p {
+    margin-bottom: 5px;
+}
