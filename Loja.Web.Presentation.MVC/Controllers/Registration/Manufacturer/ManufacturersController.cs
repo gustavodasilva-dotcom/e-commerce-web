@@ -63,14 +63,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
                             Deleted = x.Deleted
                         }).ToList());
                     }
-                    return BadRequest();
+                    return Redirect("/Default/Select?statusCode=400");
                 }
                 catch (Exception e)
                 {
                     return StatusCode(500, e.Message);
                 }
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
         #endregion
 
@@ -135,7 +135,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
             {
                 return View();
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
 
         [HttpPost]
@@ -221,7 +221,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
                     return StatusCode(500, e.Message);
                 }
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
         #endregion
 

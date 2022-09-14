@@ -73,7 +73,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
                     return StatusCode(500, e.Message);
                 }
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
         #endregion
 
@@ -129,7 +129,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
             {
                 return View();
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
 
         [HttpPost]

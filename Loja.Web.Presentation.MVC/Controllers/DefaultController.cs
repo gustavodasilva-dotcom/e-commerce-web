@@ -11,5 +11,12 @@ namespace Loja.Web.Presentation.MVC.Controllers
         public const string SessionUserID = "UserID";
         public const string SessionRole = "Role";
         #endregion
+
+        #region Select
+        public IActionResult Select()
+        {
+            return View();
+        }
+        #endregion
     }
 }

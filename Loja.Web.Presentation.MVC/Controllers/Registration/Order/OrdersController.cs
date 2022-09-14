@@ -27,7 +27,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
             {
                 return View();
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
             {
                 return View();
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
         #endregion
 
@@ -49,7 +49,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
             {
                 return View();
             }
-            return Unauthorized();
+            return Redirect("/Default/Select?statusCode=401");
         }
         #endregion
 
