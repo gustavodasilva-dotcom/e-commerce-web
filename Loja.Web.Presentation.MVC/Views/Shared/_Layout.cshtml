@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Loja</title>
     <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+    <link rel="stylesheet" href="~/css/Global/Message.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Loja.Web.Presentation.MVC.styles.css" asp-append-version="true" />
@@ -15,17 +16,24 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+           
             <div class="container-fluid">
+                
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Loja</a>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    
                     <ul class="navbar-nav flex-grow-1">
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
                         @if (Accessor.HttpContext.Session.Keys.Any())
                         {
                             <li class="nav-item">
@@ -35,7 +43,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Register">Users</a>
                             </li>
                         }
+
                     </ul>
+
                     @if (!Accessor.HttpContext.Session.Keys.Any())
                     {
                         <button type="button" class="login-upper-button-white" onclick="window.location.href = '/Accounts/Register';">Sign up</button>
@@ -47,14 +57,15 @@
                             <span class="user-logged">User name</span>
                             <div class="dropdown-content">
                                 <a href="/ShoppingCarts/Details">Shopping cart</a>
-                                <a href="#" id="logout-button">Log out</a>
+                                <a href="#" id="logout-button" onclick="Logout()">Log out</a>
                             </div>  
                         </div>
-
-                        @*<button type="button" class="login-upper-button" id="logout-button">Log out</button>*@
                     }
+
                 </div>
+
             </div>
+
         </nav>
     </header>
     <div class="container">
@@ -75,9 +86,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/Global/00_Global.js"></script>
+    <script src="~/js/Global/Accounts.js"></script>
     <script src="~/js/Global/Addresses.js"></script>
     <script src="~/js/Global/Orders.js"></script>
     <script src="~/js/Global/Payments.js"></script>
+    <script src="~/js/Global/Message.js"></script>
     <script src="~/js/Global/ShoppingCarts.js"></script>
     <script src="~/js/Registration/Image/Images.js"></script>
 

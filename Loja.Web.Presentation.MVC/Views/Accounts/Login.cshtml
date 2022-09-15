@@ -2,43 +2,65 @@
     ViewData["Title"] = "Login";
 }
 
-<head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="~/css/Security/Login.css" />
-</head>
-<body>
-    <div class="account-wrapper">
-        <div>
-            <h1 class="account-title">Login</h1>
-        </div>
+@section Scripts {
 
-        <div class="account-form">
-            <form id="loginForm" method="post" action="@Url.Action("Login", "Accounts")" enctype="application/x-www-form-urlencoded">
-                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-                {
-                    <div class="account-alert">
-                        <p>@ViewBag.ErrorMessage</p>
-                    </div>
-                }
-                <div class="account-input-field">
-                    <input type="text" class="account-input" name="emailUsername" id="emailUsername" placeholder="E-mail or username" />
+    <script src="~/js/Registration/Account/Login.js"></script>
+
+}
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Security/Login.css" />
+    </head>
+    <body>
+        <div class="account-wrapper">
+
+            <!--- Modal --->
+            <div id="div_Message" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p></p>
                 </div>
-                <div class="account-input-field">
-                    <input type="password" class="account-input" name="password" id="password" placeholder="Password" />
-                </div>
-                <div class="account-input-field">
-                    <button type="submit" class="account-btn-submit" name="login" id="login">Login</button>
-                </div>
-            </form>
+
+            </div>
+            <!--- Modal --->
 
             <div>
-                <div class="account-default-div">
-                    <a class="account-a-forgot-pwd" href="#">Forgot my password</a>
+                <h1 class="account-title">Login</h1>
+            </div>
+
+            <div class="account-form">
+
+                <form id="loginForm">
+
+                    <div class="account-input-field">
+                        <input type="text" class="account-input" name="emailUsername" id="emailUsername" placeholder="E-mail or username" />
+                    </div>
+
+                    <div class="account-input-field">
+                        <input type="password" class="account-input" name="password" id="password" placeholder="Password" />
+                    </div>
+
+                    <div class="account-input-field">
+                        <button type="button" class="account-btn-submit" name="login" id="login">Login</button>
+                    </div>
+
+                </form>
+
+                <div>
+
+                    <div class="account-default-div">
+                        <a class="account-a-forgot-pwd" href="#">Forgot my password</a>
+                    </div>
+
+                    <div class="account-default-div">
+                        <a class="account-a-register" href="~/Accounts/Register">Register</a>
+                    </div>
+
                 </div>
-                <div class="account-default-div">
-                    <a class="account-a-register" href="~/Accounts/Register">Register</a>
-                </div>
+
             </div>
         </div>
-    </div>
-</body>
+
+    </body>

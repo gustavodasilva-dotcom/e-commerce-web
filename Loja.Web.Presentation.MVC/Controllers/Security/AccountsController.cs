@@ -1,5 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
-using Loja.Web.Presentation.Models.Security;
+using Loja.Web.Presentation.Models.Security.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 
@@ -20,15 +20,43 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
 
         #region << METHODS >>
 
-        #region Login
+        #region Views
         public IActionResult Login()
         {
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(string emailUsername, string password)
+        public IActionResult Register()
         {
+            return View();
+        }
+        #endregion
+
+        #region GetUserRoles
+        [HttpGet]
+        public async Task<JsonResult> GetUserRoles()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.UserRoles = await _securityApplication.GetUserRolesAsync();
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
+        #region Login
+        [HttpPost]
+        public async Task<JsonResult> Login(string emailUsername, string password)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
                 var user = await _securityApplication.LoginAsync(emailUsername, password);
@@ -49,23 +77,20 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
                 HttpContext.Session.SetString(SessionUserID, user.GuidID.ToString());
 
                 if (user.UserRoleID is null)
-                {
                     HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(defaultRole) ?
                         throw new ArgumentException("Session value cannot be null.", nameof(defaultRole)) : defaultRole);
-                }
                 else
-                {
                     HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(role) ?
                         throw new ArgumentException("Session value cannot be null.", nameof(role)) : role);
-                }
-                return Redirect("~/Home/Index");
+
+                result.Code = 1;
+                result.RedirectToHome = true;
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = e.Message;
-                // TODO: create log at the database.
+                result.Message = e.Message;
             }
-            return View();
+            return Json(result);
         }
         #endregion
 
@@ -74,14 +99,16 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         public JsonResult Logout()
         {
             dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
-                result.Code = 1;
                 HttpContext.Session.Clear();
+
+                result.Code = 1;
+                result.RedirectToHome = true;
             }
             catch (Exception e)
             {
-                result.Code = 0;
                 result.Message = e.Message;
             }
             return Json(result);
@@ -89,39 +116,28 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         #endregion
 
         #region Register
-        public IActionResult Register()
-        {
-            return View();
-        }
-
         [HttpPost]
-        public async Task<IActionResult> Register(UsersModel model)
+        public async Task<JsonResult> Register(UserModel model)
         {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
                 if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    model.Created_by_Guid = Guid.Parse(HttpContext.Session.GetString(SessionUserID));
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    model.UserGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
                 }
-                var role = Request.Form["roles"].ToString().ToLower();
-                var roles = await _securityApplication.GetUserRolesAsync();
-                if (string.IsNullOrEmpty(role))
-                {
-                    model.UserRoleID_Guid = roles?.LastOrDefault()?.GuidID;
-                }
-                else
-                {
-                    model.UserRoleID_Guid = roles?.Where(x => x?.Name?.ToLower() == role).FirstOrDefault()?.GuidID;
-                }
-                await _securityApplication.InsertAsync(model);
-                ViewBag.SuccessMessage = "User created successfully.";
+
+                result.User = await _securityApplication.InsertAsync(model);
+                result.Code = 1;
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = e.Message;
-                // TODO: create log at the database.
+                result.Message = e.Message;
             }
-            return View();
+            return Json(result);
         }
         #endregion
 

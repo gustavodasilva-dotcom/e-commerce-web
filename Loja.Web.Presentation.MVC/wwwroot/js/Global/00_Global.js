@@ -18,22 +18,11 @@ function DisableButton(buttonID, disable) {
     }
 }
 
-$('#logout-button').click(function () {
-    $.ajax({
-        async: false,
-        type: "POST",
-        dataType: "json",
-        url: "/Accounts/Logout",
-        success: function (result) {
-            if (result.Code == 1) {
-                window.location.href = '/Home/Index';
-            }
-            else {
-                alert(result.Message);
-            }
-        }
+function SetComboOptions(model, elementID) {
+    $.each(model, function (i, item) {
+        $('#' + elementID).append(`<option value="${model[i].guidID}">${model[i].name}</option>`);
     });
-});
+}
 
 $('.btn-read-more').click(function () {
     if ($('.btn-read-more').text() === 'Read more') {

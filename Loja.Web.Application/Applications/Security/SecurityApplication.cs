@@ -1,7 +1,8 @@
 ﻿using Loja.Web.Application.Interfaces.Security;
 using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Tools.String.Extensions;
-using Loja.Web.Presentation.Models.Security;
+using Loja.Web.Presentation.Models.Security.Model;
+using Loja.Web.Presentation.Models.Security.ViewModel;
 
 namespace Loja.Web.Application.Applications.Security
 {
@@ -14,76 +15,115 @@ namespace Loja.Web.Application.Applications.Security
 
         #region << METHODS >>
 
-        #region LoginAsync
-        public async Task<Users> LoginAsync(string emailUsername, string password)
+        #region GetUserRolesAsync
+        public async Task<List<UserRolesViewModel>> GetUserRolesAsync()
         {
-            Validate(emailUsername, password);
-            var users = await _users.GetAllAsync();
-            if (users is null || !users.Any())
+            var roles = await _userRoles.GetAllAsync();
+            
+            if (!roles.Any()) throw new Exception("There's no user roles registered.");
+
+            return roles.Select(x => new UserRolesViewModel
             {
-                throw new Exception("Please, sign a user.");
-            }
-            Users? domain = null;
-            if (emailUsername.IsEmail())
-            {
-                domain = users.Where(x => x.Email == emailUsername && x.Active && !x.Deleted).FirstOrDefault();
-            }
-            else
-            {
-                domain = users.Where(x => x.Login == emailUsername && x.Active && !x.Deleted).FirstOrDefault();
-            }
-            if (domain is null)
-            {
-                throw new Exception("Invalid username / e-mail.");
-            }
-            if (!domain.Password.Decrypt().Equals(password))
-            {
-                throw new Exception("Invalid password.");
-            }
-            return domain;
+                ID = x.ID,
+                GuidID = x.GuidID,
+                Code = x.Code,
+                Name = x.Name,
+                Active = x.Active,
+                Deleted = x.Deleted
+            }).OrderBy(x => x.Name).ToList();
         }
         #endregion
 
-        #region GetUserRolesAsync
-        public async Task<List<UserRoles>> GetUserRolesAsync()
+        #region LoginAsync
+        public async Task<UserViewModel> LoginAsync(string emailUsername, string password)
         {
-            var roles = await _userRoles.GetAllAsync();
-            if (!roles.Any())
+            Validate(emailUsername, password);
+
+            var users = await _users.GetAllAsync();
+            
+            if (users is null || !users.Any()) throw new Exception("Please, sign a user.");
+            
+            Users? user = null;
+
+            if (emailUsername.IsEmail())
+                user = users.Where(x => x.Email == emailUsername && x.Active && !x.Deleted).FirstOrDefault() ??
+                    throw new Exception("Invalid username / e-mail.");
+            else
+                user = users.Where(x => x.Login == emailUsername && x.Active && !x.Deleted).FirstOrDefault() ??
+                    throw new Exception("Invalid username / e-mail.");
+
+            var userPassword = user.Password ??
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+            if (!userPassword.Decrypt().Equals(password)) throw new Exception("Invalid password.");
+
+            return new UserViewModel
             {
-                throw new Exception("There's no user roles registered.");
-            }
-            return roles.OrderBy(x => x.Name).ToList();
+                ID = user.ID,
+                GuidID = user.GuidID,
+                Name = user.Name,
+                Email = user.Email,
+                Login = user.Login,
+                Active = user.Active,
+                Deleted = user.Deleted,
+                Created_at = user.Created_at,
+                Deleted_at = user.Deleted_at,
+                Created_by = user.Created_by,
+                Deleted_by = user.Deleted_by,
+                UserRoleID = user.UserRoleID
+            };
         }
         #endregion
 
         #region InsertAsync
-        public async Task InsertAsync(UsersModel model)
+        public async Task<UserViewModel> InsertAsync(UserModel model)
         {
             Validate(model);
+
             var users = await _users.GetAllAsync();
+            var roles = await GetUserRolesAsync();
+
             if (users.Where(x => x.Login == model.Login).Any())
-            {
-                throw new Exception(string.Format("There's alredy an user registered with the username {0}.", model.Login));
-            }
-            if (model.Created_by_Guid != null)
-            {
-                model.Created_by = users?.Where(x => x.GuidID == model.Created_by_Guid).FirstOrDefault()?.ID;
-            }
-            if (model.UserRoleID_Guid != null)
-            {
-                var roles = await GetUserRolesAsync();
-                model.UserRoleID = roles?.Where(x => x.GuidID == model.UserRoleID_Guid).FirstOrDefault()?.ID;
-            }
+                throw new Exception(string.Format("There's already an user registered with the username {0}.", model.Login));
+
+            if (model.UserGuid != Guid.Empty)
+                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid).FirstOrDefault()?.ID;
+
+            if (model.UserRoleGuid == Guid.Empty)
+                model.UserRoleID = roles?.OrderByDescending(x => x.Name).First().ID;
+            else
+                model.UserRoleID = roles?.OrderByDescending(x => x.Name).Last().ID;
+
             model.Password = model?.Password?.Encrypt();
-            if (await _users.InsertAsync(model) is null)
-            {
+
+            var userID = await _users.InsertAsync(model ??
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")) ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-            }
+
+            users = await _users.GetAllAsync();
+            var user = users.FirstOrDefault(x => x.ID == userID) ??
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+            return new UserViewModel
+            {
+                ID = user.ID,
+                GuidID = user.GuidID,
+                Name = user.Name,
+                Email = user.Email,
+                Login = user.Login,
+                Active = user.Active,
+                Deleted = user.Deleted,
+                Created_at = user.Created_at,
+                Deleted_at = user.Deleted_at,
+                Created_by = user.Created_by,
+                Deleted_by = user.Deleted_by,
+                UserRoleID = user.UserRoleID
+            };
         }
         #endregion
 
         #region Validate
-        private static void Validate(UsersModel model)
+        private static void Validate(UserModel model)
         {
             if (string.IsNullOrEmpty(model.Name)) throw new Exception("Please, inform the name.");
             if (string.IsNullOrEmpty(model.Email)) throw new Exception("Please, inform the e-mail.");

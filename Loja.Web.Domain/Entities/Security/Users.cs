@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
-using Loja.Web.Presentation.Models.Security;
+using Loja.Web.Presentation.Models.Security.Model;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Security
@@ -46,7 +46,7 @@ namespace Loja.Web.Domain.Entities.Security
         #endregion
 
         #region InsertAsync
-        public async Task<long?> InsertAsync(UsersModel model)
+        public async Task<long?> InsertAsync(UserModel model)
         {
             long? id = null;
             try
@@ -54,17 +54,17 @@ namespace Loja.Web.Domain.Entities.Security
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Users
                 {
-                    GuidID = model.GuidID,
+                    GuidID = Guid.NewGuid(),
                     Name = model.Name,
                     Email = model.Email,
                     Login = model.Login,
                     Password = model.Password,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at,
-                    Deleted_at = model.Deleted_at,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Deleted_at = null,
                     Created_by = model.Created_by,
-                    Deleted_by = model.Deleted_by,
+                    Deleted_by = null,
                     UserRoleID = model.UserRoleID
                 });
             }

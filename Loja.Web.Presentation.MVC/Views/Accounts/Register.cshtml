@@ -1,77 +1,74 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor Accessor
 
-@model Loja.Web.Presentation.Models.Security.UsersModel
-
 @{
     ViewData["Title"] = "Register new user";
 }
 
-<head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
-</head>
-<body>
-    <div class="register-wrapper">
+@section Scripts {
 
-        <div>
-            <h1 class="register-title">Register</h1>
-        </div>
+    <script src="~/js/Registration/Account/Register.js"></script>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+}
 
-            <div class="register-form">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+    </head>
+    <body>
+        <div class="register-wrapper">
 
-                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-                {
-                    <div class="register-alert">
-                        <p>@ViewBag.ErrorMessage</p>
+            <!--- Modal --->
+            <div id="div_Message" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p></p>
+                </div>
+
+            </div>
+            <!--- Modal --->
+
+            <div>
+                <h1 class="register-title">Register</h1>
+            </div>
+
+            <form>
+
+                <div class="register-form">
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" name="edt_Name" id="edt_Name" placeholder="Name" />
                     </div>
-                }
 
-                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-                {
-                    <div class="register-success">
-                        <p>@ViewBag.SuccessMessage</p>
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" name="edt_Email" id="edt_Email" placeholder="E-mail" />
                     </div>
-                }
 
-                <div class="register-input-field">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "register-input", placeholder = "Name" } })
-                </div>
-
-                <div class="register-input-field">
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "register-input", placeholder = "E-mail" } })
-                </div>
-
-                <div class="register-input-field">
-                    @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "register-input", placeholder = "Login" } })
-                </div>
-
-                <div class="register-input-field">
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "register-input", placeholder = "Password", type = "password" } })
-                </div>
-
-                @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
-                {
-                    <div class="register-select-field">
-                        <select name="roles" class="register-select">
-                            <option value="">Select a role</option>
-                            <option value="employee">Employee</option>
-                            <option value="external_user">External user</option>
-                        </select>
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" name="edt_Login" id="edt_Login" placeholder="Login" />
                     </div>
-                }
+
+                    <div class="register-input-field">
+                        <input type="password" class="register-input" name="edt_Password" id="edt_Password" placeholder="Password" />
+                    </div>
+
+                    @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
+                    {
+                        <div class="register-select-field">
+                            <select name="roles" class="register-select" id="select_userRoles">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    }
 
                 <div class="register-input-field">
-                    <button type="submit" class="register-btn-submit" name="register" id="register">Register</button>
+                    <button type="button" class="register-btn-submit" name="register-user" id="register-user">Register</button>
                 </div>
 
             </div>
 
-        }
+        </form>
 
         <div class="register-default-div">
             <a href="~/Accounts/Login">Sign in</a>
