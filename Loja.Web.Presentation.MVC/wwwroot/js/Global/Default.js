@@ -53,7 +53,8 @@ function SetHtmlElements() {
     if (statusCode === '201' && process === '1') {
         htmlCode += '<p>Your order was created sucessfully.</p>';
 
-        if (window.Tracking == null || window.Tracking == undefined) window.location.href = '/Home/Index';
+        if (window.Tracking == null || window.Tracking == undefined)
+            window.location.href = '/Home/Index';
 
         htmlCode += `<p>Order tracking: <b>${window.Tracking}</b></p>`;
     }

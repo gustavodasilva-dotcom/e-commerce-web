@@ -10,7 +10,8 @@
             if (result.Code == 1) {
                 userRoles = result.UserRoles;
 
-                if (result.RedirectToHome) window.location.href = '/Home/Index';
+                if (result.RedirectToHome)
+                    window.location.href = '/Home/Index';
             }
             else {
                 if (result.RedirectToLogin) {
@@ -41,7 +42,8 @@ function RegisterUser(userModel) {
             if (result.Code == 1) {
                 user = result.User;
 
-                if (result.RedirectToHome) window.location.href = '/Home/Index';
+                if (result.RedirectToHome)
+                    window.location.href = '/Home/Index';
             }
             else {
                 if (result.RedirectToLogin) {
@@ -68,7 +70,8 @@ function Login(emailUsername, password) {
         url: "/Accounts/Login",
         success: function (result) {
             if (result.Code == 1) {
-                if (result.RedirectToHome) window.location.href = '/Home/Index';
+                if (result.RedirectToHome)
+                    window.location.href = '/Home/Index';
             }
             else {
                 if (result.RedirectToLogin) {
@@ -92,7 +95,8 @@ function Logout() {
         url: "/Accounts/Logout",
         success: function (result) {
             if (result.Code == 1) {
-                if (result.RedirectToHome) window.location.href = '/Home/Index';
+                if (result.RedirectToHome)
+                    window.location.href = '/Home/Index';
             }
             else {
                 if (result.RedirectToLogin) {

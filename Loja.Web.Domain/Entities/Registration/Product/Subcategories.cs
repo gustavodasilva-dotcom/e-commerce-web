@@ -12,8 +12,8 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         [Key]
 		public int ID { get; private set; }
 		public Guid GuidID { get; private set; }
-		public string Name { get; private set; }
-		public int CategoryID { get; private set; }
+		public string? Name { get; private set; }
+		public int? CategoryID { get; private set; }
 		public bool Active { get; private set; }
 		public bool Deleted { get; private set; }
 		public DateTime Created_at { get; private set; }
@@ -51,15 +51,15 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Subcategories
                 {
-                    GuidID = model.GuidID,
-                    Name = model.Name.Trim(),
-                    CategoryID = model.CategoryID.Value,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at,
-                    Created_by = model.Created_by,
-                    Deleted_at = model.Deleted_at,
-                    Deleted_by = model.Deleted_by
+                    GuidID = Guid.NewGuid(),
+                    Name = model?.Name?.Trim(),
+                    CategoryID = model?.CategoryID,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Created_by = model?.Created_by,
+                    Deleted_at = null,
+                    Deleted_by = null
                 });
             }
             catch (Exception e)

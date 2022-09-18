@@ -83,8 +83,9 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
                     HttpContext.Session.SetString(SessionRole, string.IsNullOrEmpty(role) ?
                         throw new ArgumentException("Session value cannot be null.", nameof(role)) : role);
 
-                result.Code = 1;
+                result.User = user;
                 result.RedirectToHome = true;
+                result.Code = 1;
             }
             catch (Exception e)
             {

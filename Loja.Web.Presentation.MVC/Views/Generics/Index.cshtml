@@ -1,0 +1,52 @@
+﻿@section Scripts {
+
+    <script src="~/js/Registration/Generic/Index.js"></script>
+
+}
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+    </head>
+    <body>
+        <div class="register-wrapper">
+
+            <!--- Modal --->
+            <div id="div_Message" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p></p>
+                </div>
+
+            </div>
+            <!--- Modal --->
+
+            <div>
+                <h1 class="register-title"></h1>
+            </div>
+
+            <form>
+
+                <div class="register-form">
+
+                    <div class="register-input-field">
+                        <input type="text" class="register-input" name="edt_Name" id="edt_Name" placeholder="Name" />
+                    </div>
+
+                    <div class="register-select-field 2">
+                        <select name="categories" class="register-select" id="select_Categories">
+                            <option value="">Select a category</option>
+                        </select>
+                    </div>
+
+                    <div class="register-input-field">
+                        <button type="button" class="register-btn-submit" name="register" id="register">Register</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </body>
