@@ -71,6 +71,36 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         }
         #endregion
 
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(Categories category, CategoriesModel model)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Categories
+                {
+                    ID = category.ID,
+                    GuidID = category.GuidID,
+                    Name = model?.Name?.Trim(),
+                    Active = category.Active,
+                    Deleted = category.Deleted,
+                    Created_at = category.Created_at,
+                    Created_by = category.Created_by,
+                    Deleted_at = category.Deleted_at,
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
         #endregion
     }
 }

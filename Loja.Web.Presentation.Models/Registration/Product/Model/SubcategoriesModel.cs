@@ -2,6 +2,8 @@
 {
     public class SubcategoriesModel
     {
+        public Guid GuidID { get; set; } = Guid.Empty;
+
         public string? Name { get; set; }
 
         public Guid CategoryGuid { get; set; }

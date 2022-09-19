@@ -24,7 +24,12 @@ function SetTableElements(subcategories) {
 
             for (let i = 0; i < catSub.length; i++) {
                 htmlCode += '<tr class="register-table-tr">';
-                htmlCode +=     `<td class="register-table-td" name="manufacturer-name" data-guid="${catSub[i].guidID}">${catSub[i].name}</td>`;
+                htmlCode +=     `<td class="register-table-td" name="manufacturer-name">`;
+                htmlCode +=         `<a href="/Generics/Index?process=2&method=1&guid=${catSub[i].guidID}">`;
+                htmlCode +=             `<div>${catSub[i].name}`;
+                htmlCode +=             '</div>';
+                htmlCode +=         '</a>';
+                htmlCode +=     '</td>';
                 htmlCode += '</tr>';
             }
         }

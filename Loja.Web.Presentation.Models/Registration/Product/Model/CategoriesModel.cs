@@ -2,6 +2,8 @@
 {
     public class CategoriesModel
     {
+        public Guid GuidID { get; set; } = Guid.Empty;
+
         public string? Name { get; set; }
 
         public Guid UserGuid { get; set; } = Guid.Empty;

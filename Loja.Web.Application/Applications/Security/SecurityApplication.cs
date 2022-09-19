@@ -30,7 +30,7 @@ namespace Loja.Web.Application.Applications.Security
                 Name = x.Name,
                 Active = x.Active,
                 Deleted = x.Deleted
-            }).OrderBy(x => x.Name).ToList();
+            }).Where(x => x.Active && !x.Deleted).OrderBy(x => x.Name).ToList();
         }
         #endregion
 
@@ -87,7 +87,7 @@ namespace Loja.Web.Application.Applications.Security
                 throw new Exception(string.Format("There's already an user registered with the username {0}.", model.Login));
 
             if (model.UserGuid != Guid.Empty)
-                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid).FirstOrDefault()?.ID;
+                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid && x.Active && !x.Deleted).FirstOrDefault()?.ID;
 
             if (model.UserRoleGuid == Guid.Empty)
                 model.UserRoleID = roles?.OrderByDescending(x => x.Name).First().ID;
@@ -101,7 +101,7 @@ namespace Loja.Web.Application.Applications.Security
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             users = await _users.GetAllAsync();
-            var user = users.FirstOrDefault(x => x.ID == userID) ??
+            var user = users.FirstOrDefault(x => x.ID == userID && x.Active && !x.Deleted) ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             return new UserViewModel

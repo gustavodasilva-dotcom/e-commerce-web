@@ -1,4 +1,5 @@
-﻿let domain;
+﻿let guid;
+let domain;
 let isEdit = false;
 
 $(document).ready(function () {
@@ -11,6 +12,8 @@ $(document).ready(function () {
 $('#register').click(function () {
     let model = {};
 
+    if (isEdit) model.GuidID = guid;
+
     model.Name = $('#edt_Name').val();
 
     if (process === '2') model.CategoryGuid = $('#select_Categories').val();
@@ -20,7 +23,7 @@ $('#register').click(function () {
         type: "POST",
         dataType: "json",
         data: { model: model },
-        url: `/${domain}/Register`,
+        url: `/${domain}/${isEdit ? 'Update' : 'Register'}`,
         success: function (result) {
             if (result.Code == 1) {
                 let modelResult = result[`${domain}`];
@@ -47,8 +50,9 @@ $('#register').click(function () {
 
 //#region ValidateParams
 function ValidateParams(params) {
-    process = params.get('process');
     let method = params.get('method');
+    process = params.get('process');
+    guid = params.get('guid');
 
     if (process == null || process == undefined)
         window.location.href = '/Default/Select?statusCode=400';
@@ -57,6 +61,9 @@ function ValidateParams(params) {
         && method === '1' || method === '0')
         isEdit = method === '1' ? true : false;
     else
+        window.location.href = '/Default/Select?statusCode=400';
+
+    if (isEdit && (guid == null || guid == undefined || guid == ''))
         window.location.href = '/Default/Select?statusCode=400';
 }
 //#endregion
@@ -84,14 +91,36 @@ function SetHtmlElementsByProcess(process) {
     document.title = domain + ' - Loja';
     $('.register-title').text(domain);
 
-    var btnText = isEdit ? 'Alter' : 'Register';
+    var btnText = isEdit ? 'Update' : 'Register';
     $('#register').text(btnText);
 
-    if (process === '2') {
-        var categories = GetCategories();
+    var categories = GetCategories();
+    var subcategories = GetSubcategories();
 
-        if (categories != null || categories != undefined)
-            SetComboOptions(categories, 'select_Categories');
+    if (!isEdit) {
+        switch (process) {
+            case '1':
+                break;
+            case '2':
+                categories = GetCategories();
+                if (categories != null || categories != undefined) SetComboOptions(categories, 'select_Categories');
+                break;
+        }
+    } else {
+        switch (process) {
+            case '1':
+                var category = categories.find(x => x.guidID == guid);
+                $('#edt_Name').val(category.name);
+                break;
+            case '2':
+                var subcategory = subcategories.find(x => x.guidID == guid);
+                $('#edt_Name').val(subcategory.name);
+                if (categories != null || categories != undefined) {
+                    SetComboOptions(categories, 'select_Categories');
+                    $('#select_Categories').val(subcategory.category.guidID);
+                }
+                break;
+        }
     }
 }
 //#endregion

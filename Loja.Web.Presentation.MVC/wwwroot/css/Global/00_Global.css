@@ -252,6 +252,15 @@ input[type=number] {
     text-align: center;
 }
 
+.register-wrapper .register-table .register-table-td a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.register-wrapper .register-table .register-table-td:hover a {
+    color: #ffffff;
+}
+
 .register-wrapper .register-table .register-table-td:hover {
     background-color: #00AFB9;
     color: #ffffff;

@@ -72,6 +72,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
+        #region Update
+        [HttpPost]
+        public async Task<JsonResult> Update(CategoriesModel model)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.Categories = await _categoryApplication.UpdateAsync(model);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #endregion
     }
 }

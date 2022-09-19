@@ -73,6 +73,38 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         }
         #endregion
 
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(Subcategories subcategory, SubcategoriesModel model)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Subcategories
+                {
+                    ID = subcategory.ID,
+                    GuidID = subcategory.GuidID,
+                    Name = model?.Name?.Trim(),
+                    CategoryID = model?.CategoryID,
+                    Active = subcategory.Active,
+                    Deleted = subcategory.Deleted,
+                    Created_at = subcategory.Created_at,
+                    Created_by = subcategory.Created_by,
+                    Deleted_at = subcategory.Deleted_at,
+                    Deleted_by = subcategory.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
         #endregion
     }
 }

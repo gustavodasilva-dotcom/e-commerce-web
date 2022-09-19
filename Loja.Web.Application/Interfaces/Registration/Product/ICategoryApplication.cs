@@ -8,5 +8,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Product
     {
         Task<List<CategoryViewModel>> GetAllAsync();
         Task<CategoryViewModel> InsertAsync(CategoriesModel model);
+        Task<CategoryViewModel> UpdateAsync(CategoriesModel model);
     }
 }

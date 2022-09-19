@@ -35,7 +35,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
                 Created_by = x.Created_by,
                 Deleted_at = x.Deleted_at,
                 Deleted_by = x.Deleted_by
-            }).OrderBy(x => x.Name).ToList();
+            }).Where(x => x.Active && !x.Deleted).OrderBy(x => x.Name).ToList();
         }
         #endregion
 
@@ -47,7 +47,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
             var users = await _users.GetAllAsync();
 
             if (model.UserGuid != Guid.Empty)
-                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid).FirstOrDefault()?.ID;
+                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid && x.Active && !x.Deleted).FirstOrDefault()?.ID;
             
             var categories = await _categories.GetAllAsync();
 
@@ -59,7 +59,40 @@ namespace Loja.Web.Application.Applications.Registration.Product
 
             categories = await _categories.GetAllAsync();
 
-            var category = categories.FirstOrDefault(x => x.ID == categoryID) ??
+            var category = categories.FirstOrDefault(x => x.ID == categoryID && x.Active && !x.Deleted) ??
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+            return new CategoryViewModel
+            {
+                ID = category.ID,
+                GuidID = category.GuidID,
+                Name = category.Name,
+                Active = category.Active,
+                Deleted = category.Deleted,
+                Created_at = category.Created_at,
+                Created_by = category.Created_by,
+                Deleted_at = category.Deleted_at,
+                Deleted_by = category.Deleted_by
+            };
+        }
+        #endregion
+
+        #region UpdateAsync
+        public async Task<CategoryViewModel> UpdateAsync(CategoriesModel model)
+        {
+            Validate(model, isEdit: true);
+
+            var categories = await _categories.GetAllAsync();
+
+            var category = categories.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted) ??
+                throw new Exception("The category was not found. Please, contact the system administrator.");
+
+            if (!await _categories.UpdateAsync(category, model))
+                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+            categories = await _categories.GetAllAsync();
+
+            category = categories.FirstOrDefault(x => x.ID == category.ID && x.Active && !x.Deleted) ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             return new CategoryViewModel
@@ -82,12 +115,15 @@ namespace Loja.Web.Application.Applications.Registration.Product
         #region PRIVATE
 
         #region Validate
-        private static void Validate(CategoriesModel model)
+        private static void Validate(CategoriesModel model, bool isEdit = false)
         {
-            if (string.IsNullOrEmpty(model.Name))
+            if (isEdit)
             {
-                throw new Exception("The category name cannot be null or empty.");
+                if (model.GuidID == Guid.Empty)
+                    throw new Exception("The id was not sent in the request. Please, contact the system administrator.");
             }
+
+            if (string.IsNullOrEmpty(model.Name)) throw new Exception("The category name cannot be null or empty.");
         }
         #endregion
 
