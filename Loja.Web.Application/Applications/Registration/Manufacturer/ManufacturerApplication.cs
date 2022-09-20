@@ -1,8 +1,12 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Address;
 using Loja.Web.Application.Interfaces.Registration.Contact;
 using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+using Loja.Web.Domain.Entities.Registration.Address;
+using Loja.Web.Domain.Entities.Registration.Contact;
 using Loja.Web.Domain.Entities.Registration.Manufacturer;
-using Loja.Web.Presentation.Models.Registration.Manufacturer;
+using Loja.Web.Presentation.Models.Registration.Contact.ViewModel;
+using Loja.Web.Presentation.Models.Registration.Manufacturer.Model;
+using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
 
 namespace Loja.Web.Application.Applications.Registration.Manufacturer
 {
@@ -13,6 +17,8 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         private readonly IContactApplication _contactApplication;
 
         private readonly Manufacturers _manufacturer = new();
+        private readonly Addresses _addresses = new();
+        private readonly Contacts _contacts = new();
         #endregion
 
         #region << CONSTRUCTOR >>
@@ -28,9 +34,62 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         #region PUBLIC
 
         #region GetAllAsync
-        public async Task<IEnumerable<Manufacturers?>> GetAllAsync()
+        public async Task<List<ManufacturerViewModel>> GetAllAsync()
         {
-            return await _manufacturer.GetAllAsync();
+            var manufacturers = await _manufacturer.GetAllAsync();
+
+            if (!manufacturers.Any()) throw new Exception("There's no manufacturers registered.");
+
+            var addresses = await _addresses.GetAllAsync();
+            var contacts = await _contacts.GetAllAsync();
+
+            var result = new List<ManufacturerViewModel>();
+
+            foreach (var manufacturer in manufacturers.Where(x => x.Active && !x.Deleted))
+            {
+                var contact = contacts.FirstOrDefault(x => x.ID == manufacturer.ContactID && x.Active && !x.Deleted);
+                
+                var address = addresses.FirstOrDefault(x => x.ID == manufacturer.AddressID && x.Active && !x.Deleted) ??
+                    throw new Exception("No addresses was found. Please, contact the system administrator.");
+
+                var addressModel = await _addressApplication.GetAddressesAsync(address);
+
+                var contactModel = contact == null ? null : new ContactViewModel
+                {
+                    ID = contact.ID,
+                    GuidID = contact.GuidID,
+                    Phone = contact.Phone,
+                    Cellphone = contact.Cellphone,
+                    Email = contact.Email,
+                    Website = contact.Website,
+                    Active = contact.Active,
+                    Deleted = contact.Deleted,
+                    Created_at = contact.Created_at
+                };
+
+                result.Add(new ManufacturerViewModel
+                {
+                    ID = manufacturer.ID,
+                    GuidID = manufacturer.GuidID,
+                    Name = manufacturer.Name,
+                    BrazilianCompany = manufacturer.BrazilianCompany,
+                    CAGE = manufacturer.CAGE,
+                    NCAGE = manufacturer.NCAGE,
+                    SEC = manufacturer.SEC,
+                    FederalTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                    StateTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                    Contact = contactModel,
+                    Address = addressModel,
+                    Active = manufacturer.Active,
+                    Deleted = manufacturer.Deleted,
+                    Created_at = manufacturer.Created_at,
+                    Created_by = manufacturer.Created_by,
+                    Deleted_at = manufacturer.Deleted_at,
+                    Deleted_by = manufacturer.Deleted_by
+                });
+            }
+
+            return result;
         }
         #endregion
 

@@ -1,52 +1,39 @@
-﻿@model IEnumerable<Loja.Web.Presentation.Models.Registration.Manufacturer.ManufacturersModel>
-
-@{
+﻿@{
     ViewData["Title"] = "Manufacturers";
 }
 
-<head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
-</head>
-<body>
-    <button class="default-button" onclick="window.location.href = 'Manufacturers/Register';">Register</button>
-
-    <div class="register-wrapper">
-
-        <div>
-            <h1 class="register-title">Manufacturers</h1>
-        </div>
-        
-        <div>
-
-            <table class="register-table">
-
-                <tr class="register-table-tr">
-                    <th class="register-table-th">Name</th>
-                </tr>
-
-                @foreach (var item in @Model)
-                {
-                    <tr class="register-table-tr">
-                        <td class="register-table-td" id="manufacturer-name" data-guid="@item?.GuidID">@item?.Name?.ToUpper()</td>
-                    </tr>
-                }
-
-            </table>
-
-        </div>
-
-    </div>
-</body>
-
 @section Scripts {
 
-    <script>
-        $('.register-table-td').click(function() {
-            var guid = $(this).attr('data-guid');
-
-            window.location.href = "/Manufacturers/Details?guid=" + guid;
-        });
-    </script>
+    <script src="~/js/Registration/Manufacturer/Index.js"></script>
 
 }
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+    </head>
+    <body>
+        <button class="default-button" onclick="window.location.href = 'Manufacturers/Register';">Register</button>
+
+        <div class="register-wrapper">
+
+            <!--- Modal --->
+            <div id="div_Message" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p></p>
+                </div>
+
+            </div>
+            <!--- Modal --->
+
+            <div>
+                <h1 class="register-title">@ViewData["Title"]</h1>
+            </div>
+
+            <div id="content"></div>
+
+        </div>
+
+    </body>

@@ -1,11 +1,11 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
-using Loja.Web.Presentation.Models.Registration.Contact;
+using Loja.Web.Presentation.Models.Registration.Contact.Model;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.Contact
 {
-	[Table("Contacts")]
+    [Table("Contacts")]
 	public class Contacts : Repository
 	{
         #region << PROPRIEDADES >>

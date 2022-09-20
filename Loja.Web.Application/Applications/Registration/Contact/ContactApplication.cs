@@ -1,6 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Contact;
 using Loja.Web.Domain.Entities.Registration.Contact;
-using Loja.Web.Presentation.Models.Registration.Contact;
+using Loja.Web.Presentation.Models.Registration.Contact.Model;
 using Loja.Web.Tools.String.Extensions;
 
 namespace Loja.Web.Application.Applications.Registration.Contact

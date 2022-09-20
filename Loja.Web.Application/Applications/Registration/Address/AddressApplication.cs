@@ -104,100 +104,33 @@ namespace Loja.Web.Application.Applications.Registration.Address
         #endregion
 
         #region GetUserAddressesAsync
-        public async Task<List<AddressesViewModel?>> GetUserAddressesAsync(Guid userGuid)
+        public async Task<List<AddressViewModel?>> GetUserAddressesAsync(Guid userGuid)
         {
-            var result = new List<AddressesViewModel?>();
+            var result = new List<AddressViewModel?>();
 
             var users = await _users.GetAllAsync();
+
             var user = users.FirstOrDefault(x => x.GuidID == userGuid && x.Active && !x.Deleted) ??
                 throw new Exception("No user was found with the session data. Please, contact the system administrator.");
 
             var usersAddresses = await _usersAddresses.GetAllAsync() ??
                 throw new Exception("No users addresses was found. Please, contact the system administrator.");
+
             var userAddresses = usersAddresses.Where(x => x.UserID == user.ID).ToList();
 
             if (userAddresses.Any())
             {
-                var streets = await _streets.GetAllAsync() ??
-                    throw new Exception("No streets was found. Please, contact the system administrator.");
-
                 var addresses = await _addresses.GetAllAsync() ??
                     throw new Exception("No addresses was found. Please, contact the system administrator.");
-
-                var countries = await _countries.GetAllAsync() ??
-                    throw new Exception("No countries was found. Please, contact the system administrator.");
-
-                var states = await _states.GetAllAsync() ??
-                    throw new Exception("No states was found. Please, contact the system administrator.");
-
-                var cities = await _cities.GetAllAsync() ??
-                    throw new Exception("No cities was found. Please, contact the system administrator.");
-
-                var neighborhoods = await _neighborhoods.GetAllAsync() ??
-                    throw new Exception("No neighborhoods was found. Please, contact the system administrator.");
 
                 foreach (UsersAddresses userAddrs in userAddresses.Where(x => x.Active && !x.Deleted))
                 {
                     var addressResult = addresses.First(x => x.ID == userAddrs.AddressID && x.Active && !x.Deleted) ??
                         throw new Exception("No addresses was found. Please, contact the system administrator.");
 
-                    var streetResult = streets.First(x => x.ID == addressResult.StreetID && x.Active && !x.Deleted) ??
-                        throw new Exception("No streets was found. Please, contact the system administrator.");
+                    var address = await GetAddressesAsync(addressResult);
 
-                    var neighborhoodResult = neighborhoods.First(x => x.ID == streetResult.NeighborhoodID && x.Active && !x.Deleted) ??
-                        throw new Exception("No neighborhoods was found. Please, contact the system administrator.");
-
-                    var cityResult = cities.First(x => x.ID == neighborhoodResult.CityID && x.Active && !x.Deleted) ??
-                        throw new Exception("No cities was found. Please, contact the system administrator.");
-
-                    var stateResult = states.First(x => x.ID == cityResult.StateID && x.Active && !x.Deleted) ??
-                        throw new Exception("No states was found. Please, contact the system administrator.");
-
-                    var countryResult = countries.First(x => x.ID == stateResult.CountryID && x.Active && !x.Deleted) ??
-                        throw new Exception("No countries was found. Please, contact the system administrator.");
-
-                    result.Add(new AddressesViewModel
-                    {
-                        ID = addressResult.ID,
-                        GuidID = addressResult.GuidID,
-                        Number = addressResult.Number,
-                        Comment = addressResult.Comment,
-                        Street = new StreetsViewModel
-                        {
-                            ID = streetResult.ID,
-                            GuidID = streetResult.GuidID,
-                            PostalCode = streetResult.PostalCode,
-                            Name = streetResult.Name,
-                            NeighborhoodID = streetResult.NeighborhoodID,
-                        },
-                        Neighborhood = new NeighborhoodsViewModel
-                        {
-                            ID = neighborhoodResult.ID,
-                            GuidID = neighborhoodResult.GuidID,
-                            Name = neighborhoodResult.Name,
-                            CityID = neighborhoodResult.CityID
-                        },
-                        City = new CitiesViewModel
-                        {
-                            ID = cityResult.ID,
-                            GuidID = cityResult.GuidID,
-                            Name = cityResult.Name,
-                            StateID = cityResult.StateID
-                        },
-                        State = new StatesViewModel
-                        {
-                            ID = stateResult.ID,
-                            GuidID = stateResult.GuidID,
-                            Initials = stateResult.Initials,
-                            CountryID = stateResult.CountryID
-                        },
-                        Country = new CountriesViewModel
-                        {
-                            ID = countryResult.ID,
-                            GuidID = countryResult.GuidID,
-                            Name = countryResult.Name
-                        }
-                    });
+                    if (address != null) result.Add(address);
                 }
             }
 
@@ -206,7 +139,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
         #endregion
 
         #region GetOrderAddressAsync
-        public async Task<AddressesViewModel> GetOrderAddressAsync(Guid orderGuid)
+        public async Task<AddressViewModel> GetOrderAddressAsync(Guid orderGuid)
         {
             var orders = await _orders.GetAllAsync() ??
                 throw new Exception("No order was found. Please, contact the system administrator.");
@@ -220,8 +153,16 @@ namespace Loja.Web.Application.Applications.Registration.Address
             var address = addresses.FirstOrDefault(x => x.ID == order.DeliveryAddressID && x.Active && !x.Deleted) ??
                 throw new Exception("The delivery address was not found. Please, contact the system administrator.");
 
+            return await GetAddressesAsync(address) ??
+                throw new Exception("No addresses was found. Please, contact the system administrator.");
+        }
+        #endregion
+
+        #region GetAddressesAsync
+        public async Task<AddressViewModel> GetAddressesAsync(Addresses address)
+        {
             var streets = await _streets.GetAllAsync() ??
-                throw new Exception("No streets was found. Please, contact the system administrator.");
+               throw new Exception("No streets was found. Please, contact the system administrator.");
 
             var countries = await _countries.GetAllAsync() ??
                 throw new Exception("No countries was found. Please, contact the system administrator.");
@@ -235,7 +176,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
             var neighborhoods = await _neighborhoods.GetAllAsync() ??
                 throw new Exception("No neighborhoods was found. Please, contact the system administrator.");
 
-            var street = streets.First(x => x.ID == address.StreetID && x.Active && !x.Deleted) ??
+            var street = streets.First(x => x.ID == address?.StreetID && x.Active && !x.Deleted) ??
                 throw new Exception("No streets was found. Please, contact the system administrator.");
 
             var neighborhood = neighborhoods.First(x => x.ID == street.NeighborhoodID && x.Active && !x.Deleted) ??
@@ -250,13 +191,13 @@ namespace Loja.Web.Application.Applications.Registration.Address
             var country = countries.First(x => x.ID == state.CountryID && x.Active && !x.Deleted) ??
                 throw new Exception("No countries was found. Please, contact the system administrator.");
 
-            return new AddressesViewModel
+            return new AddressViewModel
             {
                 ID = address.ID,
                 GuidID = address.GuidID,
                 Number = address.Number,
                 Comment = address.Comment,
-                Street = new StreetsViewModel
+                Street = new StreetViewModel
                 {
                     ID = street.ID,
                     GuidID = street.GuidID,
@@ -264,28 +205,28 @@ namespace Loja.Web.Application.Applications.Registration.Address
                     Name = street.Name,
                     NeighborhoodID = street.NeighborhoodID,
                 },
-                Neighborhood = new NeighborhoodsViewModel
+                Neighborhood = new NeighborhoodViewModel
                 {
                     ID = neighborhood.ID,
                     GuidID = neighborhood.GuidID,
                     Name = neighborhood.Name,
                     CityID = neighborhood.CityID
                 },
-                City = new CitiesViewModel
+                City = new CityViewModel
                 {
                     ID = city.ID,
                     GuidID = city.GuidID,
                     Name = city.Name,
                     StateID = city.StateID
                 },
-                State = new StatesViewModel
+                State = new StateViewModel
                 {
                     ID = state.ID,
                     GuidID = state.GuidID,
                     Initials = state.Initials,
                     CountryID = state.CountryID
                 },
-                Country = new CountriesViewModel
+                Country = new CountryViewModel
                 {
                     ID = country.ID,
                     GuidID = country.GuidID,

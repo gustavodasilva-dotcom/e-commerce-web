@@ -1,11 +1,12 @@
 ﻿using Loja.Web.Domain.Entities.Registration.Manufacturer;
-using Loja.Web.Presentation.Models.Registration.Manufacturer;
+using Loja.Web.Presentation.Models.Registration.Manufacturer.Model;
+using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
 
 namespace Loja.Web.Application.Interfaces.Registration.Manufacturer
 {
     public interface IManufacturerApplication
     {
-        Task<IEnumerable<Manufacturers?>> GetAllAsync();
+        Task<List<ManufacturerViewModel>> GetAllAsync();
         Task<Manufacturers> InsertAsync(ManufacturersModel model);
     }
 }

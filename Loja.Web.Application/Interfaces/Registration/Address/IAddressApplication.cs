@@ -7,9 +7,10 @@ namespace Loja.Web.Application.Interfaces.Registration.Address
     public interface IAddressApplication
     {
         Task<Streets?> GetStreetByPostalCodeAsync(string postalCode);
-        Task<List<AddressesViewModel?>> GetUserAddressesAsync(Guid userGuid);
-        Task<AddressesViewModel> GetOrderAddressAsync(Guid orderGuid);
+        Task<List<AddressViewModel?>> GetUserAddressesAsync(Guid userGuid);
+        Task<AddressViewModel> GetOrderAddressAsync(Guid orderGuid);
         Task<IEnumerable<Addresses?>> GetAllAddressesAsync();
+        Task<AddressViewModel> GetAddressesAsync(Addresses addresses);
         Task<IEnumerable<Streets?>> GetAllStreetsAsync();
         Task<Neighborhoods?> GetNeighborhoodAsync(int neighborhoodID);
         Task<Cities?> GetCityAsync(int cityID);

@@ -30,11 +30,9 @@ $('#address-postal-code').focusout(function () {
             success: function (result) {
                 if (result.code == 1) {
                     SetAddressInputValues(result);
-                    DisplayAddressErrorMessage(false, '');
                 }
                 else {
-                    alert(result.message);
-                    DisplayAddressErrorMessage(true, result.message);
+                    ShowMessageDiv(result.message);
                     ReadonlyAddressInputs(true);
                     CleanAddressInputValues();
                 }
@@ -86,7 +84,7 @@ function RegisterUserAddress(addressModel) {
         data: { model: addressModel },
         success: function (result) {
             if (result.Code != 1) {
-                alert(result.Message);
+                ShowMessageDiv(result.message);
                 return;
             } else {
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
@@ -107,7 +105,7 @@ function GetUserAddresses() {
                 window.Addresses = result.Addresses;
             } else {
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                alert(result.Message);
+                ShowMessageDiv(result.message);
             }
         }
     });
@@ -123,7 +121,7 @@ function SetDeliveryAddress(orderID, addressID) {
         success: function (result) {
             if (result.Code != 1) {
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                alert(result.Message);
+                ShowMessageDiv(result.message);
                 return;
             }
         }
@@ -142,7 +140,7 @@ function GetOrderAddress(orderID) {
                 window.Address = {};
                 window.Address = result.Address;
             } else {
-                alert(result.Message);
+                ShowMessageDiv(result.message);
             }
         }
     });
