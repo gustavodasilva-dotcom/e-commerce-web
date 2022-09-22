@@ -7,6 +7,7 @@ namespace Loja.Web.Application.Interfaces.Registration.Manufacturer
     public interface IManufacturerApplication
     {
         Task<List<ManufacturerViewModel>> GetAllAsync();
+        Task<ManufacturerViewModel> GetByIDAsync(Guid guid);
         Task<Manufacturers> InsertAsync(ManufacturersModel model);
     }
 }

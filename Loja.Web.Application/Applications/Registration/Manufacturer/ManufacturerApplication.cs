@@ -93,6 +93,61 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         }
         #endregion
 
+        #region GetByIDAsync
+        public async Task<ManufacturerViewModel> GetByIDAsync(Guid guid)
+        {
+            var manufacturers = await _manufacturer.GetAllAsync() ??
+                throw new Exception("There's no manufacturers registered.");
+
+            var manufacturer = manufacturers.FirstOrDefault(x => x.GuidID == guid && x.Active && !x.Deleted) ??
+                throw new Exception("The manufacturer was not found.");
+
+            var addresses = await _addresses.GetAllAsync();
+            var contacts = await _contacts.GetAllAsync();
+
+            var contact = contacts.FirstOrDefault(x => x.ID == manufacturer.ContactID && x.Active && !x.Deleted);
+
+            var address = addresses.FirstOrDefault(x => x.ID == manufacturer.AddressID && x.Active && !x.Deleted) ??
+                throw new Exception("No addresses was found. Please, contact the system administrator.");
+
+            var addressModel = await _addressApplication.GetAddressesAsync(address);
+
+            var contactModel = contact == null ? null : new ContactViewModel
+            {
+                ID = contact.ID,
+                GuidID = contact.GuidID,
+                Phone = contact.Phone,
+                Cellphone = contact.Cellphone,
+                Email = contact.Email,
+                Website = contact.Website,
+                Active = contact.Active,
+                Deleted = contact.Deleted,
+                Created_at = contact.Created_at
+            };
+
+            return new ManufacturerViewModel
+            {
+                ID = manufacturer.ID,
+                GuidID = manufacturer.GuidID,
+                Name = manufacturer.Name,
+                BrazilianCompany = manufacturer.BrazilianCompany,
+                CAGE = manufacturer.CAGE,
+                NCAGE = manufacturer.NCAGE,
+                SEC = manufacturer.SEC,
+                FederalTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                StateTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                Contact = contactModel,
+                Address = addressModel,
+                Active = manufacturer.Active,
+                Deleted = manufacturer.Deleted,
+                Created_at = manufacturer.Created_at,
+                Created_by = manufacturer.Created_by,
+                Deleted_at = manufacturer.Deleted_at,
+                Deleted_by = manufacturer.Deleted_by
+            };
+        }
+        #endregion
+
         #region InsertAsync
         public async Task<Manufacturers> InsertAsync(ManufacturersModel model)
         {

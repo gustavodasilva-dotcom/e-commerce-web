@@ -18,7 +18,8 @@ $('#localition_foreign').change(function () {
 });
 
 $('#address-postal-code').focusout(function () {
-    if ($('input[id="localition_brazil"]:checked').length > 0) {
+    if ($('input[id="localition_brazil"]:checked').length > 0
+        && !$('#address-postal-code').is('[readonly]')) {
         var postal_code = $(this).val();
 
         $.ajax({

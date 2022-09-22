@@ -68,6 +68,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         }
         #endregion
 
+        #region GetByID
+        [HttpGet]
+        public async Task<JsonResult> GetByID(Guid guid)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.Manufacturers = await _manufacturerApplication.GetByIDAsync(guid);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #region Save
         [HttpPost]
         public async Task<IActionResult> Save(ManufacturersModel model)
