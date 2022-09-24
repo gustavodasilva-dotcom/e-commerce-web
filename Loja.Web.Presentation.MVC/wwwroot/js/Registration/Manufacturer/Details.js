@@ -1,11 +1,54 @@
 ﻿let guid;
 let isEdit = false;
+let editEnabled = false;
 
 $(document).ready(function () {
     let params = (new URL(window.location.href)).searchParams;
 
     ValidateParams(params);
     SetHtmlElements();
+});
+
+$('#btn-edit').click(function () {
+    if (editEnabled) {
+        ReadonlyElements(false);
+        $('#btn-register-update').css('display', 'block');
+    }
+})
+
+$('#btn-register-update').click(function () {
+    let model = {};
+
+    model.GuidID = guid;
+    model.Name = $('#edt_Name').val();
+    model.BrazilianCompany = $('input[name="localition"]').val();
+
+    if (model.BrazilianCompany) {
+        model.FederalTaxpayerRegistrationNumber = $('#edt_FedTaxPayer').val();
+        model.StateTaxpayerRegistrationNumber = $('#edt_SttTaxPayer').val();
+    } else {
+        model.CAGE = $('#edt_Cage').val();;
+        model.NCAGE = model.CAGE;
+        model.SEC = $('#edt_Sec').val();
+    }
+
+    model.Contacts.Phone = $('#edt_Phone').val();
+    model.Contacts.Cellphone = $('#edt_Cellphone').val();
+    model.Contacts.Email = $('#edt_Email').val();
+    model.Contacts.Website = $('#edt_Website').val();
+
+    model.Addresses.PostalCode = $('#address-postal-code').val();
+    model.Addresses.Name = $('#address-name').val();
+    model.Addresses.Number = $('#address-number').val();
+    model.Addresses.Comment = $('#address-comment').val();
+    model.Addresses.Neighborhood = $('#address-neighborhood').val();
+    model.Addresses.City = $('#address-city').val();
+    model.Addresses.State = $('#address-state').val();
+    model.Addresses.Country = $('#address-country').val();
+    model.Addresses.IsForeign = model.BrazilianCompany;
+
+    if (SaveManufacturer(model) != null)
+        window.location.reload();
 });
 
 //#region ValidateParams
@@ -21,6 +64,8 @@ function ValidateParams(params) {
 function SetHtmlElements() {
     if (isEdit) {
         ReadonlyElements(true);
+
+        $('#btn-register-update').text('Update');
 
         var manufacturer = GetManufacturerByID(guid);
 
@@ -57,42 +102,22 @@ function SetHtmlElements() {
 
 //#region ReadonlyElements
 function ReadonlyElements(readonly) {
-    if (readonly) {
-        $('#edt_Name').prop('readonly', 'true');
+    $('#edt_Name').prop('readonly', readonly);
 
-        $('input[name="localition"]').prop('disabled', 'true');
-
-        $('#edt_Cage').prop('readonly', 'true');
-        $('#edt_Sec').prop('readonly', 'true');
-        $('#edt_FedTaxPayer').prop('readonly', 'true');
-        $('#edt_SttTaxPayer').prop('readonly', 'true');
-
-        $('#edt_Phone').prop('readonly', 'true');
-        $('#edt_Cellphone').prop('readonly', 'true');
-        $('#edt_Email').prop('readonly', 'true');
-        $('#edt_Website').prop('readonly', 'true');
-
-        $('#address-postal-code').prop('readonly', 'true');
-        $('#address-number').prop('readonly', 'true');
-        $('#address-comment').prop('readonly', 'true');
-    } else {
-        $('#edt_Name').prop('readonly', 'false');
-
-        $('input[name="localition"]').prop('disabled', 'false');
-
-        $('#edt_Cage').prop('readonly', 'false');
-        $('#edt_Sec').prop('readonly', 'false');
-        $('#edt_FedTaxPayer').prop('readonly', 'false');
-        $('#edt_SttTaxPayer').prop('readonly', 'false');
-
-        $('#edt_Phone').prop('readonly', 'false');
-        $('#edt_Cellphone').prop('readonly', 'false');
-        $('#edt_Email').prop('readonly', 'false');
-        $('#edt_Website').prop('readonly', 'false');
-
-        $('#address-postal-code').prop('readonly', 'false');
-        $('#address-number').prop('readonly', 'false');
-        $('#address-comment').prop('readonly', 'false');
-    }
+    $('input[name="localition"]').prop('disabled', readonly);
+    
+    $('#edt_Cage').prop('readonly', readonly);
+    $('#edt_Sec').prop('readonly', readonly);
+    $('#edt_FedTaxPayer').prop('readonly', readonly);
+    $('#edt_SttTaxPayer').prop('readonly', readonly);
+    
+    $('#edt_Phone').prop('readonly', readonly);
+    $('#edt_Cellphone').prop('readonly', readonly);
+    $('#edt_Email').prop('readonly', readonly);
+    $('#edt_Website').prop('readonly', readonly);
+    
+    $('#address-postal-code').prop('readonly', readonly);
+    $('#address-number').prop('readonly', readonly);
+    $('#address-comment').prop('readonly', readonly);
 }
 //#endregion

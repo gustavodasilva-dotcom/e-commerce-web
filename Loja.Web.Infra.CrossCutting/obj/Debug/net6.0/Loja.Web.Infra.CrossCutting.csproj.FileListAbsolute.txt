@@ -1,0 +1,12 @@
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\bin\Debug\net6.0\Loja.Web.Infra.CrossCutting.deps.json
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\bin\Debug\net6.0\Loja.Web.Infra.CrossCutting.dll
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\bin\Debug\net6.0\Loja.Web.Infra.CrossCutting.pdb
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.csproj.AssemblyReference.cache
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.AssemblyInfoInputs.cache
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.AssemblyInfo.cs
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.dll
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\refint\Loja.Web.Infra.CrossCutting.dll
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\Loja.Web.Infra.CrossCutting.pdb
+C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Infra.CrossCutting\obj\Debug\net6.0\ref\Loja.Web.Infra.CrossCutting.dll

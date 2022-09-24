@@ -1,5 +1,4 @@
-﻿using Loja.Web.Domain.Entities.Registration.Manufacturer;
-using Loja.Web.Presentation.Models.Registration.Manufacturer.Model;
+﻿using Loja.Web.Presentation.Models.Registration.Manufacturer.Model;
 using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
 
 namespace Loja.Web.Application.Interfaces.Registration.Manufacturer
@@ -8,6 +7,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Manufacturer
     {
         Task<List<ManufacturerViewModel>> GetAllAsync();
         Task<ManufacturerViewModel> GetByIDAsync(Guid guid);
-        Task<Manufacturers> InsertAsync(ManufacturersModel model);
+        Task<ManufacturerViewModel> SaveAsync(ManufacturersModel model);
     }
 }

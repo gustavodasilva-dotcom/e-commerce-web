@@ -2,7 +2,7 @@
 {
     public class AddressesModel
     {
-        public int? ID { get; set; } = null;
+        public int? ID { get; set; }
 
         public Guid GuidID { get; set; } = Guid.NewGuid();
 

@@ -12,7 +12,7 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
         [Key]
         public int ID { get; private set; }
         public Guid GuidID { get; private set; }
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
         public bool BrazilianCompany { get; private set; }
         public string? CAGE { get; private set; }
         public string? NCAGE { get; private set; }
@@ -58,8 +58,8 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Manufacturers
                 {
-                    GuidID = model.GuidID,
-                    Name = model.Name.Trim(),
+                    GuidID = Guid.NewGuid(),
+                    Name = model?.Name?.Trim(),
                     BrazilianCompany = model.BrazilianCompany,
                     CAGE = model?.CAGE?.Trim(),
                     NCAGE = model?.NCAGE?.Trim(),
@@ -68,12 +68,12 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
                     StateTaxpayerRegistrationNumber = model?.StateTaxpayerRegistrationNumber?.Trim(),
                     ContactID = (int)model.Contacts.ID,
                     AddressID = (int)model.Addresses.ID,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
                     Created_by = model.Created_by,
-                    Deleted_at = model.Deleted_at,
-                    Deleted_by = model.Deleted_by
+                    Deleted_at = null,
+                    Deleted_by = null
                 });
             }
             catch (Exception e)
@@ -84,6 +84,44 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
                 throw new Exception(e.Message);
             }
             return id;
+        }
+        #endregion
+
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(ManufacturersModel model, Manufacturers manufacturer)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Manufacturers
+                {
+                    ID = manufacturer.ID,
+                    Name = model?.Name?.Trim(),
+                    BrazilianCompany = model.BrazilianCompany,
+                    CAGE = model?.CAGE?.Trim(),
+                    NCAGE = model?.NCAGE?.Trim(),
+                    SEC = model?.SEC?.Trim(),
+                    FederalTaxpayerRegistrationNumber = model?.FederalTaxpayerRegistrationNumber?.Trim(),
+                    StateTaxpayerRegistrationNumber = model?.StateTaxpayerRegistrationNumber?.Trim(),
+                    ContactID = (int)model.Contacts.ID,
+                    AddressID = (int)model.Addresses.ID,
+                    Active = manufacturer.Active,
+                    Deleted = manufacturer.Deleted,
+                    Created_at = manufacturer.Created_at,
+                    Created_by = manufacturer.Created_by,
+                    Deleted_at = manufacturer.Deleted_at,
+                    Deleted_by = manufacturer.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
         }
         #endregion
 

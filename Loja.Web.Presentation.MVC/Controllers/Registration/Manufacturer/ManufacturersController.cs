@@ -89,27 +89,27 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
 
         #region Save
         [HttpPost]
-        public async Task<IActionResult> Save(ManufacturersModel model)
+        public async Task<JsonResult> Save(ManufacturersModel model)
         {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
-                var localition = Request.Form["localition"].ToString().ToLower().Equals("true") ? true : false;
-                model.BrazilianCompany = localition;
-                model.Addresses.IsForeign = !localition;
-                if (await _manufacturerApplication.InsertAsync(model) != null)
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    ViewBag.SuccessMessage = "Manufacturer created successfully.";
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    model.UserGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
                 }
-                else
-                {
-                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                }
+
+                result.Manufacturers = await _manufacturerApplication.SaveAsync(model);
+                result.Code = 1;
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = e.Message;
+                result.Message = e.Message;
             }
-            return View();
+            return Json(result);
         }
         #endregion
 

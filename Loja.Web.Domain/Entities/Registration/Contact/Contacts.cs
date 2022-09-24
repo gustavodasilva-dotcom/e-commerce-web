@@ -71,6 +71,37 @@ namespace Loja.Web.Domain.Entities.Registration.Contact
         }
         #endregion
 
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(ContactsModel model, Contacts contact)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Contacts
+                {
+                    ID = contact.ID,
+                    GuidID = contact.GuidID,
+                    Phone = model?.Phone?.Trim(),
+                    Cellphone = model?.Cellphone?.Trim(),
+                    Email = model?.Email?.Trim(),
+                    Website = model?.Website?.Trim(),
+                    Active = contact.Active,
+                    Deleted = contact.Deleted,
+                    Created_at = contact.Created_at
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
         #endregion
     }
 }

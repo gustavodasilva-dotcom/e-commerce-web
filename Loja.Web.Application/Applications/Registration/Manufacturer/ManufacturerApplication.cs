@@ -4,6 +4,7 @@ using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Domain.Entities.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Contact;
 using Loja.Web.Domain.Entities.Registration.Manufacturer;
+using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Presentation.Models.Registration.Contact.ViewModel;
 using Loja.Web.Presentation.Models.Registration.Manufacturer.Model;
 using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
@@ -19,6 +20,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         private readonly Manufacturers _manufacturer = new();
         private readonly Addresses _addresses = new();
         private readonly Contacts _contacts = new();
+        private readonly Users _users = new();
         #endregion
 
         #region << CONSTRUCTOR >>
@@ -149,56 +151,124 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         #endregion
 
         #region InsertAsync
-        public async Task<Manufacturers> InsertAsync(ManufacturersModel model)
+        public async Task<ManufacturerViewModel> SaveAsync(ManufacturersModel model)
         {
             Validate(model);
-            Manufacturers? manufacturer = null;
+
+            var users = await _users.GetAllAsync();
+
             var manufacturers = await _manufacturer.GetAllAsync();
+
+            Manufacturers? manufacturer = null;
+
+            manufacturer = manufacturers.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted);
+
+            if (model.GuidID != Guid.Empty && manufacturer != null)
+            {
+                model.ID = manufacturer.ID;
+                model.GuidID = manufacturer.GuidID;
+                model.Created_by = manufacturer.Created_by;
+            }
+            else
+                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid && x.Active && !x.Deleted).FirstOrDefault()?.ID;
+
             if (model.BrazilianCompany)
             {
-                if (manufacturers.Any(x => x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber
+                if (manufacturers.Any(x => x.GuidID != model.GuidID
+                    || x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber
                     || x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber))
-                {
                     throw new Exception("There's already a manufacturer registered with the federal or state taxpayer registration number.");
-                }
             }
             else
             {
-                if (manufacturers.Any(x => x?.CAGE == model?.CAGE || x?.SEC == model?.SEC))
-                {
+                if (manufacturers.Any(x => x.GuidID != model.GuidID && x?.CAGE == model?.CAGE || x?.SEC == model?.SEC))
                     throw new Exception("There's already a manufacturer registered with the CAGE or SEC informed.");
-                }
             }
-            var street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode);
+
+            var street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode ??
+                throw new Exception("The address or the postal code was not informed."));
+
             if (street == null)
             {
                 await _addressApplication.InsertAsync(model.Addresses);
-                street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode);
+                street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode ??
+                    throw new Exception("The address or the postal code was not informed."));
             }
-            model.Addresses.StreetID = street?.ID;
-            model.Addresses.ID = (int)await _addressApplication.InsertAddressAsync(model.Addresses);
-            model.Contacts.ID = (int)await _contactApplication.InsertAsync(model.Contacts);
-            var manufacturerID = await _manufacturer.InsertAsync(model);
-            if (manufacturerID is null)
+
+            if (model.Addresses != null)
             {
-                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                if (manufacturer != null)
+                {
+                    var addresses = await _addresses.GetAllAsync();
+
+                    var manufacturerAddress = addresses.FirstOrDefault(x => x.ID == manufacturer?.ID && x.Active && !x.Deleted);
+
+                    if (manufacturerAddress != null)
+                    {
+                        model.Addresses.ID = manufacturerAddress.ID;
+
+                        if (street?.ID != manufacturerAddress?.StreetID)
+                            model.Addresses.StreetID = street?.ID;
+
+                        if (await _addresses.UpdateAsync(model.Addresses, manufacturerAddress ??
+                            throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")))
+                                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                    }
+                }
+                else
+                {
+                    model.Addresses.StreetID = street?.ID;
+                    model.Addresses.ID = (int)await _addressApplication.InsertAddressAsync(model.Addresses);
+                }
             }
+            
+            if (model.Contacts != null)
+            {
+                var contacts = await _contacts.GetAllAsync();
+
+                var manufacturerContact = contacts.FirstOrDefault(x => x.ID == manufacturer?.ContactID && x.Active && !x.Deleted);
+
+                if (manufacturerContact != null)
+                {
+                    model.Contacts.ID = manufacturerContact.ID;
+
+                    if (await _contacts.UpdateAsync(model.Contacts, manufacturerContact))
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                }
+                else
+                    model.Contacts.ID = (int)await _contactApplication.InsertAsync(model.Contacts);
+            }
+
+            long? manufacturerID = null;
+
+            if (model.GuidID == Guid.Empty)
+            {
+                manufacturerID = await _manufacturer.InsertAsync(model) ??
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+            }
+            else
+            {
+                if (await _manufacturer.UpdateAsync(model, manufacturer ??
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")))
+                    manufacturerID = manufacturers.First(x => x.GuidID == model.GuidID && x.Active && !x.Deleted).ID;
+            }
+            
             manufacturers = await _manufacturer.GetAllAsync();
+
             if (model.BrazilianCompany)
             {
                 manufacturer = manufacturers.FirstOrDefault(
                     x => x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber &&
-                    x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber);
+                    x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber) ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
             }
             else
             {
-                manufacturer = manufacturers.FirstOrDefault(x => x?.CAGE == model?.CAGE);
+                manufacturer = manufacturers.FirstOrDefault(x => x?.CAGE == model?.CAGE) ??
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
             }
-            if (manufacturer is null)
-            {
-                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-            }
-            return manufacturer;
+
+            return await GetByIDAsync(manufacturer.GuidID);
         }
         #endregion
 
@@ -213,14 +283,11 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
             {
                 if (string.IsNullOrEmpty(model.FederalTaxpayerRegistrationNumber) &&
                     !int.TryParse(model.FederalTaxpayerRegistrationNumber, out int _))
-                {
                     throw new Exception("Federal taxpayer registration number cannot be null or empty.");
-                }
+
                 if (!string.IsNullOrEmpty(model.StateTaxpayerRegistrationNumber) &&
                     !int.TryParse(model.StateTaxpayerRegistrationNumber, out int _))
-                {
                     throw new Exception("State taxpayer registration number cannot be null or empty.");
-                }
             }
             else
             {
