@@ -2,6 +2,7 @@
 using Loja.Web.Domain.Entities.Registration.Contact;
 using Loja.Web.Presentation.Models.Registration.Contact.Model;
 using Loja.Web.Tools.String.Extensions;
+using System.Text.RegularExpressions;
 
 namespace Loja.Web.Application.Applications.Registration.Contact
 {
@@ -42,18 +43,15 @@ namespace Loja.Web.Application.Applications.Registration.Contact
         #region Validate
         private static void Validate(ContactsModel model)
         {
-            if (!string.IsNullOrEmpty(model.Phone) && model.Phone.Length > 12)
-            {
-                throw new Exception("The phone number cannot be greater than 12.");
-            }
-            if (!string.IsNullOrEmpty(model.Phone) && model?.Cellphone?.Length > 13)
-            {
-                throw new Exception("The cellphone number cannot be greater than 12.");
-            }
-            if (!string.IsNullOrEmpty(model?.Email) && !model.Email.IsEmail())
-            {
-                throw new Exception("The email informed is not valid.");
-            }
+            if (!string.IsNullOrEmpty(model.Phone) && model.Phone.Length > 12) throw new Exception("The phone number cannot be greater than 12.");
+            if (!string.IsNullOrEmpty(model.Phone) && model?.Cellphone?.Length > 13) throw new Exception("The cellphone number cannot be greater than 12.");
+            if (!string.IsNullOrEmpty(model?.Email) && !model.Email.IsEmail()) throw new Exception("The email informed is not valid.");
+
+            if (!string.IsNullOrEmpty(model.Phone))
+                model.Phone = Regex.Replace(model.Phone, @"[^0-9a-zA-Z]+", "");
+
+            if (!string.IsNullOrEmpty(model.Cellphone))
+                model.Cellphone = Regex.Replace(model.Cellphone, @"[^0-9a-zA-Z]+", "");
         }
         #endregion
 

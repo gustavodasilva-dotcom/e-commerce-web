@@ -256,6 +256,7 @@ namespace Loja.Web.Application.Applications.Registration.Address
 
         public async Task<long?> InsertAddressAsync(AddressesModel model)
         {
+            Validate(ref model);
             return await _addresses.InsertAsync(model);
         }
 

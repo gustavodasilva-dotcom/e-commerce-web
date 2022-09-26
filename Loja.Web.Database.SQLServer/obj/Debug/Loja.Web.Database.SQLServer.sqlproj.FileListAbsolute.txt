@@ -1,6 +1,0 @@
-C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Database.SQLServer\bin\Debug\Loja.Web.Database.SQLServer.dacpac
-C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Database.SQLServer\bin\Debug\Loja.Web.Database.SQLServer.dll
-C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Database.SQLServer\bin\Debug\Loja.Web.Database.SQLServer.pdb
-C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Database.SQLServer\obj\Debug\Loja.Web.Database.SQLServer.sqlproj.AssemblyReference.cache
-C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Database.SQLServer\obj\Debug\Loja.Web.Database.SQLServer.dll
-C:\Users\LENOVO-EQP301\source\repos\Loja.Web.Solution\Loja.Web.Database.SQLServer\obj\Debug\Loja.Web.Database.SQLServer.pdb

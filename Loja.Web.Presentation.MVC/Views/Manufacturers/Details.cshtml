@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     </head>
     <body>
-        <button class="default-button" id="btn-edit" onclick="editEnabled = true;">Edit</button>
+        <button type="button" class="default-button" id="btn-edit" onclick="editEnabled = true;">Edit</button>
 
         <div class="register-wrapper">
 
@@ -34,7 +34,7 @@
                 <div class="register-form">
 
                     <div class="register-input-field">
-                        <input type="text" class="register-input" name="edt_Name" id="edt_Name" placeholder="Name" />
+                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Name" id="edt_Name" placeholder="Name" />
                     </div>
 
                     <div class="register-input-field">
@@ -52,21 +52,21 @@
 
                     <div id="register-input-foreigh" style="display:none;">
                         <div class="register-input-field">
-                            <input type="text" class="register-input" name="edt_Cage" id="edt_Cage" placeholder="CAGE" />
+                            <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Cage" id="edt_Cage" placeholder="CAGE" />
                         </div>
 
                         <div class="register-input-field">
-                            <input type="text" class="register-input" name="edt_Sec" id="edt_Sec" placeholder="SEC" />
+                            <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Sec" id="edt_Sec" placeholder="SEC" />
                         </div>
                     </div>
 
                     <div id="register-input-brazilian" style="display:none;">
                         <div class="register-input-field">
-                            <input type="text" class="register-input" name="edt_FedTaxPayer" id="edt_FedTaxPayer" placeholder="Federal taxpayer registration" />
+                            <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_FedTaxPayer" id="edt_FedTaxPayer" placeholder="Federal taxpayer registration" />
                         </div>
 
                         <div class="register-input-field">
-                            <input type="text" class="register-input" name="edt_SttTaxPayer" id="edt_SttTaxPayer" placeholder="State taxpayer registration" />
+                            <input type="number" style="text-transform: uppercase;" class="register-input" name="edt_SttTaxPayer" id="edt_SttTaxPayer" placeholder="State taxpayer registration" />
                         </div>
                     </div>
 
@@ -74,58 +74,25 @@
                     <h2 class="register-title-2">Contact info</h2>
 
                     <div class="register-input-field">
-                        <input type="text" class="register-input" name="edt_Phone" id="edt_Phone" placeholder="Phone" />
+                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Phone" id="edt_Phone" placeholder="Phone" />
                     </div>
 
                     <div class="register-input-field">
-                        <input type="text" class="register-input" name="edt_Cellphone" id="edt_Cellphone" placeholder="Cellphone" />
+                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Cellphone" id="edt_Cellphone" placeholder="Cellphone" />
                     </div>
 
                     <div class="register-input-field">
-                        <input type="text" class="register-input" name="edt_Email" id="edt_Email" placeholder="Email" />
+                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Email" id="edt_Email" placeholder="Email" />
                     </div>
 
                     <div class="register-input-field">
-                        <input type="text" class="register-input" name="edt_Website" id="edt_Website" placeholder="Website" />
+                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Website" id="edt_Website" placeholder="Website" />
                     </div>
-
-                    <hr />
-                    <h2 class="register-title-2">Address info</h2>
+                    
+                    @Html.Partial("~/Views/Addresses/AddressesStructure.cshtml")
 
                     <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-postal-code" id="address-postal-code" placeholder="Postal code" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-name" id="address-name" placeholder="Name" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="number" class="register-input" name="address-number" id="address-number" placeholder="Number" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-comment" id="address-comment" placeholder="Comment" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-neighborhood" id="address-neighborhood" placeholder="Neighborhood" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-city" id="address-city" placeholder="City" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-state" id="address-state" placeholder="State" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" class="register-input" name="address-country" id="address-country" placeholder="Country" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <button type="submit" style="display: none;" class="register-btn-submit" name="register" id="btn-register-update">Register</button>
+                        <button type="button" style="display: none;" class="register-btn-submit" name="register" id="btn-register-update">Register</button>
                     </div>
 
                 </div>

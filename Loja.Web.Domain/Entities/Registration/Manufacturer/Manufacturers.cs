@@ -97,6 +97,7 @@ namespace Loja.Web.Domain.Entities.Registration.Manufacturer
                 updated = await connect.UpdateAsync(new Manufacturers
                 {
                     ID = manufacturer.ID,
+                    GuidID = manufacturer.GuidID,
                     Name = model?.Name?.Trim(),
                     BrazilianCompany = model.BrazilianCompany,
                     CAGE = model?.CAGE?.Trim(),

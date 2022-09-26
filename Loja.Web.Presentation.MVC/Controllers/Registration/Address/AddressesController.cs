@@ -21,6 +21,13 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Address
 
         #region << METHODS >>
 
+        #region Views
+        public IActionResult AddressesStructure(AddressesModel fields)
+        {
+            return PartialView(fields);
+        }
+        #endregion
+
         #region Get
         public IActionResult Index()
         {

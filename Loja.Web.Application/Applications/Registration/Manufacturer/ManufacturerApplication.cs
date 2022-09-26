@@ -8,6 +8,7 @@ using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Presentation.Models.Registration.Contact.ViewModel;
 using Loja.Web.Presentation.Models.Registration.Manufacturer.Model;
 using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
+using System.Text.RegularExpressions;
 
 namespace Loja.Web.Application.Applications.Registration.Manufacturer
 {
@@ -47,7 +48,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
 
             var result = new List<ManufacturerViewModel>();
 
-            foreach (var manufacturer in manufacturers.Where(x => x.Active && !x.Deleted))
+            foreach (var manufacturer in manufacturers.OrderBy(x => x.Name).Where(x => x.Active && !x.Deleted))
             {
                 var contact = contacts.FirstOrDefault(x => x.ID == manufacturer.ContactID && x.Active && !x.Deleted);
                 
@@ -79,7 +80,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                     NCAGE = manufacturer.NCAGE,
                     SEC = manufacturer.SEC,
                     FederalTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
-                    StateTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                    StateTaxpayerRegistrationNumber = manufacturer.StateTaxpayerRegistrationNumber,
                     Contact = contactModel,
                     Address = addressModel,
                     Active = manufacturer.Active,
@@ -137,7 +138,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                 NCAGE = manufacturer.NCAGE,
                 SEC = manufacturer.SEC,
                 FederalTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
-                StateTaxpayerRegistrationNumber = manufacturer.FederalTaxpayerRegistrationNumber,
+                StateTaxpayerRegistrationNumber = manufacturer.StateTaxpayerRegistrationNumber,
                 Contact = contactModel,
                 Address = addressModel,
                 Active = manufacturer.Active,
@@ -175,14 +176,21 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
             if (model.BrazilianCompany)
             {
                 if (manufacturers.Any(x => x.GuidID != model.GuidID
-                    || x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber
-                    || x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber))
-                    throw new Exception("There's already a manufacturer registered with the federal or state taxpayer registration number.");
+                    && x?.FederalTaxpayerRegistrationNumber == model?.FederalTaxpayerRegistrationNumber))
+                    throw new Exception("There's already a manufacturer registered with the federal taxpayer registration number informed.");
+
+                if (manufacturers.Any(x => x.GuidID != model.GuidID
+                    && !string.IsNullOrEmpty(x?.StateTaxpayerRegistrationNumber)
+                    && x?.StateTaxpayerRegistrationNumber == model?.StateTaxpayerRegistrationNumber))
+                    throw new Exception("There's already a manufacturer registered with the state taxpayer registration number informed.");
             }
             else
             {
-                if (manufacturers.Any(x => x.GuidID != model.GuidID && x?.CAGE == model?.CAGE || x?.SEC == model?.SEC))
-                    throw new Exception("There's already a manufacturer registered with the CAGE or SEC informed.");
+                if (manufacturers.Any(x => x.GuidID != model.GuidID && x?.CAGE == model?.CAGE))
+                    throw new Exception("There's already a manufacturer registered with the CAGE informed.");
+
+                if (manufacturers.Any(x => x.GuidID != model.GuidID && x?.SEC == model?.SEC))
+                    throw new Exception("There's already a manufacturer registered with the SEC informed.");
             }
 
             var street = await _addressApplication.GetStreetByPostalCodeAsync(model?.Addresses?.PostalCode ??
@@ -201,18 +209,20 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                 {
                     var addresses = await _addresses.GetAllAsync();
 
-                    var manufacturerAddress = addresses.FirstOrDefault(x => x.ID == manufacturer?.ID && x.Active && !x.Deleted);
+                    var manufacturerAddress = addresses.FirstOrDefault(x => x.ID == manufacturer?.AddressID && x.Active && !x.Deleted);
 
                     if (manufacturerAddress != null)
                     {
                         model.Addresses.ID = manufacturerAddress.ID;
 
                         if (street?.ID != manufacturerAddress?.StreetID)
+                        {
                             model.Addresses.StreetID = street?.ID;
 
-                        if (await _addresses.UpdateAsync(model.Addresses, manufacturerAddress ??
-                            throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")))
-                                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                            if (!await _addresses.UpdateAsync(model.Addresses, manufacturerAddress ??
+                                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")))
+                                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                        }
                     }
                 }
                 else
@@ -232,7 +242,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                 {
                     model.Contacts.ID = manufacturerContact.ID;
 
-                    if (await _contacts.UpdateAsync(model.Contacts, manufacturerContact))
+                    if (!await _contacts.UpdateAsync(model.Contacts, manufacturerContact))
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
                 }
                 else
@@ -248,7 +258,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
             }
             else
             {
-                if (await _manufacturer.UpdateAsync(model, manufacturer ??
+                if (!await _manufacturer.UpdateAsync(model, manufacturer ??
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")))
                     manufacturerID = manufacturers.First(x => x.GuidID == model.GuidID && x.Active && !x.Deleted).ID;
             }
@@ -281,6 +291,12 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
         {
             if (model.BrazilianCompany)
             {
+                if (!string.IsNullOrEmpty(model.FederalTaxpayerRegistrationNumber))
+                    model.FederalTaxpayerRegistrationNumber = Regex.Replace(model.FederalTaxpayerRegistrationNumber, @"[^0-9a-zA-Z]+", "");
+                
+                if (!string.IsNullOrEmpty(model.StateTaxpayerRegistrationNumber))
+                    model.StateTaxpayerRegistrationNumber = Regex.Replace(model.StateTaxpayerRegistrationNumber, @"[^0-9a-zA-Z]+", "");
+
                 if (string.IsNullOrEmpty(model.FederalTaxpayerRegistrationNumber) &&
                     !int.TryParse(model.FederalTaxpayerRegistrationNumber, out int _))
                     throw new Exception("Federal taxpayer registration number cannot be null or empty.");
@@ -291,6 +307,9 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
             }
             else
             {
+                model.CAGE = Regex.Replace(model.CAGE, @"[^0-9a-zA-Z]+", "");
+                model.NCAGE = Regex.Replace(model.NCAGE, @"[^0-9a-zA-Z]+", "");
+
                 if (string.IsNullOrEmpty(model.Name)) throw new Exception("Name cannot be null or empty.");
                 if (string.IsNullOrEmpty(model.CAGE)) throw new Exception("CAGE cannot be null or empty.");
                 if (string.IsNullOrEmpty(model.NCAGE)) throw new Exception("NCAGE cannot be null or empty.");

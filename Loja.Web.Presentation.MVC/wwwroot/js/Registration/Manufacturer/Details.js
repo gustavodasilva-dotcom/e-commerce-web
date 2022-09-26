@@ -7,6 +7,11 @@ $(document).ready(function () {
 
     ValidateParams(params);
     SetHtmlElements();
+    SetMasks();
+});
+
+$('input[name="localition"]').click(function () {
+    SetVisibilityByLocation();
 });
 
 $('#btn-edit').click(function () {
@@ -18,10 +23,12 @@ $('#btn-edit').click(function () {
 
 $('#btn-register-update').click(function () {
     let model = {};
+    let contacts = {};
+    let addresses = {};
 
     model.GuidID = guid;
     model.Name = $('#edt_Name').val();
-    model.BrazilianCompany = $('input[name="localition"]').val();
+    model.BrazilianCompany = $('#localition_brazil:checked').length > 0 ? true : false;
 
     if (model.BrazilianCompany) {
         model.FederalTaxpayerRegistrationNumber = $('#edt_FedTaxPayer').val();
@@ -32,23 +39,33 @@ $('#btn-register-update').click(function () {
         model.SEC = $('#edt_Sec').val();
     }
 
-    model.Contacts.Phone = $('#edt_Phone').val();
-    model.Contacts.Cellphone = $('#edt_Cellphone').val();
-    model.Contacts.Email = $('#edt_Email').val();
-    model.Contacts.Website = $('#edt_Website').val();
+    contacts.Phone = $('#edt_Phone').val();
+    contacts.Cellphone = $('#edt_Cellphone').val();
+    contacts.Email = $('#edt_Email').val();
+    contacts.Website = $('#edt_Website').val();
 
-    model.Addresses.PostalCode = $('#address-postal-code').val();
-    model.Addresses.Name = $('#address-name').val();
-    model.Addresses.Number = $('#address-number').val();
-    model.Addresses.Comment = $('#address-comment').val();
-    model.Addresses.Neighborhood = $('#address-neighborhood').val();
-    model.Addresses.City = $('#address-city').val();
-    model.Addresses.State = $('#address-state').val();
-    model.Addresses.Country = $('#address-country').val();
-    model.Addresses.IsForeign = model.BrazilianCompany;
+    addresses.PostalCode = $('#address-postal-code').val();
+    addresses.Name = $('#address-name').val();
+    addresses.Number = $('#address-number').val();
+    addresses.Comment = $('#address-comment').val();
+    addresses.Neighborhood = $('#address-neighborhood').val();
+    addresses.City = $('#address-city').val();
+    addresses.State = $('#address-state').val();
+    addresses.Country = $('#address-country').val();
+    addresses.IsForeign = !model.BrazilianCompany;
 
-    if (SaveManufacturer(model) != null)
-        window.location.reload();
+    model.Contacts = contacts;
+    model.Addresses = addresses;
+
+    var modelSaved = SaveManufacturer(model);
+
+    if (modelSaved != null) {
+        if (isEdit) {
+            window.location.reload();
+        } else {
+            window.location.href = '/Manufacturers/Details?guid=' + modelSaved.guidID;
+        }
+    }
 });
 
 //#region ValidateParams
@@ -60,7 +77,7 @@ function ValidateParams(params) {
 }
 //#endregion
 
-//#region SetHtmlElementsByProcess
+//#region SetHtmlElements
 function SetHtmlElements() {
     if (isEdit) {
         ReadonlyElements(true);
@@ -96,6 +113,11 @@ function SetHtmlElements() {
 
             SetAddressInputValues(manufacturer.address);
         }
+    } else {
+        $('#btn-edit').css('display', 'none');
+        $('#btn-register-update').css('display', 'block');
+
+        SetVisibilityByLocation();
     }
 }
 //#endregion
@@ -119,5 +141,29 @@ function ReadonlyElements(readonly) {
     $('#address-postal-code').prop('readonly', readonly);
     $('#address-number').prop('readonly', readonly);
     $('#address-comment').prop('readonly', readonly);
+}
+//#endregion
+
+//#region SetMasks
+function SetMasks() {
+    if ($('#localition_brazil:checked').length > 0) {
+        $('#edt_FedTaxPayer').mask('00.000.000/0000-00');
+    }
+}
+//#endregion
+
+//#region SetVisibilityByLocation
+function SetVisibilityByLocation() {
+    if ($('#localition_brazil:checked').length > 0) {
+        $('#localition_brazil').prop('checked', true);
+
+        $('#register-input-brazilian').css('display', 'block');
+        $('#register-input-foreigh').css('display', 'none');
+    } else {
+        $('#localition_foreign').prop('checked', true);
+
+        $('#register-input-foreigh').css('display', 'block');
+        $('#register-input-brazilian').css('display', 'none');
+    }
 }
 //#endregion
