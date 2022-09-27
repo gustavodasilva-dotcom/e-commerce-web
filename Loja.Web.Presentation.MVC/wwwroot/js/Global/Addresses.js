@@ -42,6 +42,12 @@ $('#address-postal-code').focusout(function () {
     }
 });
 
+function SetAddressMasks() {
+    if (isBrazilianCompany) {
+        $('#address-postal-code').mask('00000-000');
+    }
+}
+
 function ReadonlyAddressInputs(readonly) {
     if (readonly) {
         $('#address-name').prop('readonly', true);
@@ -60,20 +66,29 @@ function ReadonlyAddressInputs(readonly) {
 }
 
 function SetAddressInputValues(model) {
+    $('#address-postal-code').val(model.street.postalCode);
     $('#address-name').val(model.street.name);
-    $('#address-name').prop('readonly', true);
-
+    $('#address-number').val(model.number);
+    $('#address-comment').val(model.comment);
     $('#address-neighborhood').val(model.neighborhood.name);
-    $('#address-neighborhood').prop('readonly', true);
-
     $('#address-city').val(model.city.name);
-    $('#address-city').prop('readonly', true);
-
     $('#address-state').val(model.state.initials);
-    $('#address-state').prop('readonly', true);
-
     $('#address-country').val(model.country.name);
-    $('#address-country').prop('readonly', true);
+}
+
+function SetAddressModel() {
+    let addresses = {};
+
+    addresses.PostalCode = $('#address-postal-code').val();
+    addresses.Name = $('#address-name').val();
+    addresses.Number = $('#address-number').val();
+    addresses.Comment = $('#address-comment').val();
+    addresses.Neighborhood = $('#address-neighborhood').val();
+    addresses.City = $('#address-city').val();
+    addresses.State = $('#address-state').val();
+    addresses.Country = $('#address-country').val();
+
+    return addresses;
 }
 
 function RegisterUserAddress(addressModel) {

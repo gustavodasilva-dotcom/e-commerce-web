@@ -1,6 +1,7 @@
 ﻿let guid;
 let isEdit = false;
 let editEnabled = false;
+let isBrazilianCompany = false;
 
 $(document).ready(function () {
     let params = (new URL(window.location.href)).searchParams;
@@ -12,6 +13,8 @@ $(document).ready(function () {
 
 $('input[name="localition"]').click(function () {
     SetVisibilityByLocation();
+    SetContactMasks();
+    SetAddressMasks();
 });
 
 $('#btn-edit').click(function () {
@@ -23,8 +26,6 @@ $('#btn-edit').click(function () {
 
 $('#btn-register-update').click(function () {
     let model = {};
-    let contacts = {};
-    let addresses = {};
 
     model.GuidID = guid;
     model.Name = $('#edt_Name').val();
@@ -39,23 +40,10 @@ $('#btn-register-update').click(function () {
         model.SEC = $('#edt_Sec').val();
     }
 
-    contacts.Phone = $('#edt_Phone').val();
-    contacts.Cellphone = $('#edt_Cellphone').val();
-    contacts.Email = $('#edt_Email').val();
-    contacts.Website = $('#edt_Website').val();
+    model.Contacts = SetContatModel();
 
-    addresses.PostalCode = $('#address-postal-code').val();
-    addresses.Name = $('#address-name').val();
-    addresses.Number = $('#address-number').val();
-    addresses.Comment = $('#address-comment').val();
-    addresses.Neighborhood = $('#address-neighborhood').val();
-    addresses.City = $('#address-city').val();
-    addresses.State = $('#address-state').val();
-    addresses.Country = $('#address-country').val();
-    addresses.IsForeign = !model.BrazilianCompany;
-
-    model.Contacts = contacts;
-    model.Addresses = addresses;
+    model.Addresses = SetAddressModel();
+    model.Addresses.IsForeign = !model.BrazilianCompany;
 
     var modelSaved = SaveManufacturer(model);
 
@@ -89,6 +77,8 @@ function SetHtmlElements() {
         if (manufacturer != null || manufacturer != undefined) {
             $('#edt_Name').val(manufacturer.name);
 
+            isBrazilianCompany = manufacturer.brazilianCompany;
+
             if (manufacturer.brazilianCompany) {
                 $('#localition_brazil').prop('checked', true);
                 $('#register-input-brazilian').css('display', 'block');
@@ -102,14 +92,7 @@ function SetHtmlElements() {
             $('#edt_FedTaxPayer').val(manufacturer.federalTaxpayerRegistrationNumber);
             $('#edt_SttTaxPayer').val(manufacturer.stateTaxpayerRegistrationNumber);
 
-            $('#edt_Phone').val(manufacturer.contact.phone);
-            $('#edt_Cellphone').val(manufacturer.contact.cellphone);
-            $('#edt_Email').val(manufacturer.contact.email);
-            $('#edt_Website').val(manufacturer.contact.website);
-
-            $('#address-postal-code').val(manufacturer.address.street.postalCode);
-            $('#address-number').val(manufacturer.address.number);
-            $('#address-comment').val(manufacturer.address.comment);
+            SetContactHtmlElements(manufacturer.contact);
 
             SetAddressInputValues(manufacturer.address);
         }
@@ -149,6 +132,9 @@ function SetMasks() {
     if ($('#localition_brazil:checked').length > 0) {
         $('#edt_FedTaxPayer').mask('00.000.000/0000-00');
     }
+
+    SetContactMasks();
+    SetAddressMasks();
 }
 //#endregion
 
@@ -159,11 +145,15 @@ function SetVisibilityByLocation() {
 
         $('#register-input-brazilian').css('display', 'block');
         $('#register-input-foreigh').css('display', 'none');
+
+        isBrazilianCompany = true;
     } else {
         $('#localition_foreign').prop('checked', true);
 
         $('#register-input-foreigh').css('display', 'block');
         $('#register-input-brazilian').css('display', 'none');
+
+        isBrazilianCompany = false;
     }
 }
 //#endregion

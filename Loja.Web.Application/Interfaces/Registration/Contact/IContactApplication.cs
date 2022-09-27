@@ -6,6 +6,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Contact
     public interface IContactApplication
     {
         Task<IEnumerable<Contacts?>> GetAllAsync();
-        Task<long?> InsertAsync(ContactsModel model);
+        Task<long?> SaveAsync(ContactsModel model, int? contactID = null);
     }
 }

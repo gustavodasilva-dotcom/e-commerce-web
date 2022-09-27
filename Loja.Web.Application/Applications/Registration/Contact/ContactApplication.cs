@@ -24,14 +24,29 @@ namespace Loja.Web.Application.Applications.Registration.Contact
         #endregion
 
         #region InsertAsync
-        public async Task<long?> InsertAsync(ContactsModel model)
+        public async Task<long?> SaveAsync(ContactsModel model, int? contactID = null)
         {
             Validate(model);
-            var contactID = await _contacts.InsertAsync(model);
-            if (contactID is null)
+
+            long? id = null;
+
+            var contacts = await _contacts.GetAllAsync();
+
+            var contact = contacts.FirstOrDefault(x => x.ID == contactID && x.Active && !x.Deleted);
+
+            if (model.GuidID == Guid.Empty && contact == null)
             {
-                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                id = await _contacts.InsertAsync(model) ??
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
             }
+            else
+            {
+                if (!await _contacts.UpdateAsync(model, contact))
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+                id = contact.ID;
+            }
+
             return contactID;
         }
         #endregion

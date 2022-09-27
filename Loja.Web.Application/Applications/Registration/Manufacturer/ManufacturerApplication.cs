@@ -239,14 +239,9 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
                 var manufacturerContact = contacts.FirstOrDefault(x => x.ID == manufacturer?.ContactID && x.Active && !x.Deleted);
 
                 if (manufacturerContact != null)
-                {
-                    model.Contacts.ID = manufacturerContact.ID;
-
-                    if (!await _contacts.UpdateAsync(model.Contacts, manufacturerContact))
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                }
+                    model.Contacts.ID = (int)await _contactApplication.SaveAsync(model.Contacts, manufacturer?.ContactID);
                 else
-                    model.Contacts.ID = (int)await _contactApplication.InsertAsync(model.Contacts);
+                    model.Contacts.ID = (int)await _contactApplication.SaveAsync(model.Contacts);
             }
 
             long? manufacturerID = null;

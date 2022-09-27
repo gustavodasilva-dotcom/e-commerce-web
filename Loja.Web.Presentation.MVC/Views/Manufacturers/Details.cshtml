@@ -70,24 +70,7 @@
                         </div>
                     </div>
 
-                    <hr />
-                    <h2 class="register-title-2">Contact info</h2>
-
-                    <div class="register-input-field">
-                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Phone" id="edt_Phone" placeholder="Phone" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Cellphone" id="edt_Cellphone" placeholder="Cellphone" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Email" id="edt_Email" placeholder="Email" />
-                    </div>
-
-                    <div class="register-input-field">
-                        <input type="text" style="text-transform: uppercase;" class="register-input" name="edt_Website" id="edt_Website" placeholder="Website" />
-                    </div>
+                    @Html.Partial("~/Views/Contacts/ContactsStructure.cshtml")
                     
                     @Html.Partial("~/Views/Addresses/AddressesStructure.cshtml")
 
