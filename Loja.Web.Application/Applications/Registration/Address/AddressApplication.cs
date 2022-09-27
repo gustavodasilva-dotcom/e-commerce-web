@@ -339,14 +339,16 @@ namespace Loja.Web.Application.Applications.Registration.Address
             }
             else
             {
-                model.NeighborhoodID = neighborhoods?.FirstOrDefault(x => x.Name.ToLower().Contains(model.Neighborhood.ToLower())).ID;
+                model.NeighborhoodID = neighborhoods?.FirstOrDefault(x => x.Name.ToLower().Contains(model.Neighborhood.ToLower()))?.ID;
             }
             if (!model.IsForeign)
             {
                 model.Name = viaCEP?.logradouro;
             }
             var streets = await _streets.GetAllAsync();
-            if (streets is null || !streets.Any(x => x.Name.ToLower().Equals(model?.Name?.ToLower()) && x.NeighborhoodID == model.NeighborhoodID))
+            if (streets is null || !streets.Any(x => x.Name.ToLower().Equals(model?.Name?.ToLower())
+                && x.PostalCode == model?.PostalCode?.Trim()
+                && x.NeighborhoodID == model.NeighborhoodID))
             {
                 streetID = await _streets.InsertAsync(model);
                 if (streetID == null)

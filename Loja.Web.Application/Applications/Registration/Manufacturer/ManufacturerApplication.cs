@@ -160,9 +160,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
 
             var manufacturers = await _manufacturer.GetAllAsync();
 
-            Manufacturers? manufacturer = null;
-
-            manufacturer = manufacturers.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted);
+            Manufacturers? manufacturer = manufacturers.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted);
 
             if (model.GuidID != Guid.Empty && manufacturer != null)
             {
@@ -253,7 +251,7 @@ namespace Loja.Web.Application.Applications.Registration.Manufacturer
             }
             else
             {
-                if (!await _manufacturer.UpdateAsync(model, manufacturer ??
+                if (await _manufacturer.UpdateAsync(model, manufacturer ??
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.")))
                     manufacturerID = manufacturers.First(x => x.GuidID == model.GuidID && x.Active && !x.Deleted).ID;
             }

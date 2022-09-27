@@ -19,7 +19,9 @@ $('#localition_foreign').change(function () {
 
 $('#address-postal-code').focusout(function () {
     if ($('input[id="localition_brazil"]:checked').length > 0
-        && !$('#address-postal-code').is('[readonly]')) {
+        && !$('#address-postal-code').is('[readonly]')
+        && $('#address-postal-code').val().length >= 9) {
+
         var postal_code = $(this).val();
 
         $.ajax({
@@ -39,12 +41,16 @@ $('#address-postal-code').focusout(function () {
                 }
             }
         });
+
     }
+
+    SetAddressMasks();
 });
 
 function SetAddressMasks() {
     if (isBrazilianCompany) {
         $('#address-postal-code').mask('00000-000');
+        $('#address-postal-code').trigger('input');
     }
 }
 

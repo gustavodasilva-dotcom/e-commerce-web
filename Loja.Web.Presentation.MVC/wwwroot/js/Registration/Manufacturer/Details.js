@@ -15,12 +15,18 @@ $('input[name="localition"]').click(function () {
     SetVisibilityByLocation();
     SetContactMasks();
     SetAddressMasks();
+    ReadonlyAddressInputs(isBrazilianCompany);
 });
 
 $('#btn-edit').click(function () {
     if (editEnabled) {
         ReadonlyElements(false);
+        SetContactMasks();
+        SetAddressMasks();
+        ReadonlyAddressInputs(isBrazilianCompany);
+
         $('#btn-register-update').css('display', 'block');
+        $(this).css('display', 'none');
     }
 })
 

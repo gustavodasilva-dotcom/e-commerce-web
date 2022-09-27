@@ -41,8 +41,9 @@ namespace Loja.Web.Application.Applications.Registration.Contact
             }
             else
             {
-                if (!await _contacts.UpdateAsync(model, contact))
-                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+                if (!await _contacts.UpdateAsync(model, contact ??
+                    throw new Exception("The contact was not found. Please, contact the system administrator.")))
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
                 id = contact.ID;
             }
@@ -58,15 +59,15 @@ namespace Loja.Web.Application.Applications.Registration.Contact
         #region Validate
         private static void Validate(ContactsModel model)
         {
-            if (!string.IsNullOrEmpty(model.Phone) && model.Phone.Length > 12) throw new Exception("The phone number cannot be greater than 12.");
-            if (!string.IsNullOrEmpty(model.Phone) && model?.Cellphone?.Length > 13) throw new Exception("The cellphone number cannot be greater than 12.");
-            if (!string.IsNullOrEmpty(model?.Email) && !model.Email.IsEmail()) throw new Exception("The email informed is not valid.");
-
             if (!string.IsNullOrEmpty(model.Phone))
                 model.Phone = Regex.Replace(model.Phone, @"[^0-9a-zA-Z]+", "");
 
             if (!string.IsNullOrEmpty(model.Cellphone))
                 model.Cellphone = Regex.Replace(model.Cellphone, @"[^0-9a-zA-Z]+", "");
+
+            if (!string.IsNullOrEmpty(model.Phone) && model.Phone.Length > 12) throw new Exception("The phone number cannot be greater than 12.");
+            if (!string.IsNullOrEmpty(model.Phone) && model?.Cellphone?.Length > 13) throw new Exception("The cellphone number cannot be greater than 12.");
+            if (!string.IsNullOrEmpty(model?.Email) && !model.Email.IsEmail()) throw new Exception("The email informed is not valid.");
         }
         #endregion
 
