@@ -168,7 +168,9 @@ input[type=number] {
     border: 2px solid #00afb9;
 }
 
-.register-wrapper .register-form .register-input-field .register-input:read-only {
+.register-wrapper .register-form .register-input-field .register-input:read-only,
+.register-wrapper .register-form .register-input-field textarea:disabled,
+.register-wrapper .register-form .register-select-field select:disabled {
     background-color: #D7F6F7;
 }
 

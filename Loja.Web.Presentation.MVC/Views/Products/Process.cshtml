@@ -15,7 +15,20 @@
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     </head>
     <body>
+        <button type="button" class="default-button" id="btn-edit">Edit</button>
+
         <div class="register-wrapper">
+
+            <!--- Modal --->
+            <div id="div_Message" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p></p>
+                </div>
+
+            </div>
+            <!--- Modal --->
 
             <div>
                 <h1 class="register-title">Register</h1>
@@ -37,13 +50,13 @@
 
                     <div class="register-select-field">
                         <select name="subcategories" class="register-select" id="register-select-subcategories">
-                            <option value="" disabled>Select a subcategory</option>
+                            <option value="" disabled selected>Select a subcategory</option>
                         </select>
                     </div>
 
                     <div class="register-select-field">
                         <select name="manufacturers" class="register-select" id="register-select-manufacturers">
-                            <option value="" disabled>Select a manufacturer</option>
+                            <option value="" disabled selected>Select a manufacturer</option>
                         </select>
                     </div>
 
@@ -51,7 +64,7 @@
 
                     <div class="register-select-field">
                         <select name="currencies" class="register-select" id="register-select-currencies">
-                            <option value="" disabled>Select a currency</option>
+                            <option value="" disabled selected>Select a currency</option>
                         </select>
                     </div>
 
@@ -67,7 +80,7 @@
 
                     <div class="register-select-field">
                         <select name="weight-measure" class="register-select" id="register-select-mass-measurements">
-                            <option value="" disabled>Select mass measurement</option>
+                            <option value="" disabled selected>Select mass measurement</option>
                         </select>
                     </div>
 
@@ -77,7 +90,7 @@
 
                     <div class="register-select-field">
                         <select name="height-measure" class="register-select" id="register-select-height-measurements">
-                            <option value="" disabled>Select height measurement</option>
+                            <option value="" disabled selected>Select height measurement</option>
                         </select>
                     </div>
 
@@ -87,7 +100,7 @@
 
                     <div class="register-select-field">
                         <select name="width-measure" class="register-select" id="register-select-width-measurements">
-                            <option value="" disabled>Select width measurement</option>
+                            <option value="" disabled selected>Select width measurement</option>
                         </select>
                     </div>
 
@@ -97,7 +110,7 @@
 
                     <div class="register-select-field">
                         <select name="length-measure" class="register-select" id="register-select-length-measurements">
-                            <option value="" disabled>Select length measurement</option>
+                            <option value="" disabled selected>Select length measurement</option>
                         </select>
                     </div>
 
@@ -114,13 +127,13 @@
                     <h2 class="register-title-2">Product's image</h2>
 
                     <div class="register-input-field">
-                        <input type="file" class="register-input-file" multiple="multiple" accept=".gif,.jpg,.jpeg,.png" />
+                        <input type="file" class="register-input-file" id="register-input-file" multiple="multiple" accept=".gif,.jpg,.jpeg,.png" />
                     </div>
 
                     <div class="register-alert" style="display: none;"><p></p></div>
 
                     <div class="register-input-field">
-                        <button type="button" class="register-btn-submit" name="register" id="register">Register</button>
+                        <button type="button" class="register-btn-submit" name="register" id="btn-register-update">Register</button>
                     </div>
 
                 </div>

@@ -1,9 +1,9 @@
-﻿using Loja.Web.Domain.Entities.Registration.Finance;
+﻿using Loja.Web.Presentation.Models.Registration.Finance.ViewModel;
 
 namespace Loja.Web.Application.Interfaces.Registration.Finance
 {
     public interface ICurrencyApplication
     {
-        Task<IEnumerable<Currencies?>> GetAllAsync();
+        Task<List<CurrencyViewModel>> GetAllAsync();
     }
 }

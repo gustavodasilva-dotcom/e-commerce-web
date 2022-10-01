@@ -1,5 +1,4 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Finance;
-using Loja.Web.Presentation.Models.Registration.Finance;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 
@@ -25,42 +24,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Finance
         public async Task<JsonResult> Get()
         {
             dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
-                var currencies = await _currencyApplication.GetAllAsync();
-                if (currencies.Any())
-                {
-                    var currenciesObj = new List<CurrenciesModel>();
-                    foreach (var currency in currencies)
-                    {
-                        currenciesObj.Add(new CurrenciesModel
-                        {
-                            ID = currency?.ID,
-                            GuidID = currency.GuidID,
-                            Name = currency.Name,
-                            Symbol = currency.Symbol,
-                            USExchangeRate = currency.USExchangeRate,
-                            LastUpdated = currency.LastUpdated,
-                            Active = currency.Active,
-                            Deleted = currency.Deleted,
-                            Created_at = currency.Created_at,
-                            Created_by = currency.Created_by,
-                            Deleted_at = currency.Deleted_at,
-                            Deleted_by = currency.Deleted_by
-                        });
-                    }
-                    result.Code = 1;
-                    result.Currencies = currenciesObj.OrderBy(x => x.Name);
-                }
-                else
-                {
-                    result.Code = 0;
-                    result.Message = "There's no subcategories registered.";
-                }
+                result.Currencies = await _currencyApplication.GetAllAsync();
+                result.Code = 1;
             }
             catch (Exception e)
             {
-                result.Code = 0;
                 result.Message = e.Message;
             }
             return Json(result);

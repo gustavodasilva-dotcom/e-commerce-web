@@ -1,4 +1,5 @@
-﻿using Loja.Web.Application.Interfaces.Registration.Manufacturer;
+﻿using Loja.Web.Application.Interfaces.Registration.Finance;
+using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Finance;
 using Loja.Web.Domain.Entities.Registration.Manufacturer;
@@ -18,16 +19,19 @@ namespace Loja.Web.Application.Applications.Registration.Product
         private readonly Subcategories _subcategories = new();
         private readonly Measurements _measurements = new();
 
+        private readonly ICurrencyApplication _currencyApplication;
         private readonly ISubcategoryApplication _subcategoryApplication;
         private readonly IManufacturerApplication _manufacturerApplication;
         private readonly IMeasurementApplication _measurementApplication;
         #endregion
 
         #region << CONSTRUCTOR >>
-        public ProductApplication(ISubcategoryApplication subcategoryApplication,
+        public ProductApplication(ICurrencyApplication currencyApplication,
+                                  ISubcategoryApplication subcategoryApplication,
                                   IManufacturerApplication manufacturerApplication,
                                   IMeasurementApplication measurementApplication)
         {
+            _currencyApplication = currencyApplication;
             _subcategoryApplication = subcategoryApplication;
             _manufacturerApplication = manufacturerApplication;
             _measurementApplication = measurementApplication;
@@ -53,6 +57,9 @@ namespace Loja.Web.Application.Applications.Registration.Product
 
             var product = products.FirstOrDefault(x => x.GuidID == guid && x.Active && !x.Deleted) ??
                 throw new Exception("The product was not found.");
+
+            var currencies = await _currencyApplication.GetAllAsync();
+            var currency = currencies.FirstOrDefault(x => x.ID == product.CurrencyID && x.Active && !x.Deleted);
 
             var subcategories = await _subcategoryApplication.GetAllAsync();
             var subcategory = subcategories.FirstOrDefault(x => x.ID == product.SubcategoryID && x.Active && !x.Deleted);
@@ -133,6 +140,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
                 Description = product.Description,
                 Price = product.Price,
                 Discount = product.Discount,
+                Currency = currency,
                 Subcategory = subcategory,
                 Manufacturer = manufacturer,
                 Weight = weightModel,

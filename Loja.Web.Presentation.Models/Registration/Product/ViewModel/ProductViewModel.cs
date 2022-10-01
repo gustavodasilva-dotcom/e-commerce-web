@@ -1,4 +1,5 @@
-﻿using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
+﻿using Loja.Web.Presentation.Models.Registration.Finance.ViewModel;
+using Loja.Web.Presentation.Models.Registration.Manufacturer.ViewModel;
 
 namespace Loja.Web.Presentation.Models.Registration.Product.ViewModel
 {
@@ -13,6 +14,8 @@ namespace Loja.Web.Presentation.Models.Registration.Product.ViewModel
         public decimal? Price { get; set; }
 
         public int Discount { get; set; }
+
+        public CurrencyViewModel? Currency { get; set; }
 
         public SubcategoryViewModel? Subcategory { get; set; }
 
