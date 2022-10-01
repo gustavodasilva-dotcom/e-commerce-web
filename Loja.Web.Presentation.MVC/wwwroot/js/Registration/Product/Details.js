@@ -11,6 +11,19 @@ $(document).ready(function () {
     ConvertBase64ToImage();
 });
 
+$('#btn-add-to-cart').click(function () {
+    AddItemToCart();
+});
+
+$('#btn-buy-now').click(function () {
+    AddItemToCart();
+    window.location.href = '/Orders/SelectPay?oneItemOnly=1&productGuidID=' + productID;
+});
+
+$('#btn-edit').click(function () {
+    window.location.href = '/Products/Process?edit=1&guidID=' + productID;
+});
+
 function popImage(image) {
     bigImage.src = image;
 }
@@ -20,7 +33,7 @@ function GetProductDetails(guidID) {
         async: false,
         type: "GET",
         dataType: "json",
-        url: "/Products/GetDetails",
+        url: "/Products/Get",
         data: { productID: guidID },
         success: function (result) {
             if (result.Code == 1) {
@@ -107,12 +120,3 @@ function AddItemToCart() {
 
     AddToCart(quantity, productID, productQuantity);
 }
-
-$('#btn-add-to-cart').click(function () {
-    AddItemToCart();
-});
-
-$('#btn-buy-now').click(function () {
-    AddItemToCart();
-    window.location.href = '/Orders/SelectPay?oneItemOnly=1&productGuidID=' + productID;
-});

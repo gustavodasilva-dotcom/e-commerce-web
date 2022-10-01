@@ -12,7 +12,10 @@ $(document).ready(function () {
     GetCurrencies();
     GetMeasurements();
 
-    if (isEdit) GetProductDetails(guidID);
+    if (isEdit) {
+        let products = GetProductByID(guidID);
+        SetDetails(products);
+    }
 });
 
 function CheckRoute() {
@@ -44,7 +47,7 @@ function GetManufacturers() {
         url: "/Manufacturers/Get",
         success: function (result) {
             if (result.Code == 1) {
-                SetComboBoxManufacturers(result.Manufacturers);
+                SetComboOptions(result.Manufacturers, 'register-select-manufacturers');
             }
             else {
                 ShowMessageError(result.Message);
@@ -61,7 +64,7 @@ function GetSubcategories() {
         url: "/Subcategories/Get",
         success: function (result) {
             if (result.Code == 1) {
-                SetComboBoxSubcategories(result.Subcategories);
+                SetComboOptions(result.Subcategories, 'register-select-subcategories');
             }
             else {
                 ShowMessageError(result.Message);
@@ -78,7 +81,7 @@ function GetCurrencies() {
         url: "/Currencies/Get",
         success: function (result) {
             if (result.Code == 1) {
-                SetComboBoxCurrencies(result.Currencies);
+                SetComboOptions(result.Currencies, 'register-select-currencies');
             }
             else {
                 ShowMessageError(result.Message);
@@ -96,24 +99,6 @@ function GetMeasurements() {
         success: function (result) {
             if (result.Code == 1) {
                 SetComboBoxMeasurements(result.Measurements);
-            }
-            else {
-                ShowMessageError(result.Message);
-            }
-        }
-    });
-}
-
-function GetProductDetails(guidID) {
-    $.ajax({
-        async: false,
-        type: "GET",
-        dataType: "json",
-        url: "/Products/GetDetails",
-        data: { productID: guidID },
-        success: function (result) {
-            if (result.Code == 1) {
-                SetDetails(result.Product);
             }
             else {
                 ShowMessageError(result.Message);
@@ -184,36 +169,18 @@ $('.register-btn-submit').click(function () {
     });
 });
 
-function SetComboBoxManufacturers(manufacturers) {
-    $.each(manufacturers, function (i, item) {
-        $('#register-select-manufacturers').append(`<option value="${manufacturers[i].id}">${manufacturers[i].name}</option>`);
-    });
-}
-
-function SetComboBoxSubcategories(subcategories) {
-    $.each(subcategories, function (i, item) {
-        $('#register-select-subcategories').append(`<option value="${subcategories[i].id}">${subcategories[i].name}</option>`);
-    });
-}
-
-function SetComboBoxCurrencies(currencies) {
-    $.each(currencies, function (i, item) {
-        $('#register-select-currencies').append(`<option value="${currencies[i].id}">${currencies[i].name}</option>`);
-    });
-}
-
 function SetComboBoxMeasurements(measurements) {
     var mass = measurements.filter(function (value) { return value.measurementTypeID == 1 });
     var height = measurements.filter(function (value) { return value.measurementTypeID == 2 });
 
     $.each(height, function (i, item) {
-        $('#register-select-height-measurements').append(`<option value="${height[i].id}">${height[i].name}</option>`);
-        $('#register-select-width-measurements').append(`<option value="${height[i].id}">${height[i].name}</option>`);
-        $('#register-select-length-measurements').append(`<option value="${height[i].id}">${height[i].name}</option>`);
+        $('#register-select-height-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
+        $('#register-select-width-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
+        $('#register-select-length-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
     });
 
     $.each(mass, function (i, item) {
-        $('#register-select-mass-measurements').append(`<option value="${mass[i].id}">${mass[i].name}</option>`);
+        $('#register-select-mass-measurements').append(`<option value="${mass[i].guidID}">${mass[i].name}</option>`);
     });
 }
 
@@ -222,18 +189,20 @@ function SetDetails(product) {
     $('#register-input-description').text(product.description);
     $('#register-input-price').val(product.price).trigger('mask.maskMoney');
     $('#register-input-discount').val(product.discount);
-    $('#register-input-weight').val(product.weight);
-    $('#register-input-height').val(product.height);
-    $('#register-input-width').val(product.width);
-    $('#register-input-length').val(product.length);
+
+    $('#register-input-weight').val(product.weight.value);
+    $('#register-input-height').val(product.height.value);
+    $('#register-input-width').val(product.width.value);
+    $('#register-input-length').val(product.length.value);
+
     $('#register-input-stock').val(product.stock);
 
-    $('#register-select-manufacturers').val(product.manufacturerID);
-    $('#register-select-subcategories').val(product.subcategoryID);
+    $('#register-select-manufacturers').val(product.manufacturer.guidID);
+    $('#register-select-subcategories').val(product.subcategory.guidID);
     $('#register-select-currencies').val(product.currencyID);
 
-    $('#register-select-height-measurements').val(product.heightMeasurementTypeID);
-    $('#register-select-width-measurements').val(product.widthMeasurementTypeID);
-    $('#register-select-length-measurements').val(product.lengthMeasurementTypeID);
-    $('#register-select-mass-measurements').val(product.weightMeasurementTypeID);
+    $('#register-select-height-measurements').val(product.height.guidID);
+    $('#register-select-width-measurements').val(product.width.guidID);
+    $('#register-select-length-measurements').val(product.length.guidID);
+    $('#register-select-mass-measurements').val(product.weight.guidID);
 }

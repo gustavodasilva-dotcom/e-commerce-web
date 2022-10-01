@@ -25,40 +25,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         public async Task<JsonResult> Get()
         {
             dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
-                var measurements = await _measurementApplication.GetAllMeasurementsAsync();
-                if (measurements.Any())
-                {
-                    var measurementsObj = new List<MeasurementsModel>();
-                    foreach (var measurement in measurements)
-                    {
-                        measurementsObj.Add(new MeasurementsModel
-                        {
-                            ID = measurement?.ID,
-                            GuidID = measurement.GuidID,
-                            Name = measurement.Name,
-                            MeasurementTypeID = measurement.MeasurementTypeID,
-                            Active = measurement.Active,
-                            Deleted = measurement.Deleted,
-                            Created_at = measurement.Created_at,
-                            Created_by = measurement.Created_by,
-                            Deleted_at = measurement.Deleted_at,
-                            Deleted_by = measurement.Deleted_by
-                        });
-                    }
-                    result.Code = 1;
-                    result.Measurements = measurementsObj.OrderBy(x => x.MeasurementTypeID);
-                }
-                else
-                {
-                    result.Code = 0;
-                    result.Message = "There's no measurements registered.";
-                }
+                result.Measurements = await _measurementApplication.GetAllMeasurementsAsync();
+                result.Code = 1;
             }
             catch (Exception e)
             {
-                result.Code = 0;
                 result.Message = e.Message;
             }
             return Json(result);

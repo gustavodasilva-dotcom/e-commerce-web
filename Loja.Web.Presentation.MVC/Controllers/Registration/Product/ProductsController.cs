@@ -36,47 +36,11 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         #region << METHODS >>
 
         #region Index
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            List<ProductsModel>? result = new();
-            try
-            {
-                var products = await _productApplication.GetAllAsync();
-                foreach (var product in products.Where(x => x.Active && !x.Deleted))
-                {
-                    result?.Add(new ProductsModel
-                    {
-                        ID = product?.ID,
-                        GuidID = product.GuidID,
-                        Name = product.Name,
-                        Description = product.Description,
-                        //Price = product.Price,
-                        //Discount = product.Discount,
-                        SubcategoryID = product.SubcategoryID,
-                        ManufacturerID = product.ManufacturerID,
-                        //Weight = product.Weight,
-                        //Height = product.Height,
-                        //Width = product.Width,
-                        //Length = product.Length,
-                        Stock = product.Stock,
-                        Active = product.Active,
-                        Deleted = product.Deleted,
-                        Created_at = product.Created_at,
-                        Created_by = product.Created_by,
-                        Deleted_at = product.Deleted_at,
-                        Deleted_by = product.Deleted_by
-                    });
-                }
-                return View(result);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.Message);
-            }
+            return View();
         }
-        #endregion
 
-        #region Process
         public IActionResult Process()
         {
             if (HttpContext.Session.GetString(SessionRole) == "Employee")
@@ -86,6 +50,13 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
             return Redirect("/Default/Select?statusCode=401");
         }
 
+        public IActionResult Details(Guid guidID)
+        {
+            return View();
+        }
+        #endregion
+
+        #region Process
         [HttpPost]
         public async Task<JsonResult> Process(ProductsModel model)
         {
@@ -139,50 +110,19 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
-        #region Details
-        public IActionResult Details(Guid guidID)
-        {
-            return View();
-        }
-
+        #region Get
         [HttpGet]
-        public async Task<JsonResult> GetDetails(Guid productID)
+        public async Task<JsonResult> Get(Guid guid)
         {
             dynamic result = new ExpandoObject();
+            result.Code = 0;
             try
             {
-                var products = await _productApplication.GetAllAsync();
-                var product = products.FirstOrDefault(x => x?.GuidID == productID);
-                if (product is null || !product.Active || product.Deleted)
-                {
-                    throw new Exception("There's no product with the id informed.");
-                }
+                result.Products = await _productApplication.GetByIDAsync(guid);
                 result.Code = 1;
-                result.Product = new
-                {
-                    product.ID,
-                    product.GuidID,
-                    product.Name,
-                    product.Description,
-                    product.Price,
-                    product.CurrencyID,
-                    product.Discount,
-                    product.SubcategoryID,
-                    product.ManufacturerID,
-                    product.Weight,
-                    product.WeightMeasurementTypeID,
-                    product.Height,
-                    product.HeightMeasurementTypeID,
-                    product.Width,
-                    product.WidthMeasurementTypeID,
-                    product.Length,
-                    product.LengthMeasurementTypeID,
-                    product.Stock
-                };
             }
             catch (Exception e)
             {
-                result.Code = 0;
                 result.Message = e.Message;
             }
             return Json(result);

@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@{
     ViewData["Title"] = "Details | Products";
 }
 
@@ -16,6 +19,11 @@
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     </head>
     <body>
+        @if (Accessor.HttpContext.Session.Keys.Any())
+        {
+            <button type="button" class="default-button" id="btn-edit" name="btn-edit">Edit</button>
+        }
+        
         <div class="product-details-wrapper-details">
 
             <div class="product-details-left">
