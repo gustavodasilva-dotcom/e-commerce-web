@@ -25,11 +25,11 @@ $('#btn-edit').click(function () {
 });
 
 $('.register-btn-submit').click(function () {
-    if (imagesIDs.length == 0) {
+    if (imagesIDs.length == 0 && $('input[type="file"]').get(0).files.length > 0) {
         imagesIDs = UploadImages();
 
         if (imagesIDs.length != 6) {
-            ShowMessageError("There has to be exactly 6 files to upload.");
+            ShowMessageDiv("There has to be exactly 6 files to upload.");
             return;
         }
     }
@@ -42,45 +42,43 @@ $('.register-btn-submit').click(function () {
 
     productModel.Description = $('#register-input-description').val();
 
-    productModel.Price = $('#register-input-price').val();
+    productModel.Price = parseFloat($('#register-input-price').val());
 
-    productModel.CurrencyID = parseInt($('#register-select-currencies').val());
+    productModel.CurrencyGuid = $('#register-select-currencies').val();
 
-    productModel.Discount = parseInt($('#register-input-discount').val());
+    productModel.Discount = $('#register-input-discount').val();
 
-    productModel.SubcategoryID = parseInt($('#register-select-subcategories').val());
+    productModel.SubcategoryGuid = $('#register-select-subcategories').val();
 
-    productModel.ManufacturerID = parseInt($('#register-select-manufacturers').val());
+    productModel.ManufacturerGuid = $('#register-select-manufacturers').val();
 
-    productModel.Weight = $('#register-input-weight').val();
-    productModel.WeightMeasurementTypeID = parseInt($('#register-select-mass-measurements').val());
+    productModel.Weight = parseFloat($('#register-input-weight').val());
+    productModel.WeightGuid = $('#register-select-mass-measurements').val();
 
-    productModel.Height = $('#register-input-height').val();
-    productModel.HeightMeasurementTypeID = parseInt($('#register-select-height-measurements').val());
+    productModel.Height = parseFloat($('#register-input-height').val());
+    productModel.HeightGuid = $('#register-select-height-measurements').val();
 
-    productModel.Width = $('#register-input-width').val();
-    productModel.WidthMeasurementTypeID = parseInt($('#register-select-width-measurements').val());
+    productModel.Width = parseFloat($('#register-input-width').val());
+    productModel.WidthGuid = $('#register-select-width-measurements').val();
 
-    productModel.Length = $('#register-input-length').val();
-    productModel.LengthMeasurementTypeID = parseInt($('#register-select-length-measurements').val());
+    productModel.Length = parseFloat($('#register-input-length').val());
+    productModel.LengthGuid = $('#register-select-length-measurements').val();
 
     productModel.Stock = parseInt($('#register-input-stock').val());
-
-    productModel.IsEdit = isEdit;
 
     $.ajax({
         async: false,
         type: "POST",
         dataType: "json",
-        url: "/Products/Process",
+        url: "/Products/Save",
         data: { model: productModel },
         success: function (result) {
             if (result.Code == 1) {
-                InsertProductsImages(result.Product.id, imagesIDs);
+                InsertProductsImages(result.Products.id, imagesIDs);
                 window.location.href = '/Products/Details?guidID=' + result.Product.guidID;
             }
             else {
-                ShowMessageError(result.Message);
+                ShowMessageDiv(result.Message);
             }
         }
     });

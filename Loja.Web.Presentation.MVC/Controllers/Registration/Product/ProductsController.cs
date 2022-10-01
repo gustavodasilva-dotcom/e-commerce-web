@@ -56,60 +56,6 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
-        #region Process
-        [HttpPost]
-        public async Task<JsonResult> Process(ProductsModel model)
-        {
-            dynamic result = new ExpandoObject();
-            result.Code = 0;
-            try
-            {
-                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
-                {
-                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
-                    model.Created_by_Guid = Guid.Parse(
-                        createdByGuid != null ? createdByGuid :
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
-                }
-                var product = await _productApplication.ProcessAsync(model);
-                if (product != null)
-                {
-                    result.Code = 1;
-                    result.Product = new
-                    {
-                        product.ID,
-                        product.GuidID,
-                        product.Name,
-                        product.Description,
-                        product.Price,
-                        product.CurrencyID,
-                        product.Discount,
-                        product.SubcategoryID,
-                        product.ManufacturerID,
-                        product.WeightMeasurementTypeID,
-                        product.Weight,
-                        product.HeightMeasurementTypeID,
-                        product.Height,
-                        product.WidthMeasurementTypeID,
-                        product.Width,
-                        product.LengthMeasurementTypeID,
-                        product.Length,
-                        product.Stock
-                    };
-                }
-                else
-                {
-                    result.Message = "An error occurred while executing the process. Please, contact the system administrator.";
-                }
-            }
-            catch (Exception e)
-            {
-                result.Message = e.Message;
-            }
-            return Json(result);
-        }
-        #endregion
-
         #region Get
         [HttpGet]
         public async Task<JsonResult> Get(Guid guid)
@@ -119,6 +65,32 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
             try
             {
                 result.Products = await _productApplication.GetByIDAsync(guid);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
+        #region Save
+        [HttpPost]
+        public async Task<JsonResult> Save(ProductsModel model)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
+                {
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    model.UserGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                }
+
+                result.Products = await _productApplication.SaveAsync(model);
                 result.Code = 1;
             }
             catch (Exception e)

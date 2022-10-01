@@ -2,70 +2,52 @@
 {
     public class ProductsModel
     {
-        public int? ID { get; set; } = null;
+        public int? ID { get; set; }
 
-        public Guid GuidID { get; set; } = Guid.NewGuid();
+        public Guid GuidID { get; set; }
 
         public string? Name { get; set; }
 
         public string? Description { get; set; }
 
-        #region Monetary
-        public string? Price { get; set; }
-        public decimal? PriceConverted { get; set; } = null;
+        public decimal? Price { get; set; }
 
         public int? CurrencyID { get; set; }
+        public Guid CurrencyGuid { get; set; }
 
         public int Discount { get; set; } = 0;
-        #endregion
-
+        
         public int? SubcategoryID { get; set; }
+        public Guid SubcategoryGuid { get; set; }
 
         public int? ManufacturerID { get; set; }
+        public Guid ManufacturerGuid { get; set; }
 
-        #region Measurements
+        public decimal? Weight { get; set; }
+        public int? WeightMeasurementTypeID { get; set; }
+        public Guid WeightGuid { get; set; }
 
-        #region Weight
-        public string? Weight { get; set; }
-        public decimal? WeightConverted { get; set; } = null;
-        public int? WeightMeasurementTypeID { get; set; } = null;
-        #endregion
+        public decimal? Height { get; set; }
+        public int? HeightMeasurementTypeID { get; set; }
+        public Guid HeightGuid { get; set; }
 
-        #region Height
-        public string? Height { get; set; }
-        public decimal? HeightConverted { get; set; } = null;
-        public int? HeightMeasurementTypeID { get; set; } = null;
-        #endregion
+        public decimal? Width { get; set; }
+        public int? WidthMeasurementTypeID { get; set; }
+        public Guid WidthGuid { get; set; }
 
-        #region Width
-        public string? Width { get; set; }
-        public decimal? WidthConverted { get; set; } = null;
-        public int? WidthMeasurementTypeID { get; set; } = null;
-        #endregion
-
-        #region Length
-        public string? Length { get; set; }
-        public decimal? LengthConverted { get; set; } = null;
-        public int? LengthMeasurementTypeID { get; set; } = null;
-        #endregion
-
-        #endregion
+        public decimal? Length { get; set; }
+        public int? LengthMeasurementTypeID { get; set; }
+        public Guid LengthGuid { get; set; }
 
         public int? Stock { get; set; }
 
-        public bool IsEdit { get; set; }
+        public DateTime? Created_at { get; set; }
 
-        public bool Active { get; set; } = true;
-
-        public bool Deleted { get; set; } = false;
-
-        public DateTime Created_at { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
-
+        public Guid UserGuid { get; set; }
         public int? Created_by { get; set; } = null;
-        public Guid? Created_by_Guid { get; set; } = null;
 
-        public DateTime? Deleted_at { get; set; } = null;
+        public DateTime? Deleted_at { get; set; }
 
-        public int? Deleted_by { get; set; } = null;
+        public int? Deleted_by { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Finance;
 using Loja.Web.Domain.Entities.Registration.Manufacturer;
 using Loja.Web.Domain.Entities.Registration.Product;
+using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Presentation.Models.Registration.Product.Model;
 using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
 using System.Globalization;
@@ -18,6 +19,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
         private readonly Manufacturers _manufacturers = new();
         private readonly Subcategories _subcategories = new();
         private readonly Measurements _measurements = new();
+        private readonly Users _users = new();
 
         private readonly ICurrencyApplication _currencyApplication;
         private readonly ISubcategoryApplication _subcategoryApplication;
@@ -155,51 +157,66 @@ namespace Loja.Web.Application.Applications.Registration.Product
         }
         #endregion
 
-        #region ProcessAsync
-        public async Task<Products> ProcessAsync(ProductsModel model)
+        #region SaveAsync
+        public async Task<Products> SaveAsync(ProductsModel model)
         {
-            ValidateModel(ref model);
-            await ValidateKeys(model);
-            long? productID = null;
-            Products? product = null;
+            Validate(model);
+
+            var users = await _users.GetAllAsync();
             var products = await _products.GetAllAsync();
-            if (products.Any(x => x.Name == model?.Name?.Trim() &&
-                x.ManufacturerID == model.ManufacturerID &&
-                x.SubcategoryID == model.SubcategoryID))
+            var currencies = await _currencies.GetAllAsync();
+            var measurements = await _measurements.GetAllAsync();
+            var subcategories = await _subcategories.GetAllAsync();
+            var manufacturers = await _manufacturers.GetAllAsync();
+
+            Products? product = products.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted) ??
+                throw new Exception("The product was not found. Please, contact the system administrator.");
+
+            if (model.GuidID != Guid.Empty && product != null)
             {
-                if (!model.IsEdit)
+                model.ID = product.ID;
+                model.GuidID = product.GuidID;
+                model.Created_at = product.Created_at;
+                model.Created_by = product.Created_by;
+                model.Deleted_at = product.Deleted_at;
+                model.Deleted_by = product.Deleted_by;
+            }
+            else
+                model.Created_by = users?.Where(x => x.GuidID == model.UserGuid && x.Active && !x.Deleted).FirstOrDefault()?.ID;
+
+            var productSubcategory = subcategories.FirstOrDefault(x => x.GuidID == model.SubcategoryGuid);
+            var productManufacturer = manufacturers.FirstOrDefault(x => x.GuidID == model.ManufacturerGuid);
+
+            model.CurrencyID = currencies.First(x => x.GuidID == model.CurrencyGuid && x.Active && !x.Deleted).ID;
+            model.SubcategoryID = subcategories.First(x => x.GuidID == model.SubcategoryGuid && x.Active && !x.Deleted).ID;
+            model.ManufacturerID = manufacturers.First(x => x.GuidID == model.ManufacturerGuid && x.Active && !x.Deleted).ID;
+            model.WeightMeasurementTypeID = measurements.First(x => x.GuidID == model.WeightGuid && x.Active && !x.Deleted).ID;
+            model.HeightMeasurementTypeID = measurements.First(x => x.GuidID == model.HeightGuid && x.Active && !x.Deleted).ID;
+            model.WidthMeasurementTypeID = measurements.First(x => x.GuidID == model.WidthGuid && x.Active && !x.Deleted).ID;
+            model.LengthMeasurementTypeID = measurements.First(x => x.GuidID == model.LengthGuid && x.Active && !x.Deleted).ID;
+
+            if (model.GuidID == Guid.Empty)
+            {
+                if (products.Any(x => x.Name == model?.Name?.Trim() &&
+                                      x.ManufacturerID == productManufacturer?.ID &&
+                                      x.SubcategoryID == productSubcategory?.ID))
                 {
                     throw new Exception("There's already a product registered with the same name, manufacturer and subcategory.");
                 }
-            }
-            if (model.IsEdit)
-            {
-                var productToBeUpdated = products?.FirstOrDefault(x => x?.GuidID == model?.GuidID);
-                model.ID = productToBeUpdated?.ID;
-                model.Created_at = model.Created_at;
-                model.Created_by = model.Created_by;
-                model.Deleted_at = model.Deleted_at;
-                model.Deleted_by = model.Deleted_by;
-                if (!await _products.UpdateAsync(model))
-                {
-                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                }
-                productID = model.ID;
+
+                model.ID = (int)await _products.InsertAsync(model);
             }
             else
             {
-                productID = await _products.InsertAsync(model);
+                if (!await _products.UpdateAsync(model, product))
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
             }
-            if (productID is null)
-            {
-                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-            }
+
             products = await _products.GetAllAsync();
-            product = products.FirstOrDefault(x => x.ID == productID);
-            if (product is null)
-            {
+
+            product = products.FirstOrDefault(x => x.ID == model.ID) ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-            }
+
             return product;
         }
         #endregion
@@ -209,218 +226,26 @@ namespace Loja.Web.Application.Applications.Registration.Product
         #region PRIVATE
 
         #region Validate
-        private static void ValidateModel(ref ProductsModel model)
+        private static void Validate(ProductsModel model)
         {
-            if (string.IsNullOrEmpty(model.Name))
-            {
-                throw new Exception("The product's name cannot be null or empty.");
-            }
-            if (string.IsNullOrEmpty(model.Description))
-            {
-                throw new Exception("The product's description cannot be null or empty.");
-            }
-            model.Description = ValidateDescription(model.@Description);
-            if (string.IsNullOrEmpty(model.Price))
-            {
-                throw new Exception("Please, inform the product's price.");
-            }
-            if (!decimal.TryParse(model.Price.Replace(",", ""), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal price))
-            {
-                throw new Exception("The product's price is not numeric.");
-            }
-            model.PriceConverted = price;
-            if (model.PriceConverted <= 0)
-            {
-                throw new Exception("The product's price cannot be null, equal or less then 0.");
-            }
-            if (model.Discount < 0 || model.Discount > 100)
-            {
-                throw new Exception("The product's price cannot be less then 0 or greater then 100.");
-            }
-            if (!string.IsNullOrEmpty(model.Weight))
-            {
-                if (!decimal.TryParse(model.Weight, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal weight))
-                {
-                    throw new Exception("The product's weight is not numeric.");
-                }
-                model.WeightConverted = weight;
-                if (model.WeightConverted < 0)
-                {
-                    throw new Exception("The product's weight cannot be less then 0.");
-                }
-            }
-            if (!string.IsNullOrEmpty(model.Height))
-            {
-                if (!decimal.TryParse(model.Height, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal height))
-                {
-                    throw new Exception("The product's height is not numeric.");
-                }
-                model.HeightConverted = height;
-                if (model.HeightConverted < 0)
-                {
-                    throw new Exception("The product's height cannot be less then 0.");
-                }
-            }
-            if (!string.IsNullOrEmpty(model.Width))
-            {
-                if (!decimal.TryParse(model.Width, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal width))
-                {
-                    throw new Exception("The product's width is not numeric.");
-                }
-                model.WidthConverted = width;
-                if (model.WidthConverted < 0)
-                {
-                    throw new Exception("The product's width cannot be less then 0.");
-                }
-            }
-            if (!string.IsNullOrEmpty(model.Length))
-            {
-                if (!decimal.TryParse(model.Length, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal length))
-                {
-                    throw new Exception("The product's length is not numeric.");
-                }
-                model.LengthConverted = length;
-                if (model.LengthConverted < 0)
-                {
-                    throw new Exception("The product's length cannot be less then 0.");
-                }
-            }
-            if (model.Stock < 0)
-            {
-                throw new Exception("The product's stock cannot be less then 0.");
-            }
-        }
+            if (string.IsNullOrEmpty(model.Name)) throw new Exception("The product's name cannot be null or empty.");
+            if (string.IsNullOrEmpty(model.Description)) throw new Exception("The product's description cannot be null or empty.");
+            if (model.Price == null || model.Price <= 0) throw new Exception("Please, inform the product's price.");
+            if (model.Discount < 0 || model.Discount >= 100) throw new Exception("The product's price cannot be less then 0 or greater then 100.");
+            if (model.Stock < 0) throw new Exception("The product's stock cannot be less then 0.");
 
-        private static string ValidateDescription(string description)
-        {
-            return description.Replace("\r\n", "<br>");
-        }
-        #endregion
+            if (model.Weight < 0) throw new Exception("The product's weight cannot be less than 0.");
+            if (model.Height < 0) throw new Exception("The product's height cannot be less than 0.");
+            if (model.Width < 0) throw new Exception("The product's width cannot be less than 0.");
+            if (model.Length < 0) throw new Exception("The product's length cannot be less than 0.");
 
-        #region ValidateKeys
-        private async Task ValidateKeys(ProductsModel model)
-        {
-            var currencies = await _currencies.GetAllAsync();
-            try
-            {
-                if (model.CurrencyID is null || model.CurrencyID == 0)
-                {
-                    throw new Exception("Please, select a currency.");
-                }
-                else
-                {
-                    model.CurrencyID = currencies?.FirstOrDefault(x => x?.ID == model.CurrencyID)?.ID;
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a currency.");
-            }
-            var manufacturers = await _manufacturers.GetAllAsync();
-            try
-            {
-                if (model.ManufacturerID is null || model.ManufacturerID == 0)
-                {
-                    throw new Exception("Please, select a manufacturer.");
-                }
-                else
-                {
-                    model.ManufacturerID = manufacturers?.FirstOrDefault(x => x?.ID == model.ManufacturerID)?.ID;
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a manufacturer.");
-            }
-            var subcategories = await _subcategories.GetAllAsync();
-            try
-            {
-                if (model.SubcategoryID is null || model.SubcategoryID == 0)
-                {
-                    throw new Exception("Please, select a subcategory.");
-                }
-                else
-                {
-                    model.SubcategoryID = subcategories?.FirstOrDefault(x => x?.ID == model.SubcategoryID)?.ID;
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Please, select a subcategory.");
-            }
-            var measurements = await _measurements.GetAllAsync();
-            if (model.WeightMeasurementTypeID != null)
-            {
-                try
-                {
-                    if (model.WeightMeasurementTypeID == 0)
-                    {
-                        throw new Exception("Please, select a weight.");
-                    }
-                    else
-                    {
-                        model.WeightMeasurementTypeID = measurements?.FirstOrDefault(x => x?.ID == model.WeightMeasurementTypeID)?.ID;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a weight.");
-                }
-            }
-            if (model.HeightMeasurementTypeID != null)
-            {
-                try
-                {
-                    if (model.HeightMeasurementTypeID is null || model.HeightMeasurementTypeID == 0)
-                    {
-                        throw new Exception("Please, select a height.");
-                    }
-                    else
-                    {
-                        model.HeightMeasurementTypeID = measurements?.FirstOrDefault(x => x?.ID == model.HeightMeasurementTypeID)?.ID;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a height.");
-                }
-            }
-            if (model.WidthMeasurementTypeID != null)
-            {
-                try
-                {
-                    if (model.WidthMeasurementTypeID is null || model.WidthMeasurementTypeID == 0)
-                    {
-                        throw new Exception("Please, select a width.");
-                    }
-                    else
-                    {
-                        model.WidthMeasurementTypeID = measurements?.FirstOrDefault(x => x?.ID == model.WidthMeasurementTypeID)?.ID;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a width.");
-                }
-            }
-            if (model.LengthMeasurementTypeID != null)
-            {
-                try
-                {
-                    if (model.LengthMeasurementTypeID is null || model.LengthMeasurementTypeID == 0)
-                    {
-                        throw new Exception("Please, select a length.");
-                    }
-                    else
-                    {
-                        model.LengthMeasurementTypeID = measurements?.FirstOrDefault(x => x?.ID == model.LengthMeasurementTypeID)?.ID;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Please, select a length.");
-                }
-            }
+            if (model.CurrencyGuid == Guid.Empty) throw new Exception("Please, inform the product's price currency.");
+            if (model.SubcategoryGuid == Guid.Empty) throw new Exception("Please, inform the product's subcategory.");
+            if (model.ManufacturerGuid == Guid.Empty) throw new Exception("Please, inform the product's manufacturer.");
+            if (model.WeightGuid == Guid.Empty) throw new Exception("Please, inform the product's weight measure.");
+            if (model.HeightGuid == Guid.Empty) throw new Exception("Please, inform the product's height measure.");
+            if (model.WidthGuid == Guid.Empty) throw new Exception("Please, inform the product's width measure.");
+            if (model.LengthGuid == Guid.Empty) throw new Exception("Please, inform the product's length measure.");
         }
         #endregion
 

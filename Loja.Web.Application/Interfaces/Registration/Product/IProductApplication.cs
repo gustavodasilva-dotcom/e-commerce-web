@@ -8,6 +8,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Product
     {
         Task<ProductViewModel> GetByIDAsync(Guid guid);
         Task<IEnumerable<Products?>> GetAllAsync();
-        Task<Products> ProcessAsync(ProductsModel model);
+        Task<Products> SaveAsync(ProductsModel model);
     }
 }

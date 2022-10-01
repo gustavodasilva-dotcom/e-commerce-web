@@ -12,13 +12,13 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         [Key]
 		public int ID { get; private set; }
 		public Guid GuidID { get; private set; }
-		public string Name { get; private set; }
-		public string Description { get; private set; }
+		public string? Name { get; private set; }
+		public string? Description { get; private set; }
 		public decimal? Price { get; private set; }
-        public int CurrencyID { get; private set; }
+        public int? CurrencyID { get; private set; }
         public int Discount { get; private set; }
-		public int SubcategoryID { get; private set; }
-		public int ManufacturerID { get; private set; }
+		public int? SubcategoryID { get; private set; }
+		public int? ManufacturerID { get; private set; }
         public int? WeightMeasurementTypeID { get; private set; }
 		public decimal? Weight { get; private set; }
         public int? HeightMeasurementTypeID { get; private set; }
@@ -66,28 +66,28 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                 id = await connect.InsertAsync(new Products
                 {
                     GuidID = model.GuidID,
-                    Name = model.Name.Trim(),
-                    Description = model.Description.Trim(),
-                    Price = model.PriceConverted.Value,
-                    CurrencyID = model.CurrencyID.Value,
+                    Name = model?.Name?.Trim(),
+                    Description = model?.Description?.Trim(),
+                    Price = model?.Price,
+                    CurrencyID = model?.CurrencyID,
                     Discount = model.Discount,
-                    SubcategoryID = model.SubcategoryID.Value,
-                    ManufacturerID = model.ManufacturerID.Value,
-                    WeightMeasurementTypeID = model.WeightMeasurementTypeID,
-                    Weight = model.WeightConverted,
-                    HeightMeasurementTypeID = model.HeightMeasurementTypeID,
-                    Height = model.HeightConverted,
-                    WidthMeasurementTypeID = model.WidthMeasurementTypeID,
-                    Width = model.WidthConverted,
-                    LengthMeasurementTypeID = model.LengthMeasurementTypeID,
-                    Length = model.LengthConverted,
-                    Stock = model.Stock,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at,
-                    Created_by = model.Created_by,
-                    Deleted_at = model.Deleted_at,
-                    Deleted_by = model.Deleted_by
+                    SubcategoryID = model?.SubcategoryID,
+                    ManufacturerID = model?.ManufacturerID,
+                    WeightMeasurementTypeID = model?.WeightMeasurementTypeID,
+                    Weight = model?.Weight,
+                    HeightMeasurementTypeID = model?.HeightMeasurementTypeID,
+                    Height = model?.Height,
+                    WidthMeasurementTypeID = model?.WidthMeasurementTypeID,
+                    Width = model?.Width,
+                    LengthMeasurementTypeID = model?.LengthMeasurementTypeID,
+                    Length = model?.Length,
+                    Stock = model?.Stock,
+                    Active = true,
+                    Deleted = false,
+                    Created_at = DateTime.Now,
+                    Created_by = model?.Created_by,
+                    Deleted_at = null,
+                    Deleted_by = null
                 });
             }
             catch (Exception e)
@@ -102,7 +102,7 @@ namespace Loja.Web.Domain.Entities.Registration.Product
         #endregion
 
         #region UpdateAsync
-        public async Task<bool> UpdateAsync(ProductsModel model)
+        public async Task<bool> UpdateAsync(ProductsModel model, Products product)
         {
             var updated = false;
             try
@@ -110,30 +110,30 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                 var connect = await ConnectAsync();
                 updated = await connect.UpdateAsync(new Products
                 {
-                    ID = model.ID.Value,
-                    GuidID = model.GuidID,
-                    Name = model.Name.Trim(),
-                    Description = model.Description.Trim(),
-                    Price = model.PriceConverted.Value,
-                    CurrencyID = model.CurrencyID.Value,
+                    ID = product.ID,
+                    GuidID = product.GuidID,
+                    Name = model?.Name?.Trim(),
+                    Description = model?.Description?.Trim(),
+                    Price = model?.Price,
+                    CurrencyID = model?.CurrencyID,
                     Discount = model.Discount,
-                    SubcategoryID = model.SubcategoryID.Value,
-                    ManufacturerID = model.ManufacturerID.Value,
+                    SubcategoryID = model.SubcategoryID,
+                    ManufacturerID = model.ManufacturerID,
                     WeightMeasurementTypeID = model.WeightMeasurementTypeID,
-                    Weight = model.WeightConverted,
+                    Weight = model.Weight,
                     HeightMeasurementTypeID = model.HeightMeasurementTypeID,
-                    Height = model.HeightConverted,
+                    Height = model.Height,
                     WidthMeasurementTypeID = model.WidthMeasurementTypeID,
-                    Width = model.WidthConverted,
+                    Width = model.Width,
                     LengthMeasurementTypeID = model.LengthMeasurementTypeID,
-                    Length = model.LengthConverted,
+                    Length = model.Length,
                     Stock = model.Stock,
-                    Active = model.Active,
-                    Deleted = model.Deleted,
-                    Created_at = model.Created_at,
-                    Created_by = model.Created_by,
-                    Deleted_at = model.Deleted_at,
-                    Deleted_by = model.Deleted_by
+                    Active = product.Active,
+                    Deleted = product.Deleted,
+                    Created_at = product.Created_at,
+                    Created_by = product.Created_by,
+                    Deleted_at = product.Deleted_at,
+                    Deleted_by = product.Deleted_by
                 });
             }
             catch (Exception e)
