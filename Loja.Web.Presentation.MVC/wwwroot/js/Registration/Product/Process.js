@@ -42,7 +42,7 @@ $('.register-btn-submit').click(function () {
 
     productModel.Description = $('#register-input-description').val();
 
-    productModel.Price = parseFloat($('#register-input-price').val());
+    productModel.Price = parseFloatToBackEnd($('#register-input-price').val());
 
     productModel.CurrencyGuid = $('#register-select-currencies').val();
 
@@ -52,16 +52,16 @@ $('.register-btn-submit').click(function () {
 
     productModel.ManufacturerGuid = $('#register-select-manufacturers').val();
 
-    productModel.Weight = parseFloat($('#register-input-weight').val());
+    productModel.Weight = parseFloatToBackEnd($('#register-input-weight').val());
     productModel.WeightGuid = $('#register-select-mass-measurements').val();
 
-    productModel.Height = parseFloat($('#register-input-height').val());
+    productModel.Height = parseFloatToBackEnd($('#register-input-height').val());
     productModel.HeightGuid = $('#register-select-height-measurements').val();
 
-    productModel.Width = parseFloat($('#register-input-width').val());
+    productModel.Width = parseFloatToBackEnd($('#register-input-width').val());
     productModel.WidthGuid = $('#register-select-width-measurements').val();
 
-    productModel.Length = parseFloat($('#register-input-length').val());
+    productModel.Length = parseFloatToBackEnd($('#register-input-length').val());
     productModel.LengthGuid = $('#register-select-length-measurements').val();
 
     productModel.Stock = parseInt($('#register-input-stock').val());
@@ -74,8 +74,10 @@ $('.register-btn-submit').click(function () {
         data: { model: productModel },
         success: function (result) {
             if (result.Code == 1) {
-                InsertProductsImages(result.Products.id, imagesIDs);
-                window.location.href = '/Products/Details?guidID=' + result.Product.guidID;
+                if (imagesIDs.length == 0 && $('input[type="file"]').get(0).files.length > 0)
+                    InsertProductsImages(result.Products.id, imagesIDs);
+
+                window.location.href = '/Products/Details?guidID=' + result.Products.guidID;
             }
             else {
                 ShowMessageDiv(result.Message);

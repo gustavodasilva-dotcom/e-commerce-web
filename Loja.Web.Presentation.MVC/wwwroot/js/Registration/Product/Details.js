@@ -5,8 +5,13 @@ $(document).ready(function () {
     let params = (new URL(window.location.href)).searchParams;
     productID = params.get('guidID');
 
-    GetProductDetails(productID);
+    var product = GetProductByID(productID);
 
+    if (product != null) {
+        SetDetails(product);
+        SetDescription(product.description);
+    }
+    
     GetBases64ByProductIDAsync(productID);
     ConvertBase64ToImage();
 });
@@ -26,25 +31,6 @@ $('#btn-edit').click(function () {
 
 function popImage(image) {
     bigImage.src = image;
-}
-
-function GetProductDetails(guidID) {
-    $.ajax({
-        async: false,
-        type: "GET",
-        dataType: "json",
-        url: "/Products/Get",
-        data: { productID: guidID },
-        success: function (result) {
-            if (result.Code == 1) {
-                SetDetails(result.Product);
-                SetDescription(result.Product.description);
-            }
-            else {
-                alert(result.Message);
-            }
-        }
-    });
 }
 
 function SetDetails(product) {

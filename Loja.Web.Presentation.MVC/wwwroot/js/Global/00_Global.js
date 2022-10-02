@@ -35,3 +35,9 @@ $('.btn-read-more').click(function () {
         $('#more').css('display', 'none');
     }
 });
+
+function parseFloatToBackEnd(value) {
+    value = parseFloat(value);
+    value = '' + value;
+    return value.replace('.', ',');
+}

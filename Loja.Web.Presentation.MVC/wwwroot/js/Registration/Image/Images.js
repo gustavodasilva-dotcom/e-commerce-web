@@ -25,13 +25,13 @@
                             ids[i] = result.Images[i].id;
                         }
                     } else {
-                        ShowMessageError(result.Message);
+                        ShowMessageDiv(result.Message);
                     }
                 },
             });
         }
     } else {
-        ShowMessageError('Not inserting images, because FormData is not supported by the browser.');
+        ShowMessageDiv('Not inserting images, because FormData is not supported by the browser.');
     }
 
     return ids;
@@ -51,7 +51,7 @@ function InsertProductsImages(productId, imagesId) {
         data: { defaultObjectImages: defaultObjectImagesModel },
         success: function (result) {
             if (result.Code != 1) {
-                ShowMessageError(result.Message);
+                ShowMessageDiv(result.Message);
                 return;
             }
         },
@@ -71,7 +71,7 @@ async function GetBases64ByProductIDAsync(productID) {
             if (result.Code == 1) {
                 window.Bases64 = result.Bases64;
             } else {
-                ShowMessageError(result.Message);
+                ShowMessageDiv(result.Message);
             }
         },
     });
