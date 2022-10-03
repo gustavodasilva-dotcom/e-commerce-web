@@ -65,7 +65,7 @@ namespace Loja.Web.Domain.Entities.Registration.Product
                 var connect = await ConnectAsync();
                 id = await connect.InsertAsync(new Products
                 {
-                    GuidID = model.GuidID,
+                    GuidID = Guid.NewGuid(),
                     Name = model?.Name?.Trim(),
                     Description = model?.Description?.Trim(),
                     Price = model?.Price,

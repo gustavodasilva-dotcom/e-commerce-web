@@ -169,11 +169,13 @@ namespace Loja.Web.Application.Applications.Registration.Product
             var subcategories = await _subcategories.GetAllAsync();
             var manufacturers = await _manufacturers.GetAllAsync();
 
-            Products? product = products.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted) ??
-                throw new Exception("The product was not found. Please, contact the system administrator.");
+            var product = products.FirstOrDefault(x => x.GuidID == model.GuidID && x.Active && !x.Deleted);
 
-            if (model.GuidID != Guid.Empty && product != null)
+            if (model.GuidID != Guid.Empty)
             {
+                if (product == null)
+                    throw new Exception("The product was not found. Please, contact the system administrator.");
+
                 model.ID = product.ID;
                 model.GuidID = product.GuidID;
                 model.Created_at = product.Created_at;
