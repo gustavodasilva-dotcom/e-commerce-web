@@ -7,7 +7,6 @@ using Loja.Web.Domain.Entities.Registration.Product;
 using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Presentation.Models.Registration.Product.Model;
 using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
-using System.Globalization;
 
 namespace Loja.Web.Application.Applications.Registration.Product
 {

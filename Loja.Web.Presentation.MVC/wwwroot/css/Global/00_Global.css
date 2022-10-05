@@ -16,6 +16,9 @@ body {
     padding: 0 10px;
 }
 
+/************************************
+ ********** Buttons style ***********
+ ************************************/
 .login-upper-button {
     margin: 1px auto;
     width: 7%;
@@ -30,9 +33,9 @@ body {
     outline: none;
 }
 
-.login-upper-button:hover {
-    background: #00AFB9;
-}
+    .login-upper-button:hover {
+        background: #00AFB9;
+    }
 
 .login-upper-button-white {
     margin: 1px auto;
@@ -50,9 +53,9 @@ body {
     margin-right: 15px
 }
 
-.login-upper-button-white:hover {
-    background: #D7F6F7;
-}
+    .login-upper-button-white:hover {
+        background: #D7F6F7;
+    }
 
 .default-button {
     width: 10%;
@@ -67,10 +70,17 @@ body {
     outline: none;
 }
 
-.default-button:hover {
-    background: #00AFB9;
-}
+    .default-button:hover {
+        background: #00AFB9;
+    }
+/************************************
+ ********** Buttons style ***********
+ ************************************/
 
+
+/************************************
+ ******** Register form style *******
+ ************************************/
 .register-wrapper {
     max-width: 500px;
     width: 100%;
@@ -79,47 +89,47 @@ body {
     box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.140);
 }
 
-.register-wrapper .register-title {
-    font-size: 40px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    text-align: center;
-}
+    .register-wrapper .register-title {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        text-align: center;
+    }
 
-.register-wrapper .register-title-2 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    text-align: center;
-}
+    .register-wrapper .register-title-2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        text-align: center;
+    }
 
-.register-wrapper .register-form {
-    width: 100%;
-}
+    .register-wrapper .register-form {
+        width: 100%;
+    }
 
-.register-wrapper .register-form .register-alert {
-    width: 100%;
-    margin: 20px auto;
-    align-items: center;
-    background-color: #F07167;
-    padding: 10px;
-}
+        .register-wrapper .register-form .register-alert {
+            width: 100%;
+            margin: 20px auto;
+            align-items: center;
+            background-color: #F07167;
+            padding: 10px;
+        }
 
-.register-wrapper .register-form .register-alert p {
-    color: #ffffff;
-    text-align: center;
-}
+            .register-wrapper .register-form .register-alert p {
+                color: #ffffff;
+                text-align: center;
+            }
 
-.register-wrapper .register-form .register-success {
-    width: 100%;
-    margin: 20px auto;
-    align-items: center;
-    background-color: #00BA84;
-    padding: 10px;
-}
+        .register-wrapper .register-form .register-success {
+            width: 100%;
+            margin: 20px auto;
+            align-items: center;
+            background-color: #00BA84;
+            padding: 10px;
+        }
 
 /* Hide number input's spin box  */
 input::-webkit-outer-spin-button,
@@ -144,35 +154,35 @@ input[type=number] {
     align-items: center;
 }
 
-.register-wrapper .register-form .register-input-field .register-input-radio {
-    margin: 10px;
-}
+    .register-wrapper .register-form .register-input-field .register-input-radio {
+        margin: 10px;
+    }
 
-.register-wrapper .register-form .register-input-field .register-input,
-.register-wrapper .register-form .register-input-field textarea {
-    width: 100%;
-    outline: none;
-    border: 1px solid #d5dbd9;
-    font-size: 17px;
-    padding: 8px 10px;
-    border-radius: 5px;
-}
+    .register-wrapper .register-form .register-input-field .register-input,
+    .register-wrapper .register-form .register-input-field textarea {
+        width: 100%;
+        outline: none;
+        border: 1px solid #d5dbd9;
+        font-size: 17px;
+        padding: 8px 10px;
+        border-radius: 5px;
+    }
 
-.register-wrapper .register-form .register-input-field textarea {
-    resize: none;
-    height: 125px;
-}
+    .register-wrapper .register-form .register-input-field textarea {
+        resize: none;
+        height: 125px;
+    }
 
-.register-wrapper .register-form .register-input-field .register-input:focus,
-.register-wrapper .register-form .register-select-field select:focus {
-    border: 2px solid #00afb9;
-}
+    .register-wrapper .register-form .register-input-field .register-input:focus,
+    .register-wrapper .register-form .register-select-field select:focus {
+        border: 2px solid #00afb9;
+    }
 
-.register-wrapper .register-form .register-input-field .register-input:read-only,
-.register-wrapper .register-form .register-input-field textarea:disabled,
-.register-wrapper .register-form .register-select-field select:disabled {
-    background-color: #D7F6F7;
-}
+    .register-wrapper .register-form .register-input-field .register-input:read-only,
+    .register-wrapper .register-form .register-input-field textarea:disabled,
+    .register-wrapper .register-form .register-select-field select:disabled {
+        background-color: #D7F6F7;
+    }
 
 .register-wrapper .register-form .register-select-field {
     position: relative;
@@ -181,27 +191,27 @@ input[type=number] {
     margin-bottom: 20px;
 }
 
-.register-wrapper .register-form .register-select-field select {
-    -webkit-appearance: none;
-    appearance: none;
-    border: 1px solid #d5dbd9;
-    font-size: 17px;
-    width: 100%;
-    height: 100%;
-    padding: 8px 10px;
-    border-radius: 5px;
-    outline: none;
-}
+    .register-wrapper .register-form .register-select-field select {
+        -webkit-appearance: none;
+        appearance: none;
+        border: 1px solid #d5dbd9;
+        font-size: 17px;
+        width: 100%;
+        height: 100%;
+        padding: 8px 10px;
+        border-radius: 5px;
+        outline: none;
+    }
 
-.register-wrapper .register-form .register-select-field:before {
-    content: "";
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    border: 8px solid;
-    border-color: #d5dbd9 transparent transparent transparent;
-    pointer-events: none;
-}
+    .register-wrapper .register-form .register-select-field:before {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right: 10px;
+        border: 8px solid;
+        border-color: #d5dbd9 transparent transparent transparent;
+        pointer-events: none;
+    }
 
 .register-wrapper .register-form .register-input-field .register-btn-submit {
     width: 100%;
@@ -215,24 +225,24 @@ input[type=number] {
     outline: none;
 }
 
-.register-wrapper .register-form .register-input-field .register-btn-submit:hover {
-    background: #00AFB9;
-}
+    .register-wrapper .register-form .register-input-field .register-btn-submit:hover {
+        background: #00AFB9;
+    }
 
 .register-wrapper .register-default-div {
     margin: 30px auto;
     text-align: center;
 }
 
-.register-wrapper .register-default-div a {
-    color: black;
-    font-size: 15px;
-    text-decoration: inherit;
-}
+    .register-wrapper .register-default-div a {
+        color: black;
+        font-size: 15px;
+        text-decoration: inherit;
+    }
 
-.register-wrapper .register-default-div a:hover {
-    color: #00afb9;
-}
+        .register-wrapper .register-default-div a:hover {
+            color: #00afb9;
+        }
 
 .register-wrapper .register-table,
 .register-wrapper .register-table .register-table-tr {
@@ -244,30 +254,157 @@ input[type=number] {
     font-size: 17px;
 }
 
-.register-wrapper .register-table .register-table-th {
-    height: 75px;
-    text-align: center;
+    .register-wrapper .register-table .register-table-th {
+        height: 75px;
+        text-align: center;
+    }
+
+    .register-wrapper .register-table .register-table-td {
+        height: 50px;
+        text-align: center;
+    }
+
+        .register-wrapper .register-table .register-table-td a {
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .register-wrapper .register-table .register-table-td:hover a {
+            color: #ffffff;
+        }
+
+        .register-wrapper .register-table .register-table-td:hover {
+            background-color: #00AFB9;
+            color: #ffffff;
+            cursor: pointer;
+        }
+/************************************
+ ******** Register form style *******
+ ************************************/
+
+
+/************************************
+ *********** Side bar style *********
+ ************************************/
+.sidebar {
+    position: fixed;
+    width: 240px;
+    left: -240px;
+    height: 100%;
+    background: #0081a7;
+    transition: all .5s ease;
 }
 
-.register-wrapper .register-table .register-table-td {
-    height: 50px;
-    text-align: center;
+    .sidebar header {
+        font-size: 20px;
+        color: #ffffff;
+        line-height: 70px;
+        text-align: center;
+        background: #097090;
+        user-select: none;
+    }
+
+    .sidebar a {
+        display: block;
+        height: 65px;
+        width: 100%;
+        color: #ffffff;
+        line-height: 65px;
+        padding-left: 30px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #000000;
+        border-top: 1px solid rgba(255, 255, 255, .1);
+        border-left: 5px solid transparent;
+        transition: all 5s ease;
+    }
+
+        .sidebar a i {
+            font-size: 23px;
+            margin-right: 16px;
+            color: #ffffff;
+        }
+
+        .sidebar a span {
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+#check {
+    display: none;
 }
 
-.register-wrapper .register-table .register-table-td a {
-    text-decoration: none;
-    color: #000000;
-}
-
-.register-wrapper .register-table .register-table-td:hover a {
-    color: #ffffff;
-}
-
-.register-wrapper .register-table .register-table-td:hover {
-    background-color: #00AFB9;
-    color: #ffffff;
+label #btn, label #cancel {
+    position: absolute;
     cursor: pointer;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #262626;
+    margin: 15px 30px;
+    font-size: 20px;
+    background: #262626;
+    height: 45px;
+    width: 45px;
+    text-align: center;
+    line-height: 45px;
+    transition: all .5s ease;
 }
+
+label #cancel {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#check:checked ~ .sidebar {
+    left: 0;
+}
+
+#check:checked ~ label #btn {
+    margin-left: 245px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+@media(max-width: 860px) {
+    .sidebar {
+        height: auto;
+        width: 70px;
+        left: 0;
+        margin: 100px 0;
+    }
+
+    header, #btn, #cancel {
+        display: none;
+    }
+
+    span {
+        position: absolute;
+        margin-left: 23px;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .sidebar a {
+        height: 60px;
+    }
+
+        .sidebar a i {
+            margin-left: -10px;
+        }
+
+        .sidebar a:hover span {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    a:hover {
+        width: 200px;
+        background: inherit;
+    }
+}
+/************************************
+ *********** Side bar style *********
+ ************************************/
 
 .user-logged {
     float: right;
@@ -278,9 +415,9 @@ input[type=number] {
     cursor: pointer;
 }
 
-.user-logged:hover {
-    color: #0081a7;
-}
+    .user-logged:hover {
+        color: #0081a7;
+    }
 
 .dropdown-content {
     float: right;
@@ -292,15 +429,21 @@ input[type=number] {
     z-index: 1;
 }
 
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+.user-content:hover .dropdown-content {
+    display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
-
-.user-content:hover .dropdown-content {display: block;}
-
-.user-content:hover .user-logged {background-color: #3e8e41;}
+.user-content:hover .user-logged {
+    background-color: #3e8e41;
+}
