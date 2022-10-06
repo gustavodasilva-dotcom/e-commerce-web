@@ -28,6 +28,13 @@ function SetComboOptions(model, elementID) {
     });
 }
 
+function parseFloatToBackEnd(value) {
+
+    value = parseFloat(value);
+    value = '' + value;
+    return value.replace('.', ',');
+}
+
 $('.btn-read-more').click(function () {
 
     if ($('.btn-read-more').text() === 'Read more') {
@@ -43,9 +50,15 @@ $('.btn-read-more').click(function () {
     }
 });
 
-function parseFloatToBackEnd(value) {
+$('.profile').click(function () {
 
-    value = parseFloat(value);
-    value = '' + value;
-    return value.replace('.', ',');
-}
+    if ($('.menu').css('visibility') == 'hidden') {
+
+        $('.menu').css('visibility', 'visible');
+        $('.menu').css('opacity', '1');
+    } else {
+
+        $('.menu').css('visibility', 'hidden');
+        $('.menu').css('opacity', '0');
+    }
+});

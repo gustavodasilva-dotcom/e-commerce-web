@@ -315,6 +315,7 @@ input[type=number] {
         border-bottom: 1px solid #000000;
         border-top: 1px solid rgba(255, 255, 255, .1);
         border-left: 5px solid transparent;
+        text-decoration: none;
         transition: all 5s ease;
     }
 
@@ -325,6 +326,7 @@ input[type=number] {
         }
 
         .sidebar a span {
+            font-size: 15px;
             letter-spacing: 1px;
             text-transform: uppercase;
             color: #ffffff;
@@ -406,14 +408,105 @@ label #cancel {
  *********** Side bar style *********
  ************************************/
 
-.user-logged {
-    float: right;
-    position: relative;
-    text-align: right;
-    margin-right: 20px;
-    font-weight: bold;
-    cursor: pointer;
+/************************************
+ *********** Dropdown menu **********
+ ************************************/
+.action {
+    position: fixed;
+    top: 20px;
+    right: 30px;
 }
+
+.profile img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.action .profile {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action .menu::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: 28px;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    transform: rotate(45deg);
+}
+
+.action .menu {
+    position: absolute;
+    top: 80px;
+    right: -10px;
+    padding: 10px 20px;
+    width: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: 0.5s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.menu h1 {
+    width: 100%;
+    font-size: 25px;
+    font-weight: 600;
+    text-align: center;
+    padding: 20px 0;
+    color: #555;
+    line-height: 1.2em;
+}
+
+.menu span {
+    font-size: 15px;
+    color: #cecece;
+    font-weight: 400;
+}
+
+.menu .menu-item {
+    text-decoration: none;
+    color: #000000;
+}
+
+.menu ul li {
+    list-style: none;
+    padding: 10px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    max-width: 20px;
+    margin-right: 10px;
+    opacity: 0.5;
+    transition: 0.5s;
+}
+
+    .menu ul li:hover {
+        opacity: 1;
+    }
+/************************************
+ *********** Dropdown menu **********
+ ************************************/
+    .user-logged {
+        float: right;
+        position: relative;
+        text-align: right;
+        margin-right: 20px;
+        font-weight: bold;
+        cursor: pointer;
+    }
 
     .user-logged:hover {
         color: #0081a7;

@@ -23,25 +23,52 @@
 <div class="sidebar">
     <header>Menu</header>
     <a href="/Home/Index">
-        <i class="fas fa-stream"></i>
+        <i class="fas fa-qrcode"></i>
         <span>Home</span>
     </a>
+    <a href="/Categories/Index">
+        <i class="fas fa-sliders-h"></i>
+        <span>Categories</span>
+    </a>
+    <a href="/Subcategories/Index">
+        <i class="fas fa-sliders-h"></i>
+        <span>Subcategories</span>
+    </a>
     <a href="/Manufacturers/Index">
-        <i class="fas fa-stream"></i>
+        <i class="fas fa-sliders-h"></i>
         <span>Manufacturers</span>
     </a>
-    <a href="#">
-        <i class="fas fa-stream"></i>
-        <span>Products</span>
-    </a>
     <a href="/Products/Index">
-        <span>See all</span>
-    </a>
-    <a href="/Products/Process?edit=0">
-        <span>Register</span>
+        <i class="fas fa-sliders-h"></i>
+        <span>Products</span>
     </a>
 </div>
 <!-------------------- Side bar -------------------->
+
+<!----------------- Dropdown Menu ------------------>
+<div class="action">
+    <div class="profile">
+        <img src="~/media/avatar.png" />
+    </div>
+    <div class="menu">
+        <h1>
+            User name
+            <span>Admin</span>
+        </h1>
+        <ul>
+            <li>
+                <a class="menu-item" href="/ShoppingCarts/Details">Shopping cart</a>
+            </li>
+            <li>
+                <a class="menu-item" href="/Accounts/Login">Login</a>
+            </li>
+            <li>
+                <a class="menu-item" href="#">Logout</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!----------------- Dropdown Menu ------------------>
 
 <body>
     <div class="container">
