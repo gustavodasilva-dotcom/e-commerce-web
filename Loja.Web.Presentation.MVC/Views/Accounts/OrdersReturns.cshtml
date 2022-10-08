@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Orders & Returns";
+}
+
+@section Scripts {
+
+    <script src="~/js/Registration/Account/OrdersReturns.js"></script>
+
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+</head>
+<body>
+
+    <div class="register-wrapper" style="max-width: 900px;">
+
+        <!--- Modal --->
+        <div id="div_Message" class="modal">
+
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p></p>
+            </div>
+
+        </div>
+        <!--- Modal --->
+
+        <div>
+            <h1 class="register-title">@ViewData["Title"]</h1>
+        </div>
+
+        <div class="tabs" style="max-width: 700px;">
+            <input type="radio" id="tabCompletedOrders" name="tabs" checked />
+            <label for="tabCompletedOrders">Completted</label>
+
+            <div class="tab">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+            <input type="radio" id="tabCancelledReturned" name="tabs" />
+            <label for="tabCancelledReturned">Cancelled & Returned</label>
+
+            <div class="tab">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>

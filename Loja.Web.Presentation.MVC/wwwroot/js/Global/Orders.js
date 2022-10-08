@@ -11,10 +11,32 @@
                 window.Order = result.Order;
             } else {
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                alert(result.Message);
+                ShowMessageDiv(result.Message);
             }
         }
     });
+}
+
+function GetByUser() {
+
+    let orders = {};
+
+    $.ajax({
+        async: false,
+        type: "GET",
+        dataType: "json",
+        url: "/Orders/GetByUser",
+        success: function (result) {
+            if (result.Code == 1) {
+                orders = result.Order;
+            } else {
+                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
+                ShowMessageDiv(result.Message);
+            }
+        }
+    });
+
+    return orders;
 }
 
 function ProcessOrder(orderID, orderTotal, finishOrder) {
@@ -34,7 +56,7 @@ function ProcessOrder(orderID, orderTotal, finishOrder) {
                 window.TrackingNumber = result.TrackingNumber;
             } else {
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                alert(result.Message);
+                ShowMessageDiv(result.Message);
             }
         }
     });

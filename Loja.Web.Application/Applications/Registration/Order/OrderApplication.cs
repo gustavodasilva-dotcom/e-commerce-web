@@ -1,4 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Order;
+using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Order;
 using Loja.Web.Domain.Entities.Registration.Payment;
@@ -26,6 +27,15 @@ namespace Loja.Web.Application.Applications.Registration.Order
         private readonly CardsInfos _cardsInfos = new();
         private readonly Products _products = new();
         private readonly Addresses _addresses = new();
+
+        private readonly IProductApplication _productApplication;
+        #endregion
+
+        #region << CONSTRUCTOR >>
+        public OrderApplication(IProductApplication productApplication)
+        {
+            _productApplication = productApplication;
+        }
         #endregion
 
         #region << METHODS >>
@@ -48,20 +58,33 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 throw new Exception("The payment method was not found. Please, contact the system administrator.");
 
             CardsInfos cardInfo = new();
+            CardInfoModel? cardInfoModel = null;
 
             if (paymentMethod.IsCard)
             {
                 var ordersCardsInfos = await _ordersCardsInfos.GetAllAsync() ??
                     throw new Exception("No orders cards infos was found. Please, contact the system administrator.");
 
-                var orderCardInfo = ordersCardsInfos.FirstOrDefault(x => x.OrderID == order.ID && x.Active && !x.Deleted) ??
-                    throw new Exception("The order's card info was not found. Please, contact the system administrator.");
+                var orderCardInfo = ordersCardsInfos.FirstOrDefault(x => x.OrderID == order.ID && x.Active && !x.Deleted);
 
-                var cardsInfos = await _cardsInfos.GetAllAsync() ??
-                    throw new Exception("No cards infos was found. Please, contact the system administrator.");
+                if (orderCardInfo != null)
+                {
+                    var cardsInfos = await _cardsInfos.GetAllAsync() ??
+                        throw new Exception("No cards infos was found. Please, contact the system administrator.");
 
-                cardInfo = cardsInfos.FirstOrDefault(x => x.ID == orderCardInfo.CardInfoID && x.Active && !x.Deleted) ??
-                    throw new Exception("The card info was not found. Please, contact the system administrator.");
+                    cardInfo = cardsInfos.FirstOrDefault(x => x.ID == orderCardInfo.CardInfoID && x.Active && !x.Deleted) ??
+                        throw new Exception("The card info was not found. Please, contact the system administrator.");
+
+                    cardInfoModel = new CardInfoModel
+                    {
+                        CardNumber = cardInfo?.CardNumber,
+                        NameAtTheCard = cardInfo?.NameAtTheCard,
+                        Month = cardInfo?.ExpMonth,
+                        Year = cardInfo?.ExpYear,
+                        CVV = cardInfo?.CVV,
+                        Quantity = cardInfo?.Quantity
+                    };
+                }
             }
 
             var ordersStatus = await _ordersStatus.GetAllAsync() ??
@@ -86,23 +109,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 var product = products.FirstOrDefault(x => x.ID == prod.ProductID && x.Active && !x.Deleted) ??
                     throw new Exception("No product was found. Please, contact the system administrator.");
 
-                productsModel.Add(new ProductViewModel
-                {
-                    GuidID = product.GuidID,
-                    Name = product.Name,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Discount = product.Discount,
-                    //Weight = product.Weight,
-                    //Height = product.Height,
-                    //Width = product.Width,
-                    //Length = product.Length,
-                    Quantity = prod.Quantity,
-                    Stock = product.Stock,
-                    Active = product.Active,
-                    Deleted = product.Deleted,
-                    Created_at = product.Created_at
-                });
+                productsModel.Add(await _productApplication.GetByIDAsync(product.GuidID));
             }
 
             return new OrderViewModel
@@ -115,15 +122,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                     Name = paymentMethod.Name,
                     IsCard = paymentMethod.IsCard
                 },
-                CardInfo = new CardInfoModel
-                {
-                    CardNumber = cardInfo?.CardNumber,
-                    NameAtTheCard = cardInfo?.NameAtTheCard,
-                    Month = cardInfo?.ExpMonth,
-                    Year = cardInfo?.ExpYear,
-                    CVV = cardInfo?.CVV,
-                    Quantity = cardInfo?.Quantity
-                },
+                CardInfo = cardInfoModel ?? null,
                 OrderStatus = new OrderStatusViewModel
                 {
                     GuidID = orderStatus.GuidID,
@@ -134,6 +133,28 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 Deleted = order.Deleted,
                 Created_at = order.Created_at
             };
+        }
+        #endregion
+
+        #region GetByUserAsync
+        public async Task<List<OrderViewModel>> GetByUserAsync(Guid userGuid)
+        {
+            var orders = await _orders.GetAllAsync() ??
+                throw new Exception("No order was found. Please, contact the system administrator.");
+
+            var users = await _users.GetAllAsync() ??
+                throw new Exception("No users was found. Please, contact the system administrator.");
+
+            var user = users.FirstOrDefault(x => x.GuidID == userGuid && x.Active && !x.Deleted) ??
+                throw new Exception("The user was not found. Please, contact the system administrator.");
+
+            var userOrders = orders.Where(x => x.UserID == user.ID);
+
+            List<OrderViewModel> ordersModel = new();
+
+            foreach (var order in userOrders) ordersModel.Add(await GetOrderDetailsAsync(order.GuidID));
+
+            return ordersModel;
         }
         #endregion
 

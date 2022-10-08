@@ -16,57 +16,104 @@
 
 <!-------------------- Side bar -------------------->
 <input type="checkbox" id="check" />
+
 <label for="check">
+
     <i class="fas fa-bars" id="btn"></i>
     <i class="fas fa-times" id="cancel"></i>
+
 </label>
+
 <div class="sidebar">
+
     <header>Menu</header>
+
     <a href="/Home/Index">
         <i class="fas fa-qrcode"></i>
         <span>Home</span>
     </a>
+    
     <a href="/Categories/Index">
         <i class="fas fa-sliders-h"></i>
         <span>Categories</span>
     </a>
-    <a href="/Subcategories/Index">
-        <i class="fas fa-sliders-h"></i>
-        <span>Subcategories</span>
-    </a>
-    <a href="/Manufacturers/Index">
-        <i class="fas fa-sliders-h"></i>
-        <span>Manufacturers</span>
-    </a>
+
+    @if (Accessor.HttpContext.Session.Keys.Any())
+    {
+        <a href="/Subcategories/Index">
+            <i class="fas fa-sliders-h"></i>
+            <span>Subcategories</span>
+        </a>
+
+        <a href="/Manufacturers/Index">
+            <i class="fas fa-sliders-h"></i>
+            <span>Manufacturers</span>
+        </a>
+    }
+    
     <a href="/Products/Index">
         <i class="fas fa-sliders-h"></i>
         <span>Products</span>
     </a>
+
 </div>
 <!-------------------- Side bar -------------------->
 
 <!----------------- Dropdown Menu ------------------>
 <div class="action">
+
     <div class="profile">
         <img src="~/media/avatar.png" />
     </div>
+
     <div class="menu">
+
         <h1>
-            User name
-            <span>Admin</span>
+            @if (Accessor.HttpContext.Session.Keys.Any())
+            {
+                @Accessor?.HttpContext?.Session.GetString("Name")
+            }
+            else
+            {
+                <a>Please, login ou create an account.</a>
+            }
+
+            </br>
+
+            @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
+            {
+                <span>@Accessor?.HttpContext?.Session.GetString("Role")</span>
+            }
         </h1>
         <ul>
-            <li>
-                <a class="menu-item" href="/ShoppingCarts/Details">Shopping cart</a>
-            </li>
-            <li>
-                <a class="menu-item" href="/Accounts/Login">Login</a>
-            </li>
-            <li>
-                <a class="menu-item" href="#">Logout</a>
-            </li>
+            @if (!Accessor.HttpContext.Session.Keys.Any())
+            {
+                <li>
+                    <a class="menu-item" href="/Accounts/Register">Sign up</a>
+                </li>
+
+                <li>
+                    <a class="menu-item" href="/Accounts/Login">Login</a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a class="menu-item" href="/Accounts/OrdersReturns">Orders & Returns</a>
+                </li>
+                
+                <li>
+                    <a class="menu-item" href="/ShoppingCarts/Details">Shopping cart</a>
+                </li>
+
+                <li>
+                    <a class="menu-item" href="#" onclick="Logout()">Logout</a>
+                </li>
+            }
         </ul>
+
     </div>
+
 </div>
 <!----------------- Dropdown Menu ------------------>
 

@@ -433,6 +433,7 @@ label #cancel {
     border-radius: 50%;
     overflow: hidden;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .action .menu::before {
@@ -499,14 +500,57 @@ label #cancel {
 /************************************
  *********** Dropdown menu **********
  ************************************/
-    .user-logged {
-        float: right;
-        position: relative;
-        text-align: right;
-        margin-right: 20px;
+
+/************************************
+ ************ Tabs style ************
+ ************************************/
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 50px auto;
+    padding: 25px;
+}
+
+    .tabs input[type="radio"] {
+        display: none;
+    }
+
+    .tabs label {
+        padding: 25px;
+        background: #00AFB9;
+        color: #ffffff;
         font-weight: bold;
         cursor: pointer;
     }
+
+    .tabs .tab {
+        width: 100%;
+        padding: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+        order: 1;
+        display: none;
+    }
+
+    .tabs input[type="radio"]:checked + label + .tab {
+        display: block;
+    }
+
+    .tabs input[type="radio"]:checked + label {
+        background: #0081A7;
+    }
+/************************************
+ ************ Tabs style ************
+ ************************************/
+
+.user-logged {
+    float: right;
+    position: relative;
+    text-align: right;
+    margin-right: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
     .user-logged:hover {
         color: #0081a7;

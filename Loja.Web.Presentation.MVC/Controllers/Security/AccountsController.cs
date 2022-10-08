@@ -30,6 +30,15 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
         {
             return View();
         }
+
+        public IActionResult OrdersReturns()
+        {
+            if (HttpContext.Session.GetString(SessionRole) == "Employee")
+            {
+                return View();
+            }
+            return Redirect("/Default/Select?statusCode=401");
+        }
         #endregion
 
         #region GetUserRoles

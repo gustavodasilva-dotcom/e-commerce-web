@@ -56,6 +56,7 @@ $('.profile').click(function () {
 
         $('.menu').css('visibility', 'visible');
         $('.menu').css('opacity', '1');
+        $('.menu').css('background', '#ffffff');
     } else {
 
         $('.menu').css('visibility', 'hidden');

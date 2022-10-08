@@ -72,6 +72,34 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
         }
         #endregion
 
+        #region GetByUser
+        [HttpGet]
+        public async Task<JsonResult> GetByUser()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
+                {
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    var userGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+
+                    result.Order = await _orderApplication.GetByUserAsync(userGuid);
+                    result.Code = 1;
+                }
+                else
+                    result.RedirectToLogin = true;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #region StepOne -- Payment
         [HttpPost]
         public async Task<JsonResult> StepOne(StepOneModel model)
