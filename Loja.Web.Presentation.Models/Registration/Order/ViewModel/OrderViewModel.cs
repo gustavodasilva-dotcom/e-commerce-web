@@ -7,6 +7,8 @@ namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
     {
         public Guid GuidID { get; set; }
 
+        public string? Tracking { get; set; }
+
         public decimal? Total { get; set; }
 
         public PaymentMethodViewModel? PaymentMethod { get; set; }

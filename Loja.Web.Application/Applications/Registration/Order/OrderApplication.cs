@@ -115,6 +115,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
             return new OrderViewModel
             {
                 GuidID = order.GuidID,
+                Tracking = order.Tracking,
                 Total = order.Total,
                 PaymentMethod = new PaymentMethodViewModel
                 {
@@ -148,7 +149,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
             var user = users.FirstOrDefault(x => x.GuidID == userGuid && x.Active && !x.Deleted) ??
                 throw new Exception("The user was not found. Please, contact the system administrator.");
 
-            var userOrders = orders.Where(x => x.UserID == user.ID);
+            var userOrders = orders.Where(x => x.UserID == user.ID).OrderBy(x => x.OrderStatusID);
 
             List<OrderViewModel> ordersModel = new();
 

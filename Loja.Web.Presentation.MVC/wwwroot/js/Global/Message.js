@@ -6,4 +6,5 @@
 
 $('.close').click(function () {
     $('#div_Message').hide();
+    $(document.body).css('overflow', 'auto');
 });
