@@ -1,4 +1,6 @@
-﻿let orders = [];
+﻿let orderGuid;
+
+let orders = [];
 let cancelleds = [];
 let completeds = [];
 let pendings = [];
@@ -41,6 +43,8 @@ function SetHtmlElements() {
 
     let htmlCode = '';
 
+
+    /****************** Completed orders tab ******************/
     for (let i = 0; i < completeds.length; i++) {
 
         htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${completeds[i].guidID}">`;
@@ -56,6 +60,47 @@ function SetHtmlElements() {
     }
 
     $('.tabCompletedOrders').html(htmlCode);
+    /****************** Completed orders tab ******************/
+
+
+    htmlCode = '';
+
+    /******************* Pending orders tab *******************/
+    for (let i = 0; i < pendings.length; i++) {
+        htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${pendings[i].guidID}">`;
+
+        if (!pendings[i].tracking)
+            htmlCode += '<p><strong>Order not finished</strong></p>';
+        else
+            htmlCode += `<p>Order <strong>${pendings[i].tracking}</strong></p>`;
+
+        htmlCode += `<p>Created at: <strong>${new Date(pendings[i].created_at).toISOString().split('T')[0]}</strong></p>`;
+        htmlCode += '<hr>';
+        htmlCode += '</a>';
+    }
+    
+    $('.tabPending').html(htmlCode);
+    /******************* Pending orders tab *******************/
+
+
+    htmlCode = '';
+
+    /****************** Cancelleds orders tab *****************/
+    for (let i = 0; i < cancelleds.length; i++) {
+        htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${cancelleds[i].guidID}">`;
+
+        if (!cancelleds[i].tracking)
+            htmlCode += '<p><strong>Order not finished</strong></p>';
+        else
+            htmlCode += `<p>Order <strong>${cancelleds[i].tracking}</strong></p>`;
+
+        htmlCode += `<p>Created at: <strong>${new Date(cancelleds[i].created_at).toISOString().split('T')[0]}</strong></p>`;
+        htmlCode += '<hr>';
+        htmlCode += '</a>';
+    }
+
+    $('.tabCancelledReturned').html(htmlCode);
+    /****************** Cancelleds orders tab *****************/
 
 }
 
@@ -67,8 +112,9 @@ function OpenOrderDetailsModal(order) {
     $(document.body).css('overflow', 'hidden');
 
     let orderObj = orders.find(x => x.guidID == order[0].id);
+    orderGuid = orderObj.guidID;
 
-    htmlCode  = '<div style="padding: 60px; margin-top: -10px;">'
+    htmlCode = '<div style="padding: 60px; margin-top: -10px;">'
 
     if (orderObj.tracking)
         htmlCode += `<p><strong>Tracking code:</strong> ${orderObj.tracking}</p>`;
@@ -87,8 +133,12 @@ function OpenOrderDetailsModal(order) {
 
     htmlCode += `<p><strong>Payment method:</strong> ${orderObj.paymentMethod.name}</p>`;
     htmlCode += '</br>';
-    htmlCode += '<button type="button" class="default-blue-button">Edit order</button>';
-    htmlCode += '<button type="button" class="default-white-button">Cancel order</button>';
+
+    if (orderObj.orderStatus.name !== 'Completed') {
+        htmlCode += `<button type="button" class="default-blue-button" onclick="window.location.href = '/Orders/SelectPay?order=${orderGuid}';">Edit order</button>`;
+        htmlCode += '<button type="button" class="default-white-button">Cancel order</button>';
+    }
+    
     htmlCode += '<button type="button" class="default-white-button">Return order</button>';
 
     htmlCode += '</div>';

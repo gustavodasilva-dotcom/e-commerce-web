@@ -80,6 +80,41 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         }
         #endregion
 
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(OrdersProducts orderProduct, int quantity)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new OrdersProducts
+                {
+                    ID = orderProduct.ID,
+                    GuidID = orderProduct.GuidID,
+                    Quantity = quantity,
+                    Amount = orderProduct.Unitary * quantity,
+                    Unitary = orderProduct.Unitary,
+                    OrderID = orderProduct.OrderID,
+                    ProductID = orderProduct.ProductID,
+                    Active = orderProduct.Active,
+                    Deleted = orderProduct.Deleted,
+                    Created_at = orderProduct.Created_at,
+                    Created_by = orderProduct.Created_by,
+                    Deleted_at = orderProduct.Deleted_at,
+                    Deleted_by = orderProduct.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
         #endregion
     }
 }

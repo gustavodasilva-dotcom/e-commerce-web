@@ -19,13 +19,13 @@ body {
 /************************************
  ********** Buttons style ***********
  ************************************/
-.default-blue-button {
+.default-blue-button,
+.default-white-button {
     margin: 1px auto;
     height: 40px;
     padding: 7px 10px;
     font-size: 15px;
     border: 0;
-    background: #0081a7;
     color: #ffffff;
     cursor: pointer;
     border-radius: 3px;
@@ -33,28 +33,23 @@ body {
     margin-right: 15px
 }
 
-    .default-blue-button:hover {
-        background: #00AFB9;
-    }
-
-.default-white-button {
-    margin: 1px auto;
-    height: 40px;
-    padding: 7px 10px;
-    font-size: 15px;
-    border: 0;
-    background: #ffffff;
-    color: #231F1F;
-    cursor: pointer;
-    border: 1px solid #7A7777;
-    border-radius: 3px;
-    outline: none;
-    margin-right: 15px
+.default-blue-button {
+    background: #0081a7;
 }
 
-    .default-white-button:hover {
-        background: #D7F6F7;
-    }
+.default-white-button {
+    background: #ffffff;
+    color: #231F1F;
+    border: 1px solid #7A7777;
+}
+
+.default-blue-button:hover {
+    background: #00AFB9;
+}
+
+.default-white-button:hover {
+    background: #D7F6F7;
+}
 
 .default-button {
     width: 10%;

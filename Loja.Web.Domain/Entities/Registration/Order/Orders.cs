@@ -121,6 +121,44 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         }
         #endregion
 
+        #region UpdateAsync
+        public async Task<bool> UpdateAsync(
+            Orders order,
+            StepOneModel model)
+        {
+            var updated = false;
+            try
+            {
+                var connect = await ConnectAsync();
+                updated = await connect.UpdateAsync(new Orders
+                {
+                    ID = order.ID,
+                    GuidID = order.GuidID,
+                    Tracking = order.Tracking,
+                    Total = order.Total,
+                    UserID = model.UserID,
+                    PaymentMethodID = model.PaymentMethodID,
+                    OrderStatusID = model.OrderStatusID,
+                    DeliveryAddressID = order.DeliveryAddressID,
+                    Active = order.Active,
+                    Deleted = order.Deleted,
+                    Created_at = order.Created_at,
+                    Created_by = order.Created_by,
+                    Deleted_at = order.Deleted_at,
+                    Deleted_by = order.Deleted_by
+                });
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return updated;
+        }
+        #endregion
+
         #endregion
     }
 }

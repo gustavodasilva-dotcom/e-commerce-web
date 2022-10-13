@@ -109,7 +109,12 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 var product = products.FirstOrDefault(x => x.ID == prod.ProductID && x.Active && !x.Deleted) ??
                     throw new Exception("No product was found. Please, contact the system administrator.");
 
-                productsModel.Add(await _productApplication.GetByIDAsync(product.GuidID));
+                var orderProduct = orderProducts.FirstOrDefault(x => x.ProductID == product.ID && x.Active && !x.Deleted);
+
+                var productDetails = await _productApplication.GetByIDAsync(product.GuidID);
+                productDetails.Quantity = orderProduct == null ? 0 : orderProduct.Quantity;
+
+                productsModel.Add(productDetails);
             }
 
             return new OrderViewModel
@@ -160,7 +165,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
         #endregion
 
         #region StepOneAsync -- Payment
-        public async Task<Orders?> StepOneAsync(StepOneModel model)
+        public async Task<OrderViewModel> StepOneAsync(StepOneModel model)
         {
             var users = await _users.GetAllAsync();
 
@@ -177,34 +182,65 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             var shoppingCart = shoppingCarts.FirstOrDefault(x => x.UserID == user?.ID);
 
-            if (shoppingCart is null)
-            {
-                // await _shoppingCarts.InsertAsync(user.ID);
-                // TODO: create function to insert product at the shopping cart in case said shopping cart is none
-                // and there's no products.
-            }
-
             var ordersStatus = await _ordersStatus.GetAllAsync() ??
                 throw new Exception("There's no order status registered. Please, contact the system administrator.");
 
             var products = await _products.GetAllAsync() ??
                 throw new Exception("There's no products registered. Please, contact the system administrator.");
 
+            var ordersProducts = await _ordersProducts.GetAllAsync() ??
+                throw new Exception("There's no order products registered. Please, contact the system administrator.");
+
+            var orders = await _orders.GetAllAsync();
+            var order = orders.FirstOrDefault(x => x.GuidID == model.OrderGuid && x.Active && !x.Deleted);
+
             model.UserID = user.ID;
             model.CardInfo.UserID = user.ID;
             model.PaymentMethodID = paymentMethod.ID;
             model.OrderStatusID = ordersStatus.Last().ID;
 
-            var orderID = await _orders.InsertAsync(model) ??
-                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+            long? orderID;
+
+            if (model.OrderGuid == Guid.Empty && order != null)
+            {
+                orderID = await _orders.InsertAsync(model) ??
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+            }
+            else
+            {
+                if (!await _orders.UpdateAsync(order, model))
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+
+                orderID = order.ID;
+            }
 
             var shoppingCartsProducts = await _shoppingCartsProducts.GetAllAsync();
 
-            var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID && x.Active && !x.Deleted) ??
+            var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID &&
+                                                                        x.Active && !x.Deleted) ??
                 throw new Exception("The user's shopping cart is empty. Please, contact the system administrator.");
 
-            foreach (var cartProd in userShoppingCarProds)
-                await _ordersProducts.InsertAsync(cartProd, model, (int)orderID, products.First(x => x.ID == cartProd.ProductID).Price ?? 0);
+            if (model.OrderGuid == Guid.Empty && order != null)
+            {
+                foreach (var cartProd in userShoppingCarProds)
+                    await _ordersProducts.InsertAsync(cartProd, model, (int)orderID, products.First(x => x.ID == cartProd.ProductID).Price ?? 0);
+            }
+            else
+            {
+                foreach (var cartProd in userShoppingCarProds)
+                {
+                    var orderProduct = ordersProducts.FirstOrDefault(x => x.OrderID == order?.ID &&
+                                                                          x.ProductID == cartProd.ProductID &&
+                                                                          x.Active && !x.Deleted) ??
+                        throw new Exception("The order's product was not found. Please, contact the system administrator.");
+
+                    var product = products.First(x => x.ID == orderProduct?.ProductID);
+                    
+                    var index = model.ProductGuid.IndexOf(model.ProductGuid.First(x => x == product.GuidID));
+
+                    await _ordersProducts.UpdateAsync(orderProduct, model.ProductQuantity[index]);
+                }
+            }
 
             if (model.IsCard)
             {
@@ -214,11 +250,11 @@ namespace Loja.Web.Application.Applications.Registration.Order
                     throw new Exception("There's no cards infos registered. Please, contact the system administrator.");
 
                 var cardInfo = cardsInfos.FirstOrDefault(x => x.UserID == model.UserID &&
-                    x.CardNumber == model?.CardInfo?.CardNumber?.Trim() &&
-                    x.NameAtTheCard == model?.CardInfo?.NameAtTheCard?.Trim() &&
-                    x.ExpMonth == model?.CardInfo?.Month &&
-                    x.ExpYear == model?.CardInfo.Year &&
-                    x.CVV == model?.CardInfo.CVV);
+                                                              x.CardNumber == model?.CardInfo?.CardNumber?.Trim() &&
+                                                              x.NameAtTheCard == model?.CardInfo?.NameAtTheCard?.Trim() &&
+                                                              x.ExpMonth == model?.CardInfo?.Month &&
+                                                              x.ExpYear == model?.CardInfo.Year &&
+                                                              x.CVV == model?.CardInfo.CVV);
 
                 if (cardInfo is null)
                 {
@@ -239,13 +275,13 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 await _ordersCardsInfos.InsertAsync((int)orderID, (int)cardInfoID);
             }
 
-            var orders = await _orders.GetAllAsync() ??
+            orders = await _orders.GetAllAsync() ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.Where(x => x.Active && !x.Deleted).ToList()))
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
-            return orders.FirstOrDefault(x => x.ID == orderID);
+            return await GetOrderDetailsAsync(orders.First(x => x.ID == orderID).GuidID);
         }
         #endregion
 

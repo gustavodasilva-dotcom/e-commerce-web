@@ -111,29 +111,13 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
                 if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
                     var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+
                     model.UserGuid = Guid.Parse(
                         createdByGuid != null ? createdByGuid :
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
-                    var order = await _orderApplication.StepOneAsync(model);
-                    if (order is not null)
-                    {
-                        result.Code = 1;
-                        result.Order = new
-                        {
-                            order.GuidID,
-                            order.Total,
-                            order.UserID,
-                            order.PaymentMethodID,
-                            order.OrderStatusID,
-                            order.Active,
-                            order.Deleted,
-                            order.Created_at
-                        };
-                    }
-                    else
-                    {
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                    }
+
+                    result.Order = await _orderApplication.StepOneAsync(model);
+                    result.Code = 1;
                 }
                 else
                 {
