@@ -10,13 +10,16 @@
                 window.PaymentTypes = result.PaymentTypes;
             }
             else {
-                alert(result.Message);
+                ShowMessageDiv(result.Message);
             }
         }
     });
 }
 
 function StepOne(stepOne) {
+
+    console.log(`Sending object ${stepOne}`);
+
     $.ajax({
         async: false,
         type: "POST",
@@ -29,7 +32,7 @@ function StepOne(stepOne) {
                 window.StepOne = result.Order;
             }
             else {
-                alert(result.Message);
+                ShowMessageDiv(result.Message);
                 return;
             }
         }

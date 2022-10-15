@@ -201,7 +201,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             long? orderID;
 
-            if (model.OrderGuid == Guid.Empty && order != null)
+            if (model.OrderGuid == Guid.Empty && order is not null)
             {
                 orderID = await _orders.InsertAsync(model) ??
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
@@ -216,29 +216,30 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             var shoppingCartsProducts = await _shoppingCartsProducts.GetAllAsync();
 
-            var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID &&
-                                                                        x.Active && !x.Deleted) ??
+            var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID).ToList() ??
                 throw new Exception("The user's shopping cart is empty. Please, contact the system administrator.");
 
-            if (model.OrderGuid == Guid.Empty && order != null)
+            if (model.OrderGuid == Guid.Empty && order is not null)
             {
-                foreach (var cartProd in userShoppingCarProds)
+                foreach (var cartProd in userShoppingCarProds.Where(x => x.Active && !x.Deleted))
                     await _ordersProducts.InsertAsync(cartProd, model, (int)orderID, products.First(x => x.ID == cartProd.ProductID).Price ?? 0);
             }
             else
             {
-                foreach (var cartProd in userShoppingCarProds)
+                foreach (ShoppingCartsProducts cartProd in userShoppingCarProds)
                 {
                     var orderProduct = ordersProducts.FirstOrDefault(x => x.OrderID == order?.ID &&
                                                                           x.ProductID == cartProd.ProductID &&
-                                                                          x.Active && !x.Deleted) ??
-                        throw new Exception("The order's product was not found. Please, contact the system administrator.");
+                                                                          x.Active && !x.Deleted);
 
-                    var product = products.First(x => x.ID == orderProduct?.ProductID);
-                    
-                    var index = model.ProductGuid.IndexOf(model.ProductGuid.First(x => x == product.GuidID));
+                    if (orderProduct is not null)
+                    {
+                        var product = products.First(x => x.ID == orderProduct?.ProductID);
 
-                    await _ordersProducts.UpdateAsync(orderProduct, model.ProductQuantity[index]);
+                        var index = model.ProductGuid.IndexOf(model.ProductGuid.First(x => x == product.GuidID));
+
+                        await _ordersProducts.UpdateAsync(orderProduct, model.ProductQuantity[index]);
+                    }
                 }
             }
 
@@ -272,15 +273,23 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 if (cardInfoID is null)
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
-                await _ordersCardsInfos.InsertAsync((int)orderID, (int)cardInfoID);
+                var ordersCardsInfos = await _ordersCardsInfos.GetAllAsync();
+
+                if (!ordersCardsInfos.Where(x => x.OrderID == orderID &&
+                                                 x.CardInfoID == cardInfoID &&
+                                                 x.Active && !x.Deleted).Any())
+                    await _ordersCardsInfos.InsertAsync((int)orderID, (int)cardInfoID);
             }
 
             orders = await _orders.GetAllAsync() ??
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
-            if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.Where(x => x.Active && !x.Deleted).ToList()))
-                throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-
+            if (shoppingCartsProducts.Where(x => x.Active && !x.Deleted).Any())
+            {
+                if (!await _shoppingCartsProducts.DeleteAsync(shoppingCartsProducts.Where(x => x.Active && !x.Deleted).ToList()))
+                    throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
+            }
+            
             return await GetOrderDetailsAsync(orders.First(x => x.ID == orderID).GuidID);
         }
         #endregion

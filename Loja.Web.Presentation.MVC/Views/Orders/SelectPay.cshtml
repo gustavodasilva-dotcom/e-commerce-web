@@ -28,36 +28,36 @@
 
                     <div class="register-select-field">
                         <select name="payment-types" class="register-select" id="register-select-payment-types">
-                            <option value="">Select a payment type</option>
+                            <option value="" disabled selected>Select a payment type</option>
                         </select>
                     </div>
 
                     <div id="card-details" style="display: none;">
                         <div class="card-input-field">
                             <label for="card-number">Card number</label>
-                            <input type="number" class="card-info-input" id="card-number" pattern="^[0-9]*$" />
+                            <input type="number" class="card-info-input" id="card-number" />
                         </div>
 
                         <div class="card-input-field">
                             <label for="card-name">Name at the card</label>
-                            <input type="text" class="card-info-input" id="card-name" />
+                            <input type="text" style="text-transform: uppercase;" class="card-info-input" id="card-name" />
                         </div>
 
                         <div class="card-input-field">
                             <label for="card-month">Expiration date</label>
-                            <input type="number" class="card-info-input-sm" id="card-month" pattern="^[0-9]*$" maxlength="2" />
-                            <input type="number" class="card-info-input-sm" id="card-year" pattern="^[0-9]*$" />
+                            <input type="number" class="card-info-input-sm" id="card-month" maxlength="2" />
+                            <input type="number" class="card-info-input-sm" id="card-year" maxlength="4" />
                         </div>
 
                         <div class="card-input-field">
                             <label for="card-cvv">CVV</label>
-                            <input type="number" class="card-info-input" id="card-cvv" pattern="^[0-9]*$" maxlength="3" />
+                            <input type="number" class="card-info-input" id="card-cvv" maxlength="3" />
                         </div>
 
                         <div class="card-input-field" id="card-quantity-field" style="display: none;">
                             <label for="card-quantity">Quantity</label>
                             <select name="card-quantity" class="card-info-select" id="card-quantity">
-                                <option value=""></option>
+                                <option value="" disabled selected>Select a quantity</option>
                             </select>
                         </div>
                     </div>

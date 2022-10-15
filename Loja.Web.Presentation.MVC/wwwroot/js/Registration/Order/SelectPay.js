@@ -11,6 +11,7 @@ let editOrder = false;
 let oneItemOnly = false;
 //#endregion
 
+
 $(document).ready(function () {
 
     CheckUrlParameters();
@@ -22,7 +23,9 @@ $(document).ready(function () {
 
     SetShoppingCartItems();
     SetComboBoxPaymentTypes();
+    SetPaymentInfos();
 });
+
 
 //#region CheckUrlParameters
 function CheckUrlParameters() {
@@ -44,6 +47,7 @@ function CheckUrlParameters() {
     orderGuid = orderParam;
 }
 //#endregion
+
 
 //#region SetShoppingCartItems
 function SetShoppingCartItems() {
@@ -94,6 +98,21 @@ function SetShoppingCartItems() {
 }
 //#endregion
 
+
+//#region SetPaymentInfos
+function SetPaymentInfos() {
+
+    $('#card-number').val(model.cardInfo.cardNumber);
+    $('#card-name').val(model.cardInfo.nameAtTheCard);
+    $('#card-month').val(model.cardInfo.month);
+    $('#card-year').val(model.cardInfo.year);
+    $('#card-cvv').val(model.cardInfo.cvv);
+    $('#card-quantity').val(model.cardInfo.quantity);
+
+}
+//#endregion
+
+
 //#region SetComboBoxPaymentTypes
 function SetComboBoxPaymentTypes() {
 
@@ -113,6 +132,7 @@ function SetComboBoxPaymentTypes() {
 }
 //#endregion
 
+
 //#region SetQuantitySelect
 function SetQuantitySelect() {
 
@@ -123,6 +143,7 @@ function SetQuantitySelect() {
     }    
 }
 //#endregion
+
 
 //#region PaymentSelected
 function PaymentSelected(paymentGuid) {
@@ -151,6 +172,7 @@ function PaymentSelected(paymentGuid) {
 }
 //#endregion
 
+
 //#region HTML elements' events
 $('#register-select-payment-types').change(function () {
 
@@ -167,6 +189,7 @@ $('#btn-move-next').click(function () {
     stepOneModel.IsCard = paymentSelected.isCard;
 
     stepOneModel.ProductGuid = [];
+    stepOneModel.ProductQuantity = [];
 
     if (oneItemOnly) {
 
@@ -182,7 +205,7 @@ $('#btn-move-next').click(function () {
             let quanity = $(`input[data-quantity="${products[i].guidID}"]`).val();
 
             stepOneModel.ProductGuid.push(products[i].guidID);
-            stepOneModel.Quantity.push(quanity);
+            stepOneModel.ProductQuantity.push(quanity);
         }
             
     }
@@ -199,70 +222,59 @@ $('#btn-move-next').click(function () {
 
     stepOneModel.CardInfo = cardInfoModel;
 
-    var validation = ValidateModel(model);
 
-    if (!validation.Valide) {
-        ShowMessageDiv(validation.Message);
+    //#region Validation
+    if (stepOneModel.PaymentGuid == '' ||
+        stepOneModel.PaymentGuid == null) {
+
+        ShowMessageDiv('Please, select the payment method.');
         return;
     }
+
+    if (stepOneModel.IsCard) {
+
+        if (stepOneModel.CardInfo.CardNumber == '' ||
+            stepOneModel.CardInfo.CardNumber == null) {
+
+            ShowMessageDiv('Please, inform the card number.');
+            return;
+        }
+
+        if (stepOneModel.CardInfo.NameAtTheCard == '' ||
+            stepOneModel.CardInfo.NameAtTheCard == null) {
+
+            ShowMessageDiv('Please, inform the name at the card.');
+            return;
+        }
+
+        if (stepOneModel.CardInfo.Month == '' ||
+            stepOneModel.CardInfo.Month == null) {
+
+            ShowMessageDiv('Please, inform the expiration month of the card.');
+            return;
+        }
+
+        if (stepOneModel.CardInfo.Year == '' ||
+            stepOneModel.CardInfo.Year == null) {
+
+            ShowMessageDiv('Please, inform the expiration year of the card.');
+            return;
+        }
+
+        if (stepOneModel.CardInfo.CVV == '' ||
+            stepOneModel.CardInfo.CVV == null) {
+
+            ShowMessageDiv('Please, inform the CVV of the card.');
+            return;
+        }
+    }
+    //#endregion
+
 
     StepOne(stepOneModel);
 
-    window.location.href = '/Orders/AddressSelect?orderID=' + window.StepOne.guidID;
+    if (requestSuccessed)
+        window.location.href = '/Orders/AddressSelect?orderID=' + window.StepOne.guidID;
+
 });
-//#endregion
-
-//#region ValidateModel
-function ValidateModel(model) {
-
-    let validation = {};
-    validation.Valide = false;
-
-    if (model.PaymentGuid == '' ||
-        model.PaymentGuid == null) {
-
-        validation.Message = 'Please, select the payment method.';
-        return;
-    }
-
-    if (mode.IsCard) {
-
-        if (model.CardInfo.CardNumber == '' ||
-            model.CardInfo.CardNumber == null) {
-
-            validation.Message = 'Please, inform the card number.';
-            return;
-        }
-
-        if (model.CardInfo.NameAtTheCard == '' ||
-            model.CardInfo.NameAtTheCard == null) {
-
-            validation.Message = 'Please, inform the name at the card.';
-            return;
-        }
-
-        if (model.CardInfo.Month == '' ||
-            model.CardInfo.Month == null) {
-
-            validation.Message = 'Please, inform the expiration month of the card.';
-            return;
-        }
-
-        if (model.CardInfo.Year == '' ||
-            model.CardInfo.Year == null) {
-
-            validation.Message = 'Please, inform the expiration year of the card.';
-            return;
-        }
-
-        if (model.CardInfo.CVV == '' ||
-            model.CardInfo.CVV == null) {
-
-            validation.Message = 'Please, inform the CVV of the card.';
-            return;
-        }
-    }
-
-    validation.Valide = true;
-}
 //#endregion

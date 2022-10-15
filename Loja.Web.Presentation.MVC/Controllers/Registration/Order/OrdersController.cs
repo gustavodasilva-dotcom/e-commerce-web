@@ -112,8 +112,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Order
                 {
                     var createdByGuid = HttpContext.Session.GetString(SessionUserID);
 
-                    model.UserGuid = Guid.Parse(
-                        createdByGuid != null ? createdByGuid :
+                    model.UserGuid = Guid.Parse(createdByGuid ??
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
 
                     result.Order = await _orderApplication.StepOneAsync(model);
