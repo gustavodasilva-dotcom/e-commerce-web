@@ -19,6 +19,13 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Payment
 
         #region << METHODS >>
 
+        #region Views
+        public IActionResult PaymentsStructure()
+        {
+            return PartialView();
+        }
+        #endregion
+
         #region GetPaymentTypes
         [HttpGet]
         public async Task<JsonResult> GetPaymentTypes()

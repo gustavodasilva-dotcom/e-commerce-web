@@ -63,6 +63,7 @@ builder.Services.AddSingleton<IImageApplication, ImageApplication>();
 builder.Services.AddSingleton<IOrderApplication, OrderApplication>();
 builder.Services.AddSingleton<IPaymentApplication, PaymentApplication>();
 builder.Services.AddSingleton<IShoppingCartApplication, ShoppingCartApplication>();
+builder.Services.AddSingleton<ICardIssuerApplication, CardIssuerApplication>();
 #endregion
 
 var app = builder.Build();

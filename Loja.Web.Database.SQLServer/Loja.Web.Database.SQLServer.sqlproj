@@ -90,6 +90,7 @@
     <Build Include="dbo\BankingBrands.sql" />
     <Build Include="dbo\ShoppingCarts.sql" />
     <Build Include="dbo\ShoppingCartsProducts.sql" />
+    <Build Include="dbo\CardIssuers.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\Default_Script.sql" />

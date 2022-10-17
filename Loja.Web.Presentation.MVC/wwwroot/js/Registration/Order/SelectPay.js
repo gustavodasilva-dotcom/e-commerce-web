@@ -26,6 +26,14 @@ $(document).ready(function () {
     SetPaymentInfos();
 });
 
+$('#card-number').change(function () {
+
+    let validIssuer = CheckCreditCardIssuer($(this).val());
+
+    if (validIssuer.success)
+        alert(validIssuer.obj);
+});
+
 
 //#region CheckUrlParameters
 function CheckUrlParameters() {
@@ -55,7 +63,7 @@ function SetShoppingCartItems() {
     model = editOrder ? window.Order : window.ShoppingCart;
 
     let htmlCards;
-        
+
     if (oneItemOnly) {
 
         singleItem = shoppingCart.find(x => x.productGuid == productGuidID.toLowerCase());
@@ -67,9 +75,8 @@ function SetShoppingCartItems() {
         htmlCards += `<p class="item-price">${singleItem.currency.symbol} ${singleItem.price}</p>`;
 
         htmlCards += '<input type="number" class="card-info-input" style="width: 50px; margin-right: 20px" ' +
-                     `data-quantity="${singleItem.guidID}" value="${singleItem.quantity}" />`;
+            `data-quantity="${singleItem.guidID}" value="${singleItem.quantity}" />`;
 
-        htmlCards += `<p class="item-amount">${singleItem.currency.symbol} ${(singleItem.price * singleItem.quantity)}</p>`;
         htmlCards += '</div>';
 
     } else {
@@ -85,9 +92,8 @@ function SetShoppingCartItems() {
             htmlCards += `<p class="item-price">${products[i].currency.symbol} ${products[i].price}</p>`;
 
             htmlCards += '<input type="number" class="card-info-input" style="width: 50px; margin-right: 20px" ' +
-                         `data-quantity="${products[i].guidID}" value="${products[i].quantity}" />`;
+                `data-quantity="${products[i].guidID}" value="${products[i].quantity}" />`;
 
-            htmlCards += `<p class="item-amount">${products[i].currency.symbol} ${(products[i].price * products[i].quantity)}</p>`;
             htmlCards += '<hr>';
             htmlCards += '</div>';
 
@@ -95,80 +101,6 @@ function SetShoppingCartItems() {
     }
 
     $('#register-items-card').html(htmlCards);
-}
-//#endregion
-
-
-//#region SetPaymentInfos
-function SetPaymentInfos() {
-
-    $('#card-number').val(model.cardInfo.cardNumber);
-    $('#card-name').val(model.cardInfo.nameAtTheCard);
-    $('#card-month').val(model.cardInfo.month);
-    $('#card-year').val(model.cardInfo.year);
-    $('#card-cvv').val(model.cardInfo.cvv);
-    $('#card-quantity').val(model.cardInfo.quantity);
-
-}
-//#endregion
-
-
-//#region SetComboBoxPaymentTypes
-function SetComboBoxPaymentTypes() {
-
-    GetPaymentTypes();
-
-    paymentTypes = window.PaymentTypes;
-
-    $.each(paymentTypes, function (i, item) {
-        $('#register-select-payment-types').append(`<option value="${paymentTypes[i].guidID}">${paymentTypes[i].name}</option>`);
-    });
-
-    if (editOrder) {
-
-        $('#register-select-payment-types').val(model.paymentMethod.guidID);
-        PaymentSelected(model.paymentMethod.guidID);
-    }
-}
-//#endregion
-
-
-//#region SetQuantitySelect
-function SetQuantitySelect() {
-
-    $('#card-quantity-field').css('display', 'block');
-
-    if (!($('#card-quantity')[0].length > 1)) {
-        for (let i = 1; i <= 12; i++) $('#card-quantity').append(`<option value="${i}">${i}x</option>`);
-    }    
-}
-//#endregion
-
-
-//#region PaymentSelected
-function PaymentSelected(paymentGuid) {
-
-    paymentSelected = paymentTypes.find(x => x.guidID == paymentGuid);
-
-    if (paymentSelected != null && paymentSelected != undefined) {
-
-        if (paymentSelected.isCard) {
-
-            $('#card-details').css('display', 'block');
-            $('#card-details').css('display', 'block');
-
-            if (paymentSelected.name.toLowerCase().includes('credit'))
-                SetQuantitySelect();
-            else
-                $('#card-quantity-field').css('display', 'none');
-        } else {
-
-            $('#card-details').css('display', 'none');
-        }
-    } else {
-
-        $('#card-details').css('display', 'none');
-    }
 }
 //#endregion
 
@@ -207,7 +139,7 @@ $('#btn-move-next').click(function () {
             stepOneModel.ProductGuid.push(products[i].guidID);
             stepOneModel.ProductQuantity.push(quanity);
         }
-            
+
     }
 
     stepOneModel.PaymentGuid = $('#register-select-payment-types').val();
@@ -223,7 +155,6 @@ $('#btn-move-next').click(function () {
     stepOneModel.CardInfo = cardInfoModel;
 
 
-    //#region Validation
     if (stepOneModel.PaymentGuid == '' ||
         stepOneModel.PaymentGuid == null) {
 
@@ -232,43 +163,13 @@ $('#btn-move-next').click(function () {
     }
 
     if (stepOneModel.IsCard) {
+        let validation = ValidateCards(stepOneModel.CardInfo);
 
-        if (stepOneModel.CardInfo.CardNumber == '' ||
-            stepOneModel.CardInfo.CardNumber == null) {
-
-            ShowMessageDiv('Please, inform the card number.');
-            return;
-        }
-
-        if (stepOneModel.CardInfo.NameAtTheCard == '' ||
-            stepOneModel.CardInfo.NameAtTheCard == null) {
-
-            ShowMessageDiv('Please, inform the name at the card.');
-            return;
-        }
-
-        if (stepOneModel.CardInfo.Month == '' ||
-            stepOneModel.CardInfo.Month == null) {
-
-            ShowMessageDiv('Please, inform the expiration month of the card.');
-            return;
-        }
-
-        if (stepOneModel.CardInfo.Year == '' ||
-            stepOneModel.CardInfo.Year == null) {
-
-            ShowMessageDiv('Please, inform the expiration year of the card.');
-            return;
-        }
-
-        if (stepOneModel.CardInfo.CVV == '' ||
-            stepOneModel.CardInfo.CVV == null) {
-
-            ShowMessageDiv('Please, inform the CVV of the card.');
+        if (!validation.success) {
+            ShowMessageDiv(validation.message);
             return;
         }
     }
-    //#endregion
 
 
     StepOne(stepOneModel);

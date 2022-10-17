@@ -7,11 +7,15 @@
         url: "/Orders/GetOrderDetails",
         success: function (result) {
             if (result.Code == 1) {
+
                 window.Order = {};
                 window.Order = result.Order;
+
                 requestSuccessed = true;
             } else {
+
                 requestSuccessed = false;
+
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
                 ShowMessageDiv(result.Message);
             }
@@ -30,10 +34,14 @@ function GetByUser() {
         url: "/Orders/GetByUser",
         success: function (result) {
             if (result.Code == 1) {
+
                 orders = result.Order;
+
                 requestSuccessed = true;
             } else {
+
                 requestSuccessed = false;
+
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
                 ShowMessageDiv(result.Message);
             }
@@ -56,11 +64,15 @@ function ProcessOrder(orderID, orderTotal, finishOrder) {
         url: "/Orders/ProcessOrder",
         success: function (result) {
             if (result.Code == 1) {
+
                 window.TrackingNumber = { };
                 window.TrackingNumber = result.TrackingNumber;
+
                 requestSuccessed = true;
             } else {
+
                 requestSuccessed = false;
+
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
                 ShowMessageDiv(result.Message);
             }
@@ -69,6 +81,7 @@ function ProcessOrder(orderID, orderTotal, finishOrder) {
 }
 
 function CalculateOrderTotal(order) {
+
     let orderTotal = 0;
 
     for (let i = 0; i < order.products.length; i++)

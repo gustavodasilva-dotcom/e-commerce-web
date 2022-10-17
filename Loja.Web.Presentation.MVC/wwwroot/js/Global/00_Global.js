@@ -1,5 +1,37 @@
-﻿let requestSuccessed = false;
+﻿//#region Global variables
+let requestSuccessed = false;
 
+const regex = new RegExp("^[0-9]{13,19}$");
+
+const response = (success, message = null, obj = null) => ({
+    message,
+    success,
+    obj
+});
+//#endregion
+
+
+//#region Model code
+function ShowMessageDiv(message) {
+    $('#div_Message').hide();
+    $('#div_Message').show();
+    $('.modal-content p').text(message);
+}
+
+$('.close').click(function () {
+    $('#div_Message').hide();
+    $(document.body).css('overflow', 'auto');
+});
+//#endregion
+
+
+//#region Masks
+
+
+//#endregion
+
+
+//#region Others
 function ShowMessageError(message) {
 
     $('.register-alert').show();
@@ -65,16 +97,4 @@ $('.profile').click(function () {
         $('.menu').css('opacity', '0');
     }
 });
-
-/****************** Model code ******************/
-function ShowMessageDiv(message) {
-    $('#div_Message').hide();
-    $('#div_Message').show();
-    $('.modal-content p').text(message);
-}
-
-$('.close').click(function () {
-    $('#div_Message').hide();
-    $(document.body).css('overflow', 'auto');
-});
-/****************** Model code ******************/
+//#endregion
