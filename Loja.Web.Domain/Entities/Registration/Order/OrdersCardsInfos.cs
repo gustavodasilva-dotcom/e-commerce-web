@@ -64,6 +64,31 @@ namespace Loja.Web.Domain.Entities.Registration.Order
         }
         #endregion
 
+        #region DeleteAsync
+        public async Task<bool> DeleteAsync(List<OrdersCardsInfos> ordersCardsInfos)
+        {
+            var deleted = false;
+            try
+            {
+                foreach (var orderCardInfo in ordersCardsInfos)
+                {
+                    orderCardInfo.Active = false;
+                    orderCardInfo.Deleted = true;
+                }
+                var connect = await ConnectAsync();
+                deleted = await connect.UpdateAsync(ordersCardsInfos);
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Debug.WriteLine(e);
+#endif
+                throw new Exception(e.Message);
+            }
+            return deleted;
+        }
+        #endregion
+
         #endregion
     }
 }

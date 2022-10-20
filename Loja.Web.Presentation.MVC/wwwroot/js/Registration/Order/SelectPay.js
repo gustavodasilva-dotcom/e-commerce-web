@@ -23,15 +23,23 @@ $(document).ready(function () {
 
     SetShoppingCartItems();
     SetComboBoxPaymentTypes();
-    SetPaymentInfos();
+    SetPaymentInfos('card-issuer-img');
 });
 
 $('#card-number').change(function () {
 
-    let validIssuer = CheckCreditCardIssuer($(this).val());
+    if ($(this).val() != '' &&
+        $(this).val() != null) {
 
-    if (validIssuer.success)
-        alert(validIssuer.obj);
+        SetCardIssuer($(this).val(), 'card-issuer-img');
+
+    } else {
+
+        $('#card-issuer-img').attr('src', null);
+        $(this).val('');
+
+    }
+
 });
 
 

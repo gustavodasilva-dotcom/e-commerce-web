@@ -49,7 +49,7 @@ function SetComboBoxPaymentTypes() {
 
 
 //#region SetPaymentInfos
-function SetPaymentInfos() {
+function SetPaymentInfos(field = null) {
 
     $('#card-number').val(model.cardInfo.cardNumber);
     $('#card-name').val(model.cardInfo.nameAtTheCard);
@@ -62,6 +62,9 @@ function SetPaymentInfos() {
         $('#register-select-payment-types').val(model.paymentMethod.guidID);
         PaymentSelected(model.paymentMethod.guidID);
     }
+
+    if (field != null)
+        SetCardIssuer(model.cardInfo.cardNumber, field);
 
 }
 //#endregion
@@ -207,7 +210,6 @@ const CheckCreditCardIssuer = cardNumber => {
 
     let lengthValid = false;
     let prefixValid = false;
-    let cardCompany = '';
 
     validIssuer = false;
 
@@ -238,9 +240,8 @@ const CheckCreditCardIssuer = cardNumber => {
         }
 
         if (prefixValid && lengthValid) {
-            cardCompany = cardIssuers[i].name;
             validIssuer = true;
-            return response(true, null, cardCompany);
+            return response(true, null, cardIssuers[i]);
         }
         
     }
@@ -275,4 +276,18 @@ function GetCardIssuers() {
 
 }
 
+function SetCardIssuer(cardNumber, field) {
+
+    let validIssuer = CheckCreditCardIssuer(cardNumber);
+
+    if (validIssuer.success)
+        SetCardIssuerImg(validIssuer.obj, field);
+
+}
+
+function SetCardIssuerImg(obj, field) {
+
+    $(`#${field}`).attr('src', `/media/${obj.name.toLowerCase()}-logo.png`);
+
+}
 //#endregion

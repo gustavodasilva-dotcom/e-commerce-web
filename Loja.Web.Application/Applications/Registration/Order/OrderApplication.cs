@@ -275,6 +275,13 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
                 var ordersCardsInfos = await _ordersCardsInfos.GetAllAsync();
 
+                var cardsInfosToBeDeleted = ordersCardsInfos.Where(x => x.OrderID == orderID &&
+                                                                        x.CardInfoID != cardInfoID &&
+                                                                        x.Active && !x.Deleted).ToList();
+
+                if (cardsInfosToBeDeleted.Any())
+                    await _ordersCardsInfos.DeleteAsync(cardsInfosToBeDeleted);
+
                 if (!ordersCardsInfos.Where(x => x.OrderID == orderID &&
                                                  x.CardInfoID == cardInfoID &&
                                                  x.Active && !x.Deleted).Any())

@@ -17,9 +17,9 @@
     font-size: 13px;
 }
 
-.item-title:hover {
-    color: #00afb9;
-}
+    .item-title:hover {
+        color: #00afb9;
+    }
 
 .item-qtd,
 .item-price,
@@ -45,12 +45,12 @@
     margin-bottom: 15px;
 }
 
-.card-input-field label {
-    display: inline-block;
-    text-align: right;
-    width: 140px;
-    margin-right: 20px;
-}
+    .card-input-field label {
+        display: inline-block;
+        text-align: right;
+        width: 140px;
+        margin-right: 20px;
+    }
 
 .card-info-input,
 .card-info-select,
@@ -69,7 +69,13 @@
     width: 96px;
 }
 
-.card-info-input:hover,
-.card-info-input-sm:hover {
-    border: 1px solid #00afb9;
+    .card-info-input:hover,
+    .card-info-input-sm:hover {
+        border: 1px solid #00afb9;
+    }
+
+#card-issuer-img {
+    border-radius: 2px;
+    width: 40px;
+    margin-left: 5px;
 }
