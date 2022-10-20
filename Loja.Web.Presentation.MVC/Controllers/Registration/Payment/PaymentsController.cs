@@ -61,6 +61,35 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Payment
         }
         #endregion
 
+        #region GetUserCards
+        public async Task<JsonResult> GetUserCards()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
+                {
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    var userGuid = Guid.Parse(
+                        createdByGuid != null ? createdByGuid :
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                    result.CardsInfos = await _paymentApplication.GetUserCardsAsync(userGuid);
+                    result.Code = 1;
+                }
+                else
+                {
+                    result.RedirectToLogin = true;
+                }
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #endregion
     }
 }

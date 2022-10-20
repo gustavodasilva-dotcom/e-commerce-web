@@ -58,7 +58,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 throw new Exception("The payment method was not found. Please, contact the system administrator.");
 
             CardsInfos cardInfo = new();
-            CardInfoModel? cardInfoModel = null;
+            CardInfoViewModel? cardInfoModel = null;
 
             if (paymentMethod.IsCard)
             {
@@ -75,14 +75,20 @@ namespace Loja.Web.Application.Applications.Registration.Order
                     cardInfo = cardsInfos.FirstOrDefault(x => x.ID == orderCardInfo.CardInfoID && x.Active && !x.Deleted) ??
                         throw new Exception("The card info was not found. Please, contact the system administrator.");
 
-                    cardInfoModel = new CardInfoModel
+                    cardInfoModel = new CardInfoViewModel
                     {
+                        ID = cardInfo.ID,
+                        GuidID = cardInfo.GuidID,
                         CardNumber = cardInfo?.CardNumber,
                         NameAtTheCard = cardInfo?.NameAtTheCard,
                         Month = cardInfo?.ExpMonth,
                         Year = cardInfo?.ExpYear,
                         CVV = cardInfo?.CVV,
-                        Quantity = cardInfo?.Quantity
+                        Quantity = cardInfo?.Quantity,
+                        UserID = cardInfo?.UserID,
+                        Active = cardInfo.Active,
+                        Deleted = cardInfo.Deleted,
+                        Created_at = cardInfo.Created_at
                     };
                 }
             }

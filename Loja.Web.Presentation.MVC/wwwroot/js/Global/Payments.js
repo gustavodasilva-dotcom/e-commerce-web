@@ -1,5 +1,6 @@
 ﻿let cardIssuers = {};
 let validIssuer = false;
+let paymentTypes = [];
 
 
 $(document).ready(function () {
@@ -7,6 +8,30 @@ $(document).ready(function () {
     GetCardIssuers();
 
 });
+
+
+//#region GetUserCards
+function GetUserCards() {
+
+    $.ajax({
+        async: false,
+        type: "GET",
+        dataType: "json",
+        url: "/Payments/GetUserCards",
+        success: function (result) {
+            if (result.Code == 1) {
+
+                window.CardsInfos = {};
+                window.CardsInfos = result.CardsInfos;
+            }
+            else {
+                ShowMessageDiv(result.Message);
+            }
+        }
+    });
+
+}
+//#endregion
 
 
 //#region GetPaymentTypes
@@ -48,24 +73,63 @@ function SetComboBoxPaymentTypes() {
 //#endregion
 
 
-//#region SetPaymentInfos
-function SetPaymentInfos(field = null) {
-
-    $('#card-number').val(model.cardInfo.cardNumber);
-    $('#card-name').val(model.cardInfo.nameAtTheCard);
-    $('#card-month').val(model.cardInfo.month);
-    $('#card-year').val(model.cardInfo.year);
-    $('#card-cvv').val(model.cardInfo.cvv);
-    $('#card-quantity').val(model.cardInfo.quantity);
+//#region SetUserCardsList
+function SetUserCardsList() {
 
     if (editOrder) {
         $('#register-select-payment-types').val(model.paymentMethod.guidID);
         PaymentSelected(model.paymentMethod.guidID);
     }
 
-    if (field != null)
-        SetCardIssuer(model.cardInfo.cardNumber, field);
+    let paymentSelected = paymentTypes.find(x => x.guidID == $('#register-select-payment-types').val()); 
 
+    if (paymentSelected.isCard) {
+
+        let card = window.CardsInfos;
+
+        let htmlCode = '<h2>Previous cards</h2>';
+
+        $.each(card, function (i, item) {
+
+            htmlCode += '<div class="card-content">';
+            htmlCode +=     `<input type="radio" name="card-chk" class="chkCard" data-card="${card[i].guidID}"`;
+            htmlCode +=         `onclick="SetCardInfos(this, null, 'card-issuer-img')">`
+            htmlCode +=     '<p style="margin-left: 18px;"><strong>Card number</strong>:';
+            htmlCode +=     `${"*".repeat(card[i].cardNumber.length - 4) + card[i].cardNumber.slice(-4)}</p>`;
+            htmlCode +=     `<p><strong>Name at the card:</strong> ${card[i].nameAtTheCard}</p>`;
+            htmlCode +=     `<p><strong>CVV:</strong> ${card[i].cvv}<span style="margin-left: 20px;"></span>`;
+            htmlCode +=     `<strong>Expiration:</strong> ${card[i].month}/${card[i].year}</p>`;
+            htmlCode += '</div>';
+            htmlCode += '<hr />';
+
+        });
+
+        $('#user-cards').html(htmlCode);
+
+    }
+
+}
+//#endregion
+
+
+//#region SetCardInfos
+function SetCardInfos(input = null, model = null, field = null) {
+
+    if (input != null)
+        model = window.CardsInfos.find(x => x.guidID == input.dataset.card);
+
+    $(`[data-card="${model.guidID}"]`).prop('checked', true);
+
+    $('#card-number').val(model.cardNumber);
+    $('#card-name').val(model.nameAtTheCard);
+    $('#card-month').val(model.month);
+    $('#card-year').val(model.year);
+    $('#card-cvv').val(model.cvv);
+    $('#card-quantity').val(model.quantity);
+
+    if (field != null)
+        SetCardIssuer(model.cardNumber, field);
+    
 }
 //#endregion
 

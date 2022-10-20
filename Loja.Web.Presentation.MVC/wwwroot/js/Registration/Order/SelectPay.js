@@ -5,7 +5,6 @@ let productGuidID;
 let paymentSelected;
 let model = [];
 let products = [];
-let paymentTypes = [];
 let shoppingCart = [];
 let editOrder = false;
 let oneItemOnly = false;
@@ -23,7 +22,12 @@ $(document).ready(function () {
 
     SetShoppingCartItems();
     SetComboBoxPaymentTypes();
-    SetPaymentInfos('card-issuer-img');
+    GetUserCards();
+    SetUserCardsList();
+
+    if (editOrder)
+        SetCardInfos(null, window.Order.cardInfo, 'card-issuer-img');
+
 });
 
 $('#card-number').change(function () {

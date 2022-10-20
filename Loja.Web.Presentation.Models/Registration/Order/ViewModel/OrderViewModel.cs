@@ -1,5 +1,4 @@
-﻿using Loja.Web.Presentation.Models.Registration.Order.Model;
-using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
+﻿using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
 
 namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
 {
@@ -13,7 +12,7 @@ namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
 
         public PaymentMethodViewModel? PaymentMethod { get; set; }
 
-        public CardInfoModel? CardInfo { get; set; }
+        public CardInfoViewModel? CardInfo { get; set; }
 
         public OrderStatusViewModel? OrderStatus { get; set; }
 
