@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 });
 
-
+    
 //#region GetUserCards
 function GetUserCards() {
 
@@ -81,32 +81,26 @@ function SetUserCardsList() {
         PaymentSelected(model.paymentMethod.guidID);
     }
 
-    let paymentSelected = paymentTypes.find(x => x.guidID == $('#register-select-payment-types').val()); 
+    let card = window.CardsInfos;
 
-    if (paymentSelected.isCard) {
+    let htmlCode = '<h2>Previous cards</h2>';
 
-        let card = window.CardsInfos;
+    $.each(card, function (i, item) {
 
-        let htmlCode = '<h2>Previous cards</h2>';
+        htmlCode += '<div class="card-content">';
+        htmlCode +=     `<input type="radio" name="card-chk" class="chkCard" data-card="${card[i].guidID}"`;
+        htmlCode +=         `onclick="SetCardInfos(this, null, 'card-issuer-img')">`
+        htmlCode +=     '<p style="margin-left: 18px;"><strong>Card number</strong>:';
+        htmlCode +=     `${"*".repeat(card[i].cardNumber.length - 4) + card[i].cardNumber.slice(-4)}</p>`;
+        htmlCode +=     `<p><strong>Name at the card:</strong> ${card[i].nameAtTheCard}</p>`;
+        htmlCode +=     `<p><strong>CVV:</strong> ${card[i].cvv}<span style="margin-left: 20px;"></span>`;
+        htmlCode +=     `<strong>Expiration:</strong> ${card[i].month}/${card[i].year}</p>`;
+        htmlCode += '</div>';
+        htmlCode += '<hr />';
 
-        $.each(card, function (i, item) {
+    });
 
-            htmlCode += '<div class="card-content">';
-            htmlCode +=     `<input type="radio" name="card-chk" class="chkCard" data-card="${card[i].guidID}"`;
-            htmlCode +=         `onclick="SetCardInfos(this, null, 'card-issuer-img')">`
-            htmlCode +=     '<p style="margin-left: 18px;"><strong>Card number</strong>:';
-            htmlCode +=     `${"*".repeat(card[i].cardNumber.length - 4) + card[i].cardNumber.slice(-4)}</p>`;
-            htmlCode +=     `<p><strong>Name at the card:</strong> ${card[i].nameAtTheCard}</p>`;
-            htmlCode +=     `<p><strong>CVV:</strong> ${card[i].cvv}<span style="margin-left: 20px;"></span>`;
-            htmlCode +=     `<strong>Expiration:</strong> ${card[i].month}/${card[i].year}</p>`;
-            htmlCode += '</div>';
-            htmlCode += '<hr />';
-
-        });
-
-        $('#user-cards').html(htmlCode);
-
-    }
+    $('#user-cards').html(htmlCode);
 
 }
 //#endregion
@@ -156,7 +150,7 @@ function PaymentSelected(paymentGuid) {
         if (paymentSelected.isCard) {
 
             $('#card-details').css('display', 'block');
-            $('#card-details').css('display', 'block');
+            $('#user-cards').css('display', 'block');
 
             if (paymentSelected.name.toLowerCase().includes('credit'))
                 SetQuantitySelect();
@@ -165,10 +159,12 @@ function PaymentSelected(paymentGuid) {
         } else {
 
             $('#card-details').css('display', 'none');
+            $('#user-cards').css('display', 'block');
         }
     } else {
 
         $('#card-details').css('display', 'none');
+        $('#user-cards').css('display', 'block');
     }
 }
 //#endregion

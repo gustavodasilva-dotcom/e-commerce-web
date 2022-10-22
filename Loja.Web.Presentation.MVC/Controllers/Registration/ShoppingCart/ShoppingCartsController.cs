@@ -38,52 +38,19 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
         {
             dynamic result = new ExpandoObject();
             result.Code = 0;
-            result.RedirectToLogin = false;
             try
             {
                 if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
-                    var userID = HttpContext.Session.GetString(SessionUserID) ??
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                    if (Guid.TryParse(userID, out Guid userGuid))
-                    {
-                        result.Products = null;
-                        var productsCart = await _shoppingCartApplication.GetShoppingCartByUserGuidAsync(userGuid);
-                        if (productsCart.Any())
-                        {
-                            var shoppingCartProducts = productsCart.Select(x => new ShoppingCartsViewModel
-                            {
-                                ID = x?.ID,
-                                GuidID = x?.GuidID,
-                                Quantity = x.Quantity,
-                                ProductID = x.ProductID,
-                                ShoppingCartID = x.ShoppingCartID,
-                                Active = x.Active,
-                                Deleted = x.Deleted,
-                                Created_at = x.Created_at
-                            }).ToList().Where(x => x.Active && !x.Deleted);
-                            var products = await _productApplication.GetAllAsync();
-                            foreach (var cartProduct in shoppingCartProducts)
-                            {
-                                var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
-                                cartProduct.ProductGuid = productDetails?.GuidID;
-                                cartProduct.Name = productDetails?.Name;
-                                cartProduct.Description = productDetails?.Description;
-                                cartProduct.Price = productDetails?.Price;
-                            }
-                            result.Products = shoppingCartProducts;
-                        }
-                        result.Code = 1;
-                    }
-                    else
-                    {
-                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                    }
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    var userGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                    
+                    result.Products = await _shoppingCartApplication.GetShoppingCartByUserGuidAsync(userGuid);
+                    result.Code = 1;
                 }
                 else
-                {
                     result.RedirectToLogin = true;
-                }
             }
             catch (Exception e)
             {
@@ -105,27 +72,14 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.ShoppingCart
                 if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
                 {
                     var createdByGuid = HttpContext.Session.GetString(SessionUserID);
-                    model.UserGuid = Guid.Parse(
-                        createdByGuid != null ? createdByGuid :
+                    model.UserGuid = Guid.Parse(createdByGuid ??
                         throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+
                     var shoppingCart = await _shoppingCartApplication.AddToCartAsync(model);
-                    result.Product = new
-                    {
-                        shoppingCart?.ID,
-                        shoppingCart?.GuidID,
-                        shoppingCart?.Quantity,
-                        shoppingCart?.ProductID,
-                        shoppingCart?.ShoppingCartID,
-                        shoppingCart?.Active,
-                        shoppingCart?.Deleted,
-                        shoppingCart?.Created_at
-                    };
                     result.Code = 1;
                 }
                 else
-                {
                     result.RedirectToLogin = true;
-                }
             }
             catch (Exception e)
             {

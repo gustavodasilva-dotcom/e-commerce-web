@@ -136,6 +136,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
 
             return new ProductViewModel
             {
+                ID = product.ID,
                 GuidID = product.GuidID,
                 Name = product.Name,
                 Description = product.Description,

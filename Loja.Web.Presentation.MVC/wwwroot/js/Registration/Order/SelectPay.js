@@ -78,13 +78,13 @@ function SetShoppingCartItems() {
 
     if (oneItemOnly) {
 
-        singleItem = shoppingCart.find(x => x.productGuid == productGuidID.toLowerCase());
+        singleItem = window.ShoppingCart.find(x => x.productGuid == productGuidID.toLowerCase());
 
         htmlCards = '<div class="item-card">';
 
         htmlCards += `<a class="item-title" href="#">${singleItem.name}</a><br/ >`;
 
-        htmlCards += `<p class="item-price">${singleItem.currency.symbol} ${singleItem.price}</p>`;
+        htmlCards += `<p class="item-price">$ ${singleItem.price}</p>`;
 
         htmlCards += '<input type="number" class="card-info-input" style="width: 50px; margin-right: 20px" ' +
             `data-quantity="${singleItem.guidID}" value="${singleItem.quantity}" />`;
