@@ -1,4 +1,5 @@
-﻿using Loja.Web.Application.Interfaces.Registration.Order;
+﻿using Loja.Web.Application.Interfaces.Registration.Address;
+using Loja.Web.Application.Interfaces.Registration.Order;
 using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Address;
 using Loja.Web.Domain.Entities.Registration.Order;
@@ -6,6 +7,7 @@ using Loja.Web.Domain.Entities.Registration.Payment;
 using Loja.Web.Domain.Entities.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.ShoppingCart;
 using Loja.Web.Domain.Entities.Security;
+using Loja.Web.Presentation.Models.Registration.Address.ViewModel;
 using Loja.Web.Presentation.Models.Registration.Order.Model;
 using Loja.Web.Presentation.Models.Registration.Order.ViewModel;
 using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
@@ -29,12 +31,15 @@ namespace Loja.Web.Application.Applications.Registration.Order
         private readonly Addresses _addresses = new();
 
         private readonly IProductApplication _productApplication;
+        private readonly IAddressApplication _addressApplication;
         #endregion
 
         #region << CONSTRUCTOR >>
-        public OrderApplication(IProductApplication productApplication)
+        public OrderApplication(IProductApplication productApplication,
+                                IAddressApplication addressApplication)
         {
             _productApplication = productApplication;
+            _addressApplication = addressApplication;
         }
         #endregion
 
@@ -59,6 +64,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             CardsInfos cardInfo = new();
             CardInfoViewModel? cardInfoModel = null;
+            AddressViewModel? deliveryAddressModel = null;
 
             if (paymentMethod.IsCard)
             {
@@ -123,6 +129,17 @@ namespace Loja.Web.Application.Applications.Registration.Order
                 productsModel.Add(productDetails);
             }
 
+            if (order.DeliveryAddressID is not null)
+            {
+                var addresses = await _addresses.GetAllAsync();
+
+                if (addresses.Any())
+                {
+                    Addresses? deliveryAddress = addresses.FirstOrDefault(x => x.ID == order.DeliveryAddressID && x.Active && !x.Deleted);
+                    deliveryAddressModel = deliveryAddress == null ? null : await _addressApplication.GetAddressesAsync(deliveryAddress);
+                }
+            }
+            
             return new OrderViewModel
             {
                 GuidID = order.GuidID,
@@ -140,6 +157,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
                     GuidID = orderStatus.GuidID,
                     Name = orderStatus.Name
                 },
+                DeliveryAddress = deliveryAddressModel,
                 Products = productsModel,
                 Active = order.Active,
                 Deleted = order.Deleted,
@@ -207,7 +225,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
 
             long? orderID;
 
-            if (model.OrderGuid == Guid.Empty && order is not null)
+            if (model.OrderGuid == Guid.Empty && order is null)
             {
                 orderID = await _orders.InsertAsync(model) ??
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
@@ -225,7 +243,7 @@ namespace Loja.Web.Application.Applications.Registration.Order
             var userShoppingCarProds = shoppingCartsProducts.Where(x => x.ShoppingCartID == shoppingCart?.ID).ToList() ??
                 throw new Exception("The user's shopping cart is empty. Please, contact the system administrator.");
 
-            if (model.OrderGuid == Guid.Empty && order is not null)
+            if (model.OrderGuid == Guid.Empty && order is null)
             {
                 foreach (var cartProd in userShoppingCarProds.Where(x => x.Active && !x.Deleted))
                     await _ordersProducts.InsertAsync(cartProd, model, (int)orderID, products.First(x => x.ID == cartProd.ProductID).Price ?? 0);

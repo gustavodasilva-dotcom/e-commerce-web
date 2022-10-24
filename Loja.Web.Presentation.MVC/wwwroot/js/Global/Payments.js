@@ -186,8 +186,13 @@ function StepOne(stepOne) {
 
                 window.StepOne = {};
                 window.StepOne = result.Order;
+
+                requestSuccessed = true;
             }
             else {
+
+                requestSuccessed = false;
+
                 ShowMessageDiv(result.Message);
                 return;
             }

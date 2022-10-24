@@ -4,6 +4,8 @@ $(document).ready(function () {
     let params = (new URL(window.location.href)).searchParams;
     orderID = params.get('orderID');
 
+    GetOrderDetails(orderID);
+
     GetUserAddresses();
     SetAddressesCards();
 });
@@ -50,16 +52,23 @@ function SetAddressesCards() {
 
         $.each(addresses, function (i, item) {
             htmlCards += '<div class="card-address">';
-            htmlCards += '<input type="radio" name="address-chk" class="address-chk" value="' + addresses[i].guidID + '">';
-            htmlCards += '<p class="address-name">' + addresses[i].street.name + '</p>';
-            htmlCards += '<p class="address-number">' + addresses[i].number;
-            htmlCards += addresses[i].comment == null || addresses[i].comment == '' ? '' : ', ' + addresses[i].comment + '</p>';
-            htmlCards += '<p class="address-city">' + addresses[i].city.name + ' - ' + addresses[i].state.initials + '</p>';
-            htmlCards += '<p class="address-country">' + addresses[i].street.postalCode + ' - ' + addresses[i].country.name + '</p>';
+            htmlCards +=    `<input type="radio" name="address-chk" class="address-chk" data-guid="${addresses[i].guidID}" value="${addresses[i].guidID}">`;
+            htmlCards +=    `<p class="address-name">${addresses[i].street.name}</p>`;
+            htmlCards +=    `<p class="address-number">${addresses[i].number}`;
+            htmlCards +=    addresses[i].comment == null || addresses[i].comment == '' ? '' : ', ' + addresses[i].comment + '</p>';
+            htmlCards +=    `<p class="address-city">${addresses[i].city.name} - ${addresses[i].state.initials}</p>`;
+            htmlCards +=    `<p class="address-country">${addresses[i].street.postalCode} - ${addresses[i].country.name}</p>`;
             htmlCards += '</div>';
             htmlCards += '<hr />';
         });
 
         $('#user-addresses').html(htmlCards);
+
+        if (window.Order.deliveryAddress != null) {
+
+            let deliveryAddress = window.Addresses.find(x => x.guidID === window.Order.deliveryAddress.guidID);
+            $(`[data-guid="${deliveryAddress.guidID}"]`).prop('checked', true);
+        }
+
     }
 }

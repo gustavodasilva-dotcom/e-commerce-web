@@ -1,12 +1,12 @@
-﻿using Loja.Web.Domain.Entities.Registration.ShoppingCart;
-using Loja.Web.Presentation.Models.Registration.ShoppingCart;
+﻿using Loja.Web.Presentation.Models.Registration.ShoppingCart.Model;
+using Loja.Web.Presentation.Models.Registration.ShoppingCart.ViewModel;
 
 namespace Loja.Web.Application.Interfaces.Registration.ShoppingCart
 {
     public interface IShoppingCartApplication
     {
-        Task<List<ShoppingCartsViewModel>> GetShoppingCartByUserGuidAsync(Guid? userGuid);
-        Task<List<ShoppingCartsViewModel>> AddToCartAsync(ShoppingCartsModel model);
+        Task<ShoppingCartViewModel> GetShoppingCartByUserGuidAsync(Guid? userGuid);
+        Task<ShoppingCartViewModel> AddToCartAsync(ShoppingCartsModel model);
         Task<bool> EmptyShoppingCartAsync(int shoppingCartID);
     }
 }

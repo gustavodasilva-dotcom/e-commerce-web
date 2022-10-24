@@ -1,6 +1,6 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Application.Interfaces.Registration.ShoppingCart;
-using Loja.Web.Presentation.Models.Registration.ShoppingCart;
+using Loja.Web.Presentation.Models.Registration.ShoppingCart.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 

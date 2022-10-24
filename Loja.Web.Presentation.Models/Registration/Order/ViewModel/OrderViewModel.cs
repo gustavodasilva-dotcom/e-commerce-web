@@ -1,4 +1,5 @@
-﻿using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
+﻿using Loja.Web.Presentation.Models.Registration.Address.ViewModel;
+using Loja.Web.Presentation.Models.Registration.Product.ViewModel;
 
 namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
 {
@@ -17,6 +18,8 @@ namespace Loja.Web.Presentation.Models.Registration.Order.ViewModel
         public OrderStatusViewModel? OrderStatus { get; set; }
 
         public List<ProductViewModel>? Products { get; set; }
+
+        public AddressViewModel? DeliveryAddress { get; set; }
 
         public bool Active { get; set; }
         

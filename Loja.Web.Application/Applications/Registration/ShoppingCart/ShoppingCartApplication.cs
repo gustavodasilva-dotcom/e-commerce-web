@@ -3,7 +3,8 @@ using Loja.Web.Application.Interfaces.Registration.ShoppingCart;
 using Loja.Web.Domain.Entities.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.ShoppingCart;
 using Loja.Web.Domain.Entities.Security;
-using Loja.Web.Presentation.Models.Registration.ShoppingCart;
+using Loja.Web.Presentation.Models.Registration.ShoppingCart.Model;
+using Loja.Web.Presentation.Models.Registration.ShoppingCart.ViewModel;
 
 namespace Loja.Web.Application.Applications.Registration.ShoppingCart
 {
@@ -28,9 +29,9 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
         #region PUBLIC
 
         #region GetShoppingCartByUserGuidAsync
-        public async Task<List<ShoppingCartsViewModel>> GetShoppingCartByUserGuidAsync(Guid? userGuid)
+        public async Task<ShoppingCartViewModel> GetShoppingCartByUserGuidAsync(Guid? userGuid)
         {
-            List<ShoppingCartsViewModel> shoppingCartReturn = new();
+            List<ShoppingCartProductViewModel> shoppingCartProductsReturn = new();
 
             int? shoppingCartID = null;
 
@@ -51,39 +52,49 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
 
             if (productsCart.Any())
             {
-                var shoppingCartProducts = productsCart.Select(x => new ShoppingCartsViewModel
+                var shoppingCartProducts = productsCart.Select(x => new ShoppingCartProductViewModel
                 {
                     ID = x?.ID,
                     GuidID = x?.GuidID,
                     Quantity = x.Quantity,
                     ProductID = x.ProductID,
-                    ShoppingCartID = x.ShoppingCartID,
                     Active = x.Active,
                     Deleted = x.Deleted,
                     Created_at = x.Created_at
-                }).Where(x => x.ShoppingCartID == shoppingCartID &&
-                              x.Active && !x.Deleted);
+                }).ToList();
 
                 var products = await _productApplication.GetAllAsync();
                 
                 foreach (var cartProduct in shoppingCartProducts)
                 {
+                    if (cartProduct.ShoppingCartID != shoppingCartID &&
+                       !cartProduct.Active && cartProduct.Deleted)
+                        continue;
+
                     var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
+
                     cartProduct.ProductGuid = productDetails?.GuidID;
                     cartProduct.Name = productDetails?.Name;
                     cartProduct.Description = productDetails?.Description;
                     cartProduct.Price = productDetails?.Price;
 
-                    shoppingCartReturn.Add(cartProduct);
+                    shoppingCartProductsReturn.Add(cartProduct);
                 }
             }
+
+            var shoppingCartReturn = new ShoppingCartViewModel
+            {
+                ID = userShoppingCart.ID,
+                GuidID = userShoppingCart.GuidID,
+                ShoppingCartProducts = shoppingCartProductsReturn
+            };
 
             return shoppingCartReturn;
         }
         #endregion
 
         #region AddToCartAsync
-        public async Task<List<ShoppingCartsViewModel>> AddToCartAsync(ShoppingCartsModel model)
+        public async Task<ShoppingCartViewModel> AddToCartAsync(ShoppingCartsModel model)
         {
             Validate(model);
 

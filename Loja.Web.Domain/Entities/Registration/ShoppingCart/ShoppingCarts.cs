@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Loja.Web.Infra.Data.Repositories;
-using Loja.Web.Presentation.Models.Registration.ShoppingCart;
+using Loja.Web.Presentation.Models.Registration.ShoppingCart.Model;
 using System.Diagnostics;
 
 namespace Loja.Web.Domain.Entities.Registration.ShoppingCart
