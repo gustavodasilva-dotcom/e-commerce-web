@@ -56,6 +56,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
+        #region GetAll
+        [HttpGet]
+        public async Task<JsonResult> GetAll()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.Products = await _productApplication.GetAllAsync();
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #region Get
         [HttpGet]
         public async Task<JsonResult> Get(Guid guid)

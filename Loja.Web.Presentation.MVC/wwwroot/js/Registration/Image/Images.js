@@ -81,26 +81,3 @@ async function GetBases64ByProductIDAsync(productID) {
         },
     });
 }
-
-function ConvertBase64ToImage() {
-
-    if (bases64.length > 0) {
-
-        for (let i = 0; i < bases64.length; i++) {
-
-            var image = document.getElementById('img-' + (i + 1));
-            image.src = 'data:image/png;base64,' + bases64[i];
-
-            if (i == 0) {
-
-                image.className = "product-details-big-image";
-
-                var smallImage1 = document.getElementById('img-1-small');
-                smallImage1.src = 'data:image/png;base64,' + bases64[i];
-            } else
-                image.className = "product-details-small-image";
-
-        }
-    }
-
-}

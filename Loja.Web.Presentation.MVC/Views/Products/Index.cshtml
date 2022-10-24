@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Products";
 }
+
+@section Scripts {
+
+    <script src="~/js/Registration/Product/Index.js"></script>
+
+}
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="~/css/Global/00_Global.css" />
+    </head>
+    <body>
+
+        <div class="register-wrapper" style="max-width: 900px;">
+
+            <!--- Modal --->
+            <div id="div_Message" class="modal">
+
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p></p>
+                </div>
+
+            </div>
+            <!--- Modal --->
+
+            <div class="register-form">
+
+                <div class="register-select-field">
+                    <select name="subcategories" class="register-select" id="register-select-subcategories">
+                        <option value="" disabled selected>Select a subcategories</option>
+                    </select>
+                </div>
+
+                <div id="gallery"></div>
+
+            </div>
+
+        </div>
+
+    </body>

@@ -6,8 +6,8 @@ namespace Loja.Web.Application.Interfaces.Registration.Product
 {
     public interface IProductApplication
     {
-        Task<ProductViewModel> GetByIDAsync(Guid guid);
-        Task<IEnumerable<Products?>> GetAllAsync();
+        Task<ProductViewModel?> GetByIDAsync(Guid guid);
+        Task<List<ProductViewModel>> GetAllAsync();
         Task<Products> SaveAsync(ProductsModel model);
     }
 }

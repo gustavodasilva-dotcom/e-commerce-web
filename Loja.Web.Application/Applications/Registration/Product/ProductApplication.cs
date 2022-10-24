@@ -1,4 +1,5 @@
 ﻿using Loja.Web.Application.Interfaces.Registration.Finance;
+using Loja.Web.Application.Interfaces.Registration.Image;
 using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Finance;
@@ -20,6 +21,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
         private readonly Measurements _measurements = new();
         private readonly Users _users = new();
 
+        private readonly IImageApplication _imageApplication;
         private readonly ICurrencyApplication _currencyApplication;
         private readonly ISubcategoryApplication _subcategoryApplication;
         private readonly IManufacturerApplication _manufacturerApplication;
@@ -27,11 +29,13 @@ namespace Loja.Web.Application.Applications.Registration.Product
         #endregion
 
         #region << CONSTRUCTOR >>
-        public ProductApplication(ICurrencyApplication currencyApplication,
+        public ProductApplication(IImageApplication imageApplication,
+                                  ICurrencyApplication currencyApplication,
                                   ISubcategoryApplication subcategoryApplication,
                                   IManufacturerApplication manufacturerApplication,
                                   IMeasurementApplication measurementApplication)
         {
+            _imageApplication = imageApplication;
             _currencyApplication = currencyApplication;
             _subcategoryApplication = subcategoryApplication;
             _manufacturerApplication = manufacturerApplication;
@@ -44,116 +48,124 @@ namespace Loja.Web.Application.Applications.Registration.Product
         #region PUBLIC
 
         #region GetAllAsync
-        public async Task<IEnumerable<Products?>> GetAllAsync()
+        public async Task<List<ProductViewModel>> GetAllAsync()
         {
-            return await _products.GetAllAsync();
+            List<ProductViewModel> productsReturn = new();
+
+            var products = await _products.GetAllAsync() ??
+                throw new Exception("There's no products registered.");
+
+            var currencies = await _currencyApplication.GetAllAsync();
+            var subcategories = await _subcategoryApplication.GetAllAsync();
+            var manufacturers = await _manufacturerApplication.GetAllAsync();
+            var measurements = await _measurementApplication.GetAllAsync();
+            
+            foreach (var product in products.Where(x => x.Active && !x.Deleted))
+            {
+                var currency = currencies.FirstOrDefault(x => x.ID == product.CurrencyID && x.Active && !x.Deleted);
+                var subcategory = subcategories.FirstOrDefault(x => x.ID == product.SubcategoryID && x.Active && !x.Deleted);
+                var manufacturer = manufacturers.FirstOrDefault(x => x.ID == product.ManufacturerID && x.Active && !x.Deleted);
+
+                var weight = measurements.FirstOrDefault(x => x.ID == product.WeightMeasurementTypeID && x.Active && !x.Deleted);
+                var height = measurements.FirstOrDefault(x => x.ID == product.HeightMeasurementTypeID && x.Active && !x.Deleted);
+                var width = measurements.FirstOrDefault(x => x.ID == product.WidthMeasurementTypeID && x.Active && !x.Deleted);
+                var length = measurements.FirstOrDefault(x => x.ID == product.LengthMeasurementTypeID && x.Active && !x.Deleted);
+
+                var weightModel = weight == null ? null : new MeasurementViewModel
+                {
+                    ID = weight.ID,
+                    GuidID = weight.GuidID,
+                    Name = weight.Name,
+                    Value = product.Weight,
+                    MeasurementType = weight.MeasurementType,
+                    Active = weight.Active,
+                    Deleted = weight.Deleted,
+                    Created_at = weight.Created_at,
+                    Created_by = weight.Created_by,
+                    Deleted_at = weight.Deleted_at,
+                    Deleted_by = weight.Deleted_by
+                };
+
+                var heightModel = height == null ? null : new MeasurementViewModel
+                {
+                    ID = height.ID,
+                    GuidID = height.GuidID,
+                    Name = height.Name,
+                    Value = product.Height,
+                    MeasurementType = height.MeasurementType,
+                    Active = height.Active,
+                    Deleted = height.Deleted,
+                    Created_at = height.Created_at,
+                    Created_by = height.Created_by,
+                    Deleted_at = height.Deleted_at,
+                    Deleted_by = height.Deleted_by
+                };
+
+                var widthModel = width == null ? null : new MeasurementViewModel
+                {
+                    ID = width.ID,
+                    GuidID = width.GuidID,
+                    Name = width.Name,
+                    Value = product.Width,
+                    MeasurementType = width.MeasurementType,
+                    Active = width.Active,
+                    Deleted = width.Deleted,
+                    Created_at = width.Created_at,
+                    Created_by = width.Created_by,
+                    Deleted_at = width.Deleted_at,
+                    Deleted_by = width.Deleted_by
+                };
+
+                var lengthModel = length == null ? null : new MeasurementViewModel
+                {
+                    ID = length.ID,
+                    GuidID = length.GuidID,
+                    Name = length.Name,
+                    Value = product.Length,
+                    MeasurementType = length.MeasurementType,
+                    Active = length.Active,
+                    Deleted = length.Deleted,
+                    Created_at = length.Created_at,
+                    Created_by = length.Created_by,
+                    Deleted_at = length.Deleted_at,
+                    Deleted_by = length.Deleted_by
+                };
+
+                var bases64 = await _imageApplication.GetBases64ByProductIDAsync(product.GuidID);
+
+                productsReturn.Add(new ProductViewModel
+                {
+                    ID = product.ID,
+                    GuidID = product.GuidID,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Discount = product.Discount,
+                    Currency = currency,
+                    Subcategory = subcategory,
+                    Manufacturer = manufacturer,
+                    Weight = weightModel,
+                    Height = heightModel,
+                    Width = widthModel,
+                    Length = lengthModel,
+                    Bases64 = bases64.ToList(),
+                    Stock = product.Stock,
+                    Active = product.Active,
+                    Deleted = product.Deleted,
+                    Created_at = product.Created_at
+                });
+            }
+
+            return productsReturn;
         }
         #endregion
 
         #region GetByIDAsync
-        public async Task<ProductViewModel> GetByIDAsync(Guid guid)
+        public async Task<ProductViewModel?> GetByIDAsync(Guid guid)
         {
-            var products = await _products.GetAllAsync() ??
-                throw new Exception("There's no products registered.");
+            var products = await GetAllAsync();
 
-            var product = products.FirstOrDefault(x => x.GuidID == guid && x.Active && !x.Deleted) ??
-                throw new Exception("The product was not found.");
-
-            var currencies = await _currencyApplication.GetAllAsync();
-            var currency = currencies.FirstOrDefault(x => x.ID == product.CurrencyID && x.Active && !x.Deleted);
-
-            var subcategories = await _subcategoryApplication.GetAllAsync();
-            var subcategory = subcategories.FirstOrDefault(x => x.ID == product.SubcategoryID && x.Active && !x.Deleted);
-
-            var manufacturers = await _manufacturerApplication.GetAllAsync();
-            var manufacturer = manufacturers.FirstOrDefault(x => x.ID == product.ManufacturerID && x.Active && !x.Deleted);
-
-            var measurements = await _measurementApplication.GetAllAsync();
-            var weight = measurements.FirstOrDefault(x => x.ID == product.WeightMeasurementTypeID && x.Active && !x.Deleted);
-            var height = measurements.FirstOrDefault(x => x.ID == product.HeightMeasurementTypeID && x.Active && !x.Deleted);
-            var width = measurements.FirstOrDefault(x => x.ID == product.WidthMeasurementTypeID && x.Active && !x.Deleted);
-            var length = measurements.FirstOrDefault(x => x.ID == product.LengthMeasurementTypeID && x.Active && !x.Deleted);
-
-            var weightModel = weight == null ? null : new MeasurementViewModel
-            {
-                ID = weight.ID,
-                GuidID = weight.GuidID,
-                Name = weight.Name,
-                Value = product.Weight,
-                MeasurementType = weight.MeasurementType,
-                Active = weight.Active,
-                Deleted = weight.Deleted,
-                Created_at = weight.Created_at,
-                Created_by = weight.Created_by,
-                Deleted_at = weight.Deleted_at,
-                Deleted_by = weight.Deleted_by
-            };
-
-            var heightModel = height == null ? null : new MeasurementViewModel
-            {
-                ID = height.ID,
-                GuidID = height.GuidID,
-                Name = height.Name,
-                Value = product.Height,
-                MeasurementType = height.MeasurementType,
-                Active = height.Active,
-                Deleted = height.Deleted,
-                Created_at = height.Created_at,
-                Created_by = height.Created_by,
-                Deleted_at = height.Deleted_at,
-                Deleted_by = height.Deleted_by
-            };
-
-            var widthModel = width == null ? null : new MeasurementViewModel
-            {
-                ID = width.ID,
-                GuidID = width.GuidID,
-                Name = width.Name,
-                Value = product.Width,
-                MeasurementType = width.MeasurementType,
-                Active = width.Active,
-                Deleted = width.Deleted,
-                Created_at = width.Created_at,
-                Created_by = width.Created_by,
-                Deleted_at = width.Deleted_at,
-                Deleted_by = width.Deleted_by
-            };
-
-            var lengthModel = length == null ? null : new MeasurementViewModel
-            {
-                ID = length.ID,
-                GuidID = length.GuidID,
-                Name = length.Name,
-                Value = product.Length,
-                MeasurementType = length.MeasurementType,
-                Active = length.Active,
-                Deleted = length.Deleted,
-                Created_at = length.Created_at,
-                Created_by = length.Created_by,
-                Deleted_at = length.Deleted_at,
-                Deleted_by = length.Deleted_by
-            };
-
-            return new ProductViewModel
-            {
-                ID = product.ID,
-                GuidID = product.GuidID,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                Discount = product.Discount,
-                Currency = currency,
-                Subcategory = subcategory,
-                Manufacturer = manufacturer,
-                Weight = weightModel,
-                Height = heightModel,
-                Width = widthModel,
-                Length = lengthModel,
-                Stock = product.Stock,
-                Active = product.Active,
-                Deleted = product.Deleted,
-                Created_at = product.Created_at
-            };
+            return products.FirstOrDefault(x => x.GuidID == guid);
         }
         #endregion
 
