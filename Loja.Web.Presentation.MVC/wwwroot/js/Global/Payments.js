@@ -66,7 +66,7 @@ function SetComboBoxPaymentTypes() {
     paymentTypes = window.PaymentTypes;
 
     $.each(paymentTypes, function (i, item) {
-        $('#register-select-payment-types').append(`<option value="${paymentTypes[i].guidID}">${paymentTypes[i].name}</option>`);
+        $('#register-select-payment-types').append(`<option value="${paymentTypes[i].guidID}">${CapitalizeFirstLetter(paymentTypes[i].name)}</option>`);
     });
 
 }
@@ -92,7 +92,7 @@ function SetUserCardsList() {
         htmlCode +=         `onclick="SetCardInfos(this, null, 'card-issuer-img')">`
         htmlCode +=     '<p style="margin-left: 18px;"><strong>Card number</strong>:';
         htmlCode +=     `${"*".repeat(card[i].cardNumber.length - 4) + card[i].cardNumber.slice(-4)}</p>`;
-        htmlCode +=     `<p><strong>Name at the card:</strong> ${card[i].nameAtTheCard}</p>`;
+        htmlCode +=     `<p><strong>Name at the card:</strong> ${CapitalizeFirstLetter(card[i].nameAtTheCard)}</p>`;
         htmlCode +=     `<p><strong>CVV:</strong> ${card[i].cvv}<span style="margin-left: 20px;"></span>`;
         htmlCode +=     `<strong>Expiration:</strong> ${card[i].month}/${card[i].year}</p>`;
         htmlCode += '</div>';

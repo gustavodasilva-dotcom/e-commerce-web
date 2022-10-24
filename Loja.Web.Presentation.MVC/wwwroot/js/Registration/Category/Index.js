@@ -25,7 +25,7 @@ function SetTableElements(categories) {
             htmlCode += '<tr class="register-table-tr">';
             htmlCode +=     '<td class="register-table-td" name="manufacturer-name">';
             htmlCode +=         `<a href="/Generics/Index?process=1&method=1&guid=${categories[i].guidID}">`;
-            htmlCode +=             `<div>${categories[i].name}`;
+            htmlCode +=             `<div>${CapitalizeFirstLetter(categories[i].name)}`;
             htmlCode +=             '</div>';
             htmlCode +=         '</a>';
             htmlCode +=     '</td>';

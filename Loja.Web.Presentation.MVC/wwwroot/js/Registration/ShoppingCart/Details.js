@@ -13,7 +13,7 @@ function SetCards() {
 
         htmlCard += '<a class="shop-cart-title" href="' + window.location.origin + '/Products/Details?guidID='
             + window.ShoppingCart.shoppingCartProducts[i].productGuid + '">'
-            + window.ShoppingCart.shoppingCartProducts[i].name + '</a>';
+            + CapitalizeFirstLetter(window.ShoppingCart.shoppingCartProducts[i].name) + '</a>';
 
         htmlCard += `<p class="shop-cart-quantity">Quantity: ${window.ShoppingCart.shoppingCartProducts[i].quantity}</p>`;
 

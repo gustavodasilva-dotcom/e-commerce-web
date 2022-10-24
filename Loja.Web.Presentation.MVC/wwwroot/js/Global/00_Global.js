@@ -58,8 +58,24 @@ function DisableButton(buttonID, disable) {
 function SetComboOptions(model, elementID) {
 
     $.each(model, function (i, item) {
-        $('#' + elementID).append(`<option value="${model[i].guidID}">${model[i].name}</option>`);
+        $('#' + elementID).append(`<option value="${model[i].guidID}">${CapitalizeFirstLetter(model[i].name)}</option>`);
     });
+}
+
+function CapitalizeFirstLetter(string) {
+
+    let stringSplit = string.split(/(\s+)/);
+    string = '';
+
+    for (let i = 0; i < stringSplit.length; i++) {
+
+        if (stringSplit[i] == ' ')
+            string += stringSplit[i];
+        else
+            string += stringSplit[i].charAt(0).toUpperCase() + stringSplit[i].slice(1);
+    }
+
+    return string;
 }
 
 function parseFloatToBackEnd(value) {

@@ -122,7 +122,7 @@ function OpenOrderDetailsModal(order) {
         htmlCode += '<p><strong>Order not finished</strong></p>';
 
     htmlCode += `<p><strong>Created at:</strong> ${new Date(orderObj.created_at).toISOString().split('T')[0]}</p>`;
-    htmlCode += `<p><strong>Order status:</strong> ${orderObj.orderStatus.name}</p>`;
+    htmlCode += `<p><strong>Order status:</strong> ${CapitalizeFirstLetter(orderObj.orderStatus.name)}</p>`;
     htmlCode += '<hr></br>';
     htmlCode += '<h3>Total & payment:</h3>';
 
@@ -131,7 +131,7 @@ function OpenOrderDetailsModal(order) {
     else
         htmlCode += '<p><strong>Order not finished</strong></p>';
 
-    htmlCode += `<p><strong>Payment method:</strong> ${orderObj.paymentMethod.name}</p>`;
+    htmlCode += `<p><strong>Payment method:</strong> ${CapitalizeFirstLetter(orderObj.paymentMethod.name)}</p>`;
     htmlCode += '</br>';
 
     if (orderObj.orderStatus.name !== 'Completed') {

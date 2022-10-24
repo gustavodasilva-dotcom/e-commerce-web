@@ -71,7 +71,7 @@
         <h1>
             @if (Accessor.HttpContext.Session.Keys.Any())
             {
-                @Accessor?.HttpContext?.Session.GetString("Name")
+                @Accessor?.HttpContext?.Session?.GetString("Name")?.ToUpper()
             }
             else
             {

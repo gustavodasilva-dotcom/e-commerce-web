@@ -136,13 +136,13 @@ function SetComboBoxMeasurements(measurements) {
     var height = measurements.filter(function (value) { return value.measurementTypeID == 2 });
 
     $.each(height, function (i, item) {
-        $('#register-select-height-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
-        $('#register-select-width-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
-        $('#register-select-length-measurements').append(`<option value="${height[i].guidID}">${height[i].name}</option>`);
+        $('#register-select-height-measurements').append(`<option value="${height[i].guidID}">${CapitalizeFirstLetter(height[i].name)}</option>`);
+        $('#register-select-width-measurements').append(`<option value="${height[i].guidID}">${CapitalizeFirstLetter(height[i].name)}</option>`);
+        $('#register-select-length-measurements').append(`<option value="${height[i].guidID}">${CapitalizeFirstLetter(height[i].name)}</option>`);
     });
 
     $.each(mass, function (i, item) {
-        $('#register-select-mass-measurements').append(`<option value="${mass[i].guidID}">${mass[i].name}</option>`);
+        $('#register-select-mass-measurements').append(`<option value="${mass[i].guidID}">${CapitalizeFirstLetter(mass[i].name)}</option>`);
     });
 }
 

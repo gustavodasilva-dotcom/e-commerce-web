@@ -25,7 +25,7 @@ function SetTableElements(manufacturers) {
             htmlCode += '<tr class="register-table-tr">';
             htmlCode +=     '<td class="register-table-td" name="manufacturer-name">';
             htmlCode +=         `<a href="/Manufacturers/Details?guid=${manufacturers[i].guidID}">`;
-            htmlCode +=             `<div style="text-transform: uppercase;">${manufacturers[i].name}`;
+            htmlCode +=             `<div style="text-transform: uppercase;">${CapitalizeFirstLetter(manufacturers[i].name)}`;
             htmlCode +=             '</div>';
             htmlCode +=         '</a>';
             htmlCode +=     '</td>';

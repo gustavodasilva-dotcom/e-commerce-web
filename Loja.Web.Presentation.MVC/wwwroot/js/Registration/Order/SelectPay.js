@@ -91,7 +91,7 @@ function SetShoppingCartItems() {
 
             htmlCards += '<div class="item-card">';
 
-            htmlCards += `<a class="item-title" href="#">${window.ShoppingCart.shoppingCartProducts[i].name}</a></br>`;
+            htmlCards += `<a class="item-title" href="#">${CapitalizeFirstLetter(window.ShoppingCart.shoppingCartProducts[i].name)}</a></br>`;
 
             htmlCards += `<p class="item-price">${window.ShoppingCart.shoppingCartProducts[i].price}</p>`;
 
@@ -112,7 +112,7 @@ function SetShoppingCartItems() {
 
             htmlCards += '<div class="item-card">';
 
-            htmlCards += `<a class="item-title" href="#">${products[i].name}</a></br>`;
+            htmlCards += `<a class="item-title" href="#">${CapitalizeFirstLetter(products[i].name)}</a></br>`;
 
             htmlCards += `<p class="item-price">${products[i].currency.symbol} ${products[i].price}</p>`;
 

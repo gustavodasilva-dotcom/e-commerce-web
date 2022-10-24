@@ -21,9 +21,9 @@ $('#register-user').click(function () {
     var user = RegisterUser(userModel);
 
     if (user != null || user != undefined) {
-        ShowMessageDiv('User registered sucessfully.');
 
-        ClearFields();
+        ShowMessageDiv('User registered sucessfully.');
+        window.location.href = '/Accounts/Login';
     }
 });
 

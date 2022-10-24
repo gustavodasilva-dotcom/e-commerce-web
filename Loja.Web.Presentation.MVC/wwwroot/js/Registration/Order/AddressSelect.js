@@ -53,11 +53,13 @@ function SetAddressesCards() {
         $.each(addresses, function (i, item) {
             htmlCards += '<div class="card-address">';
             htmlCards +=    `<input type="radio" name="address-chk" class="address-chk" data-guid="${addresses[i].guidID}" value="${addresses[i].guidID}">`;
-            htmlCards +=    `<p class="address-name">${addresses[i].street.name}</p>`;
-            htmlCards +=    `<p class="address-number">${addresses[i].number}`;
-            htmlCards +=    addresses[i].comment == null || addresses[i].comment == '' ? '' : ', ' + addresses[i].comment + '</p>';
-            htmlCards +=    `<p class="address-city">${addresses[i].city.name} - ${addresses[i].state.initials}</p>`;
-            htmlCards +=    `<p class="address-country">${addresses[i].street.postalCode} - ${addresses[i].country.name}</p>`;
+            htmlCards +=    `<p class="address-name">${CapitalizeFirstLetter(addresses[i].street.name)}</p>`;
+            htmlCards +=    `<p class="address-number">${CapitalizeFirstLetter(addresses[i].number)}`;
+            htmlCards +=    addresses[i].comment == null || CapitalizeFirstLetter(addresses[i].comment) == '' ?
+                                '' : ', ' + CapitalizeFirstLetter(addresses[i].comment) + '</p>';
+            htmlCards +=    `<p class="address-city">${CapitalizeFirstLetter(addresses[i].city.name)} - 
+                                ${CapitalizeFirstLetter(addresses[i].state.initials)}</p>`;
+            htmlCards +=    `<p class="address-country">${addresses[i].street.postalCode} - ${CapitalizeFirstLetter(addresses[i].country.name)}</p>`;
             htmlCards += '</div>';
             htmlCards += '<hr />';
         });

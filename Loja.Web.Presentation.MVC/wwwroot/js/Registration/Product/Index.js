@@ -46,7 +46,7 @@ $('#register-select-subcategories').on('change', function () {
         else
             htmlCode += '<img src="/media/default.png">';
 
-        htmlCode +=         `<h3>${subcategProducts[i].name}</h3>`;
+        htmlCode +=         `<h3>${CapitalizeFirstLetter(subcategProducts[i].name)}</h3>`;
         htmlCode +=         `<h6>${subcategProducts[i].currency.symbol} ${subcategProducts[i].price}</h6>`;
         htmlCode +=         '<ul>';
         htmlCode +=             '<li>';
