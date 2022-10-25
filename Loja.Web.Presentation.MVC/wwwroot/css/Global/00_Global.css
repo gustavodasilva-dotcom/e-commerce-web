@@ -707,3 +707,47 @@ label #cancel {
 /************************************
  ********** Product cards ***********
  ************************************/
+
+
+/************************************
+ ********* Loading spinner **********
+ ************************************/
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f9fb;
+    transition: opacity 0.75s, visibility 0.75s;
+}
+
+.loading-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading::after {
+    content: "";
+    width: 150px;
+    height: 150px;
+    border: 35px solid #0081A7;
+    border-top-color: #00AFB9;
+    border-radius: 100%;
+    animation: loading 0.75s ease infinite;
+}
+
+@keyframes loading {
+    from {
+        transform: rotate(0turn);
+    }
+    to {
+        transform: rotate(1turn);
+    }
+}
+/************************************
+ ********* Loading spinner **********
+ ************************************/

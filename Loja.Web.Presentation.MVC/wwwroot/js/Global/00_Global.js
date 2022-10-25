@@ -11,6 +11,19 @@ const response = (success, message = null, obj = null) => ({
 //#endregion
 
 
+//#region Loading
+window.addEventListener('load', () => {
+    const loading = document.querySelector('.loading');
+
+    loading.classList.add('loading-hidden');
+
+    loading.addEventListener('transitionend', () => {
+        document.body.removeChild('loading');
+    })
+})
+//#endregion
+
+
 //#region Model code
 function ShowMessageDiv(message) {
     $('#div_Message').hide();
