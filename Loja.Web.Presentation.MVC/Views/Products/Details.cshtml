@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     </head>
     <body>
-        @if (Accessor.HttpContext.Session.Keys.Any())
+        @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
         {
             <button type="button" class="default-button" id="btn-edit" name="btn-edit">Edit</button>
         }

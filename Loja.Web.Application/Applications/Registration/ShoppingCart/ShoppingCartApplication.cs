@@ -29,9 +29,10 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
         #region PUBLIC
 
         #region GetShoppingCartByUserGuidAsync
-        public async Task<ShoppingCartViewModel> GetShoppingCartByUserGuidAsync(Guid? userGuid)
+        public async Task<ShoppingCartViewModel?> GetShoppingCartByUserGuidAsync(Guid? userGuid)
         {
-            List<ShoppingCartProductViewModel> shoppingCartProductsReturn = new();
+            ShoppingCartViewModel? shoppingCartReturn = null;
+            List<ShoppingCartProductViewModel>? shoppingCartProductsReturn = null;
 
             int? shoppingCartID = null;
 
@@ -71,6 +72,9 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
                        !cartProduct.Active && cartProduct.Deleted)
                         continue;
 
+                    if (shoppingCartProductsReturn is null)
+                        shoppingCartProductsReturn = new();
+
                     var productDetails = products.FirstOrDefault(x => x?.ID == cartProduct.ProductID);
 
                     cartProduct.ProductGuid = productDetails?.GuidID;
@@ -82,13 +86,16 @@ namespace Loja.Web.Application.Applications.Registration.ShoppingCart
                 }
             }
 
-            var shoppingCartReturn = new ShoppingCartViewModel
+            if (userShoppingCart is not null)
             {
-                ID = userShoppingCart.ID,
-                GuidID = userShoppingCart.GuidID,
-                ShoppingCartProducts = shoppingCartProductsReturn
-            };
-
+                shoppingCartReturn = new ShoppingCartViewModel
+                {
+                    ID = userShoppingCart.ID,
+                    GuidID = userShoppingCart.GuidID,
+                    ShoppingCartProducts = shoppingCartProductsReturn
+                };
+            }
+            
             return shoppingCartReturn;
         }
         #endregion

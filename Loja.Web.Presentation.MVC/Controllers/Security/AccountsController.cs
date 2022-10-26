@@ -33,7 +33,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Security
 
         public IActionResult OrdersReturns()
         {
-            if (HttpContext.Session.GetString(SessionRole) == "Employee")
+            if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
             {
                 return View();
             }

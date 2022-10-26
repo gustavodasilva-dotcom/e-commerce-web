@@ -6,6 +6,6 @@
 
         public Guid GuidID { get; set; }
 
-        public List<ShoppingCartProductViewModel> ShoppingCartProducts { get; set; }
+        public List<ShoppingCartProductViewModel>? ShoppingCartProducts { get; set; }
     }
 }

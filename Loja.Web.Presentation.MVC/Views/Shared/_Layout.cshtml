@@ -37,13 +37,18 @@
         <span>Home</span>
     </a>
     
-    <a href="/Categories/Index">
-        <i class="fas fa-sliders-h"></i>
-        <span>Categories</span>
-    </a>
-
     @if (Accessor.HttpContext.Session.Keys.Any())
     {
+        <a href="/Accounts/Register">
+            <i class="fas fa-sliders-h"></i>
+            <span>Users</span>
+        </a>
+
+        <a href="/Categories/Index">
+            <i class="fas fa-sliders-h"></i>
+            <span>Categories</span>
+        </a>
+
         <a href="/Subcategories/Index">
             <i class="fas fa-sliders-h"></i>
             <span>Subcategories</span>

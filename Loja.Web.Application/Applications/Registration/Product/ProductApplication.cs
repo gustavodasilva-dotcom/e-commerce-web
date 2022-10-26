@@ -4,6 +4,7 @@ using Loja.Web.Application.Interfaces.Registration.Manufacturer;
 using Loja.Web.Application.Interfaces.Registration.Product;
 using Loja.Web.Domain.Entities.Registration.Finance;
 using Loja.Web.Domain.Entities.Registration.Manufacturer;
+using Loja.Web.Domain.Entities.Registration.Order;
 using Loja.Web.Domain.Entities.Registration.Product;
 using Loja.Web.Domain.Entities.Security;
 using Loja.Web.Presentation.Models.Registration.Product.Model;
@@ -21,6 +22,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
         private readonly Measurements _measurements = new();
         private readonly Users _users = new();
         private readonly ProductsRatings _productsRatings = new();
+        private readonly OrdersProducts _ordersProducts = new();
 
         private readonly IImageApplication _imageApplication;
         private readonly ICurrencyApplication _currencyApplication;
@@ -168,6 +170,33 @@ namespace Loja.Web.Application.Applications.Registration.Product
             var products = await GetAllAsync();
 
             return products.FirstOrDefault(x => x.GuidID == guid);
+        }
+        #endregion
+
+        #region GetMostSoldsAsync
+        public async Task<List<ProductViewModel>?> GetMostSoldsAsync()
+        {
+            List<ProductViewModel>? mostSoldsReturn = null;
+
+            var products = await _products.GetAllAsync();
+            var ordersProducts = await _ordersProducts.GetAllAsync();
+
+            var soldInMonth = ordersProducts.Where(x => x.Created_at.Month == DateTime.Now.Month).ToList();
+            var soldInMonthGrouped = soldInMonth.GroupBy(x => x.ProductID).ToList();
+
+            foreach (var product in soldInMonthGrouped.Take(4))
+            {
+                var productDetails = products.FirstOrDefault(x => x.ID == product.Key && x.Active && !x.Deleted);
+
+                if (productDetails is not null)
+                {
+                    if (mostSoldsReturn is null) mostSoldsReturn = new();
+                    var productModel = await GetByIDAsync(productDetails.GuidID);
+                    if (productModel is not null) mostSoldsReturn.Add(productModel);
+                }
+            }
+
+            return mostSoldsReturn;
         }
         #endregion
 

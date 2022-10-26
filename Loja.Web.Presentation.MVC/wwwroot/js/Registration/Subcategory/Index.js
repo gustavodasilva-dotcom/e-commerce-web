@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     var subcategories = GetSubcategories();
 
     if (subcategories != null || subcategories != undefined)
@@ -6,6 +7,7 @@
 });
 
 function SetTableElements(subcategories) {
+
     let htmlCode = '';
 
     var categories = GetCategories();
@@ -13,9 +15,11 @@ function SetTableElements(subcategories) {
     htmlCode += '<table class="register-table" id="table_Categories">';
 
     if (categories != null || categories != undefined) {
+
         htmlCode += '<table class="register-table" id="table_Categories">';
 
         for (let i = 0; i < categories.length; i++) {
+
             var catSub = subcategories.filter(x => x.category.name == categories[i].name);
 
             htmlCode += '<tr class="register-table-tr">';
@@ -23,10 +27,11 @@ function SetTableElements(subcategories) {
             htmlCode += '</tr>';
 
             for (let i = 0; i < catSub.length; i++) {
+
                 htmlCode += '<tr class="register-table-tr">';
                 htmlCode +=     `<td class="register-table-td" name="manufacturer-name">`;
                 htmlCode +=         `<a href="/Generics/Index?process=2&method=1&guid=${catSub[i].guidID}">`;
-                htmlCode +=             `<div>${catSub[i].name.toUpperCase()}`;
+                htmlCode +=             `<div>${CapitalizeFirstLetter(catSub[i].name)}`;
                 htmlCode +=             '</div>';
                 htmlCode +=         '</a>';
                 htmlCode +=     '</td>';
@@ -34,6 +39,7 @@ function SetTableElements(subcategories) {
             }
         }
     } else {
+
         htmlCode += '<tr class="register-table-tr">';
         htmlCode +=     '<th class="register-table-th">Name</th>';
         htmlCode += '</tr>';
@@ -41,11 +47,13 @@ function SetTableElements(subcategories) {
         htmlCode += '<tr class="register-table-tr">';
 
         if (subcategories.length == 0) {
+
             htmlCode += '<tr class="register-table-tr">';
             htmlCode +=     '<td class="register-table-td" id="manufacturer-name" data-guid="">No data registered.</td>';
             htmlCode += '</tr>';
         } else {
             for (let i = 0; i < subcategories.length; i++) {
+
                 htmlCode += '<tr class="register-table-tr">';
                 htmlCode +=     `<td class="register-table-td" name="manufacturer-name" data-guid="${subcategories[i].guidID}">${subcategories[i].name}</td>`;
                 htmlCode += '</tr>';

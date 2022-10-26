@@ -94,6 +94,25 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
+        #region GetMostSolds
+        [HttpGet]
+        public async Task<JsonResult> GetMostSolds()
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                result.Products = await _productApplication.GetMostSoldsAsync();
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #region Save
         [HttpPost]
         public async Task<JsonResult> Save(ProductsModel model)

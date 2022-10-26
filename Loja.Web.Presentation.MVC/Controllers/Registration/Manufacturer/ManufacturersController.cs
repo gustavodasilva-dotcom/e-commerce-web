@@ -32,7 +32,7 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Manufacturer
         #region Views
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString(SessionRole) == "Employee")
+            if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
             {
                 return View();
             }

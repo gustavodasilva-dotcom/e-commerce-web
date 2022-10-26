@@ -25,19 +25,22 @@
 
 function SetProductRating(rate) {
 
-    const stars = document.querySelectorAll('.star');
+    if (rate != null) {
 
-    stars.forEach((star, i) => {
-        let currentRate = i + 1;
+        const stars = document.querySelectorAll('.star');
 
-        if (Math.round(rate.rating) >= currentRate) {
-            star.innerHTML = '&#9733';
-        } else {
-            star.innerHTML = '&#9734';
-        }
-    });
+        stars.forEach((star, i) => {
+            let currentRate = i + 1;
 
-    $('.total-rating').text(rate.totalRatings);
+            if (Math.round(rate.rating) >= currentRate) {
+                star.innerHTML = '&#9733';
+            } else {
+                star.innerHTML = '&#9734';
+            }
+        });
+
+        $('.total-rating').text(rate.totalRatings);
+    }
 }
 
 function SaveProductRating(rate) {
@@ -117,6 +120,37 @@ function GetProducts() {
         type: "GET",
         dataType: "json",
         url: "/Products/GetAll",
+        success: function (result) {
+            if (result.Code == 1) {
+                products = result.Products;
+
+                if (result.RedirectToHome)
+                    window.location.href = '/Home/Index';
+            }
+            else {
+                if (result.RedirectToLogin) {
+                    window.location.href = '/Accounts/Login';
+                } else if (result.RedirectToHome) {
+                    window.location.href = '/Home/Index';
+                } else {
+                    ShowMessageDiv(result.Message);
+                    return;
+                }
+            }
+        }
+    });
+
+    return products;
+}
+
+function GetMostSolds() {
+    let products = null;
+
+    $.ajax({
+        async: false,
+        type: "GET",
+        dataType: "json",
+        url: "/Products/GetMostSolds",
         success: function (result) {
             if (result.Code == 1) {
                 products = result.Products;

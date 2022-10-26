@@ -45,18 +45,24 @@ function SetHtmlElements() {
 
 
     /****************** Completed orders tab ******************/
-    for (let i = 0; i < completeds.length; i++) {
+    if (completeds.length > 0) {
 
-        htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${completeds[i].guidID}">`;
+        for (let i = 0; i < completeds.length; i++) {
 
-        if (!completeds[i].tracking)
-            htmlCode += '<p><strong>Order not finished</strong></p>';
-        else
-            htmlCode += `<p>Order <strong>${completeds[i].tracking}</strong></p>`;
+            htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${completeds[i].guidID}">`;
 
-        htmlCode +=     `<p>Created at: <strong>${new Date(completeds[i].created_at).toISOString().split('T')[0]}</strong></p>`;
-        htmlCode +=     '<hr>';
-        htmlCode += '</a>';
+            if (!completeds[i].tracking)
+                htmlCode += '<p><strong>Order not finished</strong></p>';
+            else
+                htmlCode += `<p>Order <strong>${completeds[i].tracking}</strong></p>`;
+
+            htmlCode += `<p>Created at: <strong>${new Date(completeds[i].created_at).toISOString().split('T')[0]}</strong></p>`;
+            htmlCode += '<hr>';
+            htmlCode += '</a>';
+        }
+    } else {
+
+        htmlCode += 'No content';
     }
 
     $('.tabCompletedOrders').html(htmlCode);
@@ -66,18 +72,25 @@ function SetHtmlElements() {
     htmlCode = '';
 
     /******************* Pending orders tab *******************/
-    for (let i = 0; i < pendings.length; i++) {
-        htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${pendings[i].guidID}">`;
+    if (pendings.length > 0) {
 
-        if (!pendings[i].tracking)
-            htmlCode += '<p><strong>Order not finished</strong></p>';
-        else
-            htmlCode += `<p>Order <strong>${pendings[i].tracking}</strong></p>`;
+        for (let i = 0; i < pendings.length; i++) {
+            htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${pendings[i].guidID}">`;
 
-        htmlCode += `<p>Created at: <strong>${new Date(pendings[i].created_at).toISOString().split('T')[0]}</strong></p>`;
-        htmlCode += '<hr>';
-        htmlCode += '</a>';
+            if (!pendings[i].tracking)
+                htmlCode += '<p><strong>Order not finished</strong></p>';
+            else
+                htmlCode += `<p>Order <strong>${pendings[i].tracking}</strong></p>`;
+
+            htmlCode += `<p>Created at: <strong>${new Date(pendings[i].created_at).toISOString().split('T')[0]}</strong></p>`;
+            htmlCode += '<hr>';
+            htmlCode += '</a>';
+        }
+    } else {
+
+        htmlCode += 'No content';
     }
+    
     
     $('.tabPending').html(htmlCode);
     /******************* Pending orders tab *******************/
@@ -86,18 +99,25 @@ function SetHtmlElements() {
     htmlCode = '';
 
     /****************** Cancelleds orders tab *****************/
-    for (let i = 0; i < cancelleds.length; i++) {
-        htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${cancelleds[i].guidID}">`;
+    if (cancelleds.length > 0) {
 
-        if (!cancelleds[i].tracking)
-            htmlCode += '<p><strong>Order not finished</strong></p>';
-        else
-            htmlCode += `<p>Order <strong>${cancelleds[i].tracking}</strong></p>`;
+        for (let i = 0; i < cancelleds.length; i++) {
+            htmlCode += `<a onclick="OpenOrderDetailsModal($(this));" href="#" style="text-decoration: none; color: #000000;" id="${cancelleds[i].guidID}">`;
 
-        htmlCode += `<p>Created at: <strong>${new Date(cancelleds[i].created_at).toISOString().split('T')[0]}</strong></p>`;
-        htmlCode += '<hr>';
-        htmlCode += '</a>';
+            if (!cancelleds[i].tracking)
+                htmlCode += '<p><strong>Order not finished</strong></p>';
+            else
+                htmlCode += `<p>Order <strong>${cancelleds[i].tracking}</strong></p>`;
+
+            htmlCode += `<p>Created at: <strong>${new Date(cancelleds[i].created_at).toISOString().split('T')[0]}</strong></p>`;
+            htmlCode += '<hr>';
+            htmlCode += '</a>';
+        }
+    } else {
+
+        htmlCode += 'No content';
     }
+    
 
     $('.tabCancelledReturned').html(htmlCode);
     /****************** Cancelleds orders tab *****************/

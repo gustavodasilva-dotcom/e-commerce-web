@@ -652,8 +652,8 @@ label #cancel {
     margin: 50px 0;
 }
 
-.card-gallery {
-    width: 40%;
+.card-gallery,
+.card-gallery-small {
     margin: 15px;
     box-sizing: border-box;
     float: left;
@@ -667,12 +667,22 @@ label #cancel {
     background: #f2f2f2;
 }
 
-    .card-gallery:hover {
+.card-gallery {
+    width: 40%;
+}
+
+.card-gallery-small {
+    width: 20%;
+}
+
+    .card-gallery:hover,
+    .card-gallery-small:hover {
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         transform: translate(0px, -8px);
     }
 
-    .card-gallery img {
+    .card-gallery img,
+    .card-gallery-small img {
         width: 200px;
         height: 200px;
         text-align: center;
@@ -680,48 +690,55 @@ label #cancel {
         display: block;
     }
 
-    .card-gallery h3 {
-        text-align: center;
-        font-size: 20px;
-        font-weight: bold;
-        margin: 0;
-        margin-bottom: 10px;
-        padding-top: 30px;
-    }
+.card-gallery h3,
+.card-gallery-small h3 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+    padding-top: 30px;
+}
 
-    .card-gallery a {
-        text-decoration: none;
-        color: inherit;
-    }
+.card-gallery a,
+.card-gallery-small a {
+    text-decoration: none;
+    color: inherit;
+}
 
-    .card-gallery h6 {
-        font-size: 26px;
-        text-align: center;
-        margin: 0;
-        margin-bottom: 10px;
-    }
+.card-gallery h6,
+.card-gallery-small h6 {
+    font-size: 26px;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 10px;
+}
 
-    .card-gallery ul {
-        list-style: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-    }
+.card-gallery ul,
+.card-gallery-small ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
 
-    .card-gallery li {
-        padding-top: 5px;
-    }
+.card-gallery li,
+.card-gallery-small li {
+    padding-top: 5px;
+}
 
-    .card-gallery .fa {
-        transition: .4s;
-        margin: 3px;
-    }
+.card-gallery .fa,
+.card-gallery-small .fa {
+    transition: .4s;
+    margin: 3px;
+}
 
-        .card-gallery .fa:hover {
-            transform: scale(1.3);
-            transition: .6s;
-        }
+    .card-gallery .fa:hover,
+    .card-gallery-small .fa:hover {
+        transform: scale(1.3);
+        transition: .6s;
+    }
 
 @media(max-width:1000px) {
     #gallery {

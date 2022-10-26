@@ -103,7 +103,10 @@ function SetHtmlElementsByProcess(process) {
                 break;
             case '2':
                 categories = GetCategories();
-                if (categories != null || categories != undefined) SetComboOptions(categories, 'select_Categories');
+                if (categories != null || categories != undefined) {
+                    $('#select_Categories').append('<option value="" selected disabled>Select a category</option>');
+                    SetComboOptions(categories, 'select_Categories');
+                }
                 break;
         }
     } else {
@@ -116,6 +119,7 @@ function SetHtmlElementsByProcess(process) {
                 var subcategory = subcategories.find(x => x.guidID == guid);
                 $('#edt_Name').val(subcategory.name);
                 if (categories != null || categories != undefined) {
+                    $('#select_Categories').append('<option value="" selected disabled>Select a category</option>');
                     SetComboOptions(categories, 'select_Categories');
                     $('#select_Categories').val(subcategory.category.guidID);
                 }

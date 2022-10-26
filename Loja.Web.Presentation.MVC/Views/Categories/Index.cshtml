@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@{
     ViewData["Title"] = "Categories";
 }
 
@@ -13,7 +16,10 @@
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     </head>
     <body>
-        <button class="default-button" onclick="window.location.href = '/Generics/Index?process=1&method=0';">Register</button>
+        @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
+        {
+            <button class="default-button" onclick="window.location.href = '/Generics/Index?process=1&method=0';">Register</button>
+        }
 
         <div class="register-wrapper">
 
