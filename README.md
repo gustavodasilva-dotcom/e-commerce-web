@@ -12,3 +12,7 @@ But enough of this and let me show the project:
 The main idea was to create e-commerce where two types of users could use: employees (fictitious users that work for the website) and external users (users who, basically, don't work for the site).
 
 An employee has certain accesses that the external user doesn't:
+
+![](https://github.com/gustavodasilva-dotcom/e-commerce-web/blob/master/Loja.Web.Presentation.MVC/wwwroot/media/access_ext_user.gif)
+
+![](https://github.com/gustavodasilva-dotcom/e-commerce-web/blob/master/Loja.Web.Presentation.MVC/wwwroot/media/access_int_user.gif)
