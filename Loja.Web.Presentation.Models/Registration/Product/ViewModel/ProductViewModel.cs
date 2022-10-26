@@ -31,6 +31,8 @@ namespace Loja.Web.Presentation.Models.Registration.Product.ViewModel
 
         public MeasurementViewModel? Length { get; set; }
         
+        public decimal? Rating { get; set; }
+
         public List<string> Bases64 { get; set; }
 
         public int Quantity { get; set; }

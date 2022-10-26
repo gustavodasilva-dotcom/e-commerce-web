@@ -16,6 +16,29 @@ body {
     padding: 0 10px;
 }
 
+
+/************************************
+ *********** Star rating ************
+ ************************************/
+.star-rating {
+    user-select: none;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #0081A7;
+    background-color: unset;
+    border: none;
+}
+
+    .star:hover {
+        cursor: pointer;
+    }
+/************************************
+ *********** Star rating ************
+ ************************************/
+
+
 /************************************
  ********** Buttons style ***********
  ************************************/
@@ -67,6 +90,13 @@ body {
     .default-button:hover {
         background: #00AFB9;
     }
+
+.btn-read-more {
+    border: 0;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 15px;
+}
 /************************************
  ********** Buttons style ***********
  ************************************/
@@ -744,6 +774,7 @@ label #cancel {
     from {
         transform: rotate(0turn);
     }
+
     to {
         transform: rotate(1turn);
     }

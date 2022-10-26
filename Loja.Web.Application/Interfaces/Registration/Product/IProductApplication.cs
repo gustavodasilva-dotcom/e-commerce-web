@@ -9,5 +9,6 @@ namespace Loja.Web.Application.Interfaces.Registration.Product
         Task<ProductViewModel?> GetByIDAsync(Guid guid);
         Task<List<ProductViewModel>> GetAllAsync();
         Task<Products> SaveAsync(ProductsModel model);
+        Task<decimal?> SaveProductRatingAsync(ProductsRatingsModel model);
     }
 }

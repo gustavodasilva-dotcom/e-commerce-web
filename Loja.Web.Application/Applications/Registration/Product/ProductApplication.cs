@@ -20,6 +20,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
         private readonly Subcategories _subcategories = new();
         private readonly Measurements _measurements = new();
         private readonly Users _users = new();
+        private readonly ProductsRatings _productsRatings = new();
 
         private readonly IImageApplication _imageApplication;
         private readonly ICurrencyApplication _currencyApplication;
@@ -149,6 +150,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
                     Width = widthModel,
                     Length = lengthModel,
                     Bases64 = bases64.ToList(),
+                    Rating = await GetProductRatingAsync(product),
                     Stock = product.Stock,
                     Active = product.Active,
                     Deleted = product.Deleted,
@@ -232,6 +234,48 @@ namespace Loja.Web.Application.Applications.Registration.Product
                 throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
 
             return product;
+        }
+        #endregion
+
+        #region SaveProductRating
+        public async Task<decimal?> SaveProductRatingAsync(ProductsRatingsModel model)
+        {
+            var users = await _users.GetAllAsync();
+            var products = await _products.GetAllAsync();
+
+            var product = products.FirstOrDefault(x => x.GuidID == model.ProductGuid && x.Active && !x.Deleted) ??
+                throw new Exception("The product was not found. Please, contact the system administrator.");
+
+            model.ProductID = product.ID;
+            model.Created_by = users?.FirstOrDefault(x => x.GuidID == model.UserGuid && x.Active && !x.Deleted)?.ID;
+
+            if (await _productsRatings.InsertAsync(model) is null)
+                throw new Exception("The product was not found. Please, contact the system administrator.");
+
+            return await GetProductRatingAsync(product);
+        }
+        #endregion
+
+        #region GetProductRating
+        private async Task<decimal?> GetProductRatingAsync(Products product)
+        {
+            decimal? totalRating = null;
+
+            var productsRatings = await _productsRatings.GetAllAsync();
+
+            var productRatings = productsRatings.Where(x => x.ProductID == product?.ID);
+
+            if (productRatings.Any())
+            {
+                totalRating = 0;
+
+                foreach (var productRating in productRatings)
+                    totalRating += productRating.Rating;
+
+                totalRating = totalRating / productRatings.Count();
+            }
+
+            return totalRating;
         }
         #endregion
 

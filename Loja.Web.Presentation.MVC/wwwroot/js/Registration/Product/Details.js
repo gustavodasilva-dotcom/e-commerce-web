@@ -3,6 +3,8 @@ let bigImage = document.querySelector('.product-details-big-image img');
 
 $(document).ready(function () {
 
+    $(document.body).css('overflow-x', 'hidden');
+
     let params = (new URL(window.location.href)).searchParams;
     productID = params.get('guidID');
 
@@ -38,6 +40,9 @@ function popImage(image) {
 function SetDetails(product) {
 
     $('#product-id').val(product.id);
+    $('#product-guid').val(product.guidID);
+
+    SetProductRating(product.rating);
 
     $('.product-details-name').text(product.name);
     document.title = product.name;
@@ -46,15 +51,11 @@ function SetDetails(product) {
 
         let priceDiscounted = (product.price / 100) * product.discount;
         priceDiscounted = product.price - priceDiscounted;
-        $('.product-details-price').text(priceDiscounted.toFixed(2));
-        $('.product-details-original-price').text(product.price);
+        $('.product-details-price').text(`${product.currency.symbol} ${priceDiscounted.toFixed(2) }`);
+        $('.product-details-original-price').text(product.price.toFixed(2));
     }
-    else {
-
-        $('#product-details-price-hidden').val(product.price);
-        $('#product-details-price-hidden').maskMoney().trigger('mask.maskMoney');
-        $('.product-details-price').text($('#product-details-price-hidden').val());
-    }
+    else
+        $('.product-details-price').text(`${product.currency.symbol} ${product.price}`);
 
     if (product.stock >= 1) {
 

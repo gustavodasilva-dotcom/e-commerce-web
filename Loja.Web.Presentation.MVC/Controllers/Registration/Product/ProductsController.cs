@@ -120,6 +120,32 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Product
         }
         #endregion
 
+        #region SaveProductRating
+        [HttpPost]
+        public async Task<JsonResult> SaveProductRating(ProductsRatingsModel model)
+        {
+            dynamic result = new ExpandoObject();
+            result.Code = 0;
+            try
+            {
+                if (HttpContext.Session.Keys.Any(k => k == SessionUserID))
+                {
+                    var createdByGuid = HttpContext.Session.GetString(SessionUserID);
+                    model.UserGuid = Guid.Parse(createdByGuid ??
+                        throw new Exception("An error occurred while executing the process. Please, contact the system administrator."));
+                }
+
+                result.Rating = await _productApplication.SaveProductRatingAsync(model);
+                result.Code = 1;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        #endregion
+
         #endregion
     }
 }

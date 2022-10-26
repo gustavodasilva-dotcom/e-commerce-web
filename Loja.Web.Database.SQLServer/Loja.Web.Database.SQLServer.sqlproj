@@ -91,6 +91,7 @@
     <Build Include="dbo\ShoppingCarts.sql" />
     <Build Include="dbo\ShoppingCartsProducts.sql" />
     <Build Include="dbo\CardIssuers.sql" />
+    <Build Include="dbo\ProductsRatings.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Scripts\Default_Script.sql" />

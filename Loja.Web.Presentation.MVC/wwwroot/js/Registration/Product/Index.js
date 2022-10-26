@@ -48,26 +48,10 @@ $('#register-select-subcategories').on('change', function () {
 
         htmlCode +=         `<h3>${CapitalizeFirstLetter(subcategProducts[i].name)}</h3>`;
         htmlCode +=         `<h6>${subcategProducts[i].currency.symbol} ${subcategProducts[i].price}</h6>`;
-        htmlCode +=         '<ul>';
-        htmlCode +=             '<li>';
-        htmlCode +=                 '<i class="fa fa-star checked"></i>';
-        htmlCode +=             '</li>';
-        htmlCode +=             '<li>';
-        htmlCode +=                 '<i class="fa fa-star checked"></i>';
-        htmlCode +=             '</li>';
-        htmlCode +=             '<li>';
-        htmlCode +=                 '<i class="fa fa-star checked"></i>';
-        htmlCode +=             '</li>';
-        htmlCode +=             '<li>';
-        htmlCode +=                 '<i class="fa fa-star checked"></i>';
-        htmlCode +=             '</li>';
-        htmlCode +=             '<li>';
-        htmlCode +=                 '<i class="fa fa-star"></i>';
-        htmlCode +=             '</li>';
-        htmlCode +=         '</ul>';
-
         htmlCode +=     '</a>';
         htmlCode += '</div>';
+
+        SetProductRating(subcategProducts[i].rating);
 
     }
 
