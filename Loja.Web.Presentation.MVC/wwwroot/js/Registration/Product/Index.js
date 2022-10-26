@@ -51,7 +51,8 @@ $('#register-select-subcategories').on('change', function () {
         htmlCode +=     '</a>';
         htmlCode += '</div>';
 
-        SetProductRating(subcategProducts[i].rating);
+        if (subcategProducts[i].rating != null)
+            SetProductRating(subcategProducts[i].rating);
 
     }
 

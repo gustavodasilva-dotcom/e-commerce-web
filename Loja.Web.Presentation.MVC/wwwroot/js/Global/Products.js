@@ -6,13 +6,17 @@
         star.onclick = function () {
             let currentStar = i + 1;
 
-            SaveProductRating(currentStar);
+            let rate = SaveProductRating(currentStar);
 
             stars.forEach((star, j) => {
                 if (currentStar >= j + 1) {
                     star.innerHTML = '&#9733';
                 } else {
                     star.innerHTML = '&#9734';
+                }
+
+                if (rate != null) {
+                    $('.total-rating').text(rate.totalRatings);
                 }
             });
         }
@@ -26,12 +30,14 @@ function SetProductRating(rate) {
     stars.forEach((star, i) => {
         let currentRate = i + 1;
 
-        if (Math.round(rate) >= currentRate) {
+        if (Math.round(rate.rating) >= currentRate) {
             star.innerHTML = '&#9733';
         } else {
             star.innerHTML = '&#9734';
         }
     });
+
+    $('.total-rating').text(rate.totalRatings);
 }
 
 function SaveProductRating(rate) {

@@ -238,7 +238,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
         #endregion
 
         #region SaveProductRating
-        public async Task<decimal?> SaveProductRatingAsync(ProductsRatingsModel model)
+        public async Task<ProductRatingViewModel?> SaveProductRatingAsync(ProductsRatingsModel model)
         {
             var users = await _users.GetAllAsync();
             var products = await _products.GetAllAsync();
@@ -257,9 +257,9 @@ namespace Loja.Web.Application.Applications.Registration.Product
         #endregion
 
         #region GetProductRating
-        private async Task<decimal?> GetProductRatingAsync(Products product)
+        private async Task<ProductRatingViewModel?> GetProductRatingAsync(Products product)
         {
-            decimal? totalRating = null;
+            ProductRatingViewModel? productRatingReturn = null;
 
             var productsRatings = await _productsRatings.GetAllAsync();
 
@@ -267,15 +267,21 @@ namespace Loja.Web.Application.Applications.Registration.Product
 
             if (productRatings.Any())
             {
-                totalRating = 0;
+                decimal totalRating = 0;
 
                 foreach (var productRating in productRatings)
                     totalRating += productRating.Rating;
 
                 totalRating = totalRating / productRatings.Count();
+
+                productRatingReturn = new ProductRatingViewModel
+                {
+                    Rating = totalRating,
+                    TotalRatings = productRatings.Count()
+                };
             }
 
-            return totalRating;
+            return productRatingReturn;
         }
         #endregion
 
