@@ -1,4 +1,5 @@
 ﻿function GetCurrencies() {
+
     let currencies = null;
 
     $.ajax({

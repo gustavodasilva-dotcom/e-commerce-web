@@ -56,6 +56,7 @@ $('#register-select-subcategories').on('change', function () {
     $('#gallery').html(htmlCode);
 
     if (checkParam) {
+
         checkParam = false;
         window.history.pushState(null, null, '/Products/Index?subcategory=' + subcategParam);
     } else

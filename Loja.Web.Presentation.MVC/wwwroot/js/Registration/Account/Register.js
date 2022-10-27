@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     var userRoles = GetUserRoles();
 
     if (userRoles != null || userRoles != undefined)
@@ -6,6 +7,7 @@
 });
 
 $('#register-user').click(function () {
+
     let userModel = {};
 
     userModel.Name = $('#edt_Name').val();
@@ -28,6 +30,7 @@ $('#register-user').click(function () {
 });
 
 function ClearFields() {
+
     $('#edt_Name').val(null);
 
     $('#edt_Email').val(null);

@@ -98,6 +98,7 @@ function SetAddressModel() {
 }
 
 function RegisterUserAddress(addressModel) {
+
     $.ajax({
         async: false,
         type: "POST",
@@ -106,16 +107,20 @@ function RegisterUserAddress(addressModel) {
         data: { model: addressModel },
         success: function (result) {
             if (result.Code != 1) {
+
                 ShowMessageDiv(result.message);
                 return;
             } else {
-                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
+
+                if (result.RedirectToLogin)
+                    window.location.href = '/Accounts/Login';
             }
         }
     });
 }
 
 function GetUserAddresses() {
+
     $.ajax({
         async: false,
         type: "GET",
@@ -123,10 +128,14 @@ function GetUserAddresses() {
         url: "/Addresses/GetUserAddresses",
         success: function (result) {
             if (result.Code == 1) {
+
                 window.Addresses = {};
                 window.Addresses = result.Addresses;
             } else {
-                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
+
+                if (result.RedirectToLogin)
+                    window.location.href = '/Accounts/Login';
+
                 ShowMessageDiv(result.message);
             }
         }
@@ -134,6 +143,7 @@ function GetUserAddresses() {
 }
 
 function SetDeliveryAddress(orderID, addressID) {
+
     $.ajax({
         async: false,
         type: "POST",
@@ -142,7 +152,10 @@ function SetDeliveryAddress(orderID, addressID) {
         url: "/Orders/StepTwo",
         success: function (result) {
             if (result.Code != 1) {
-                if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
+
+                if (result.RedirectToLogin)
+                    window.location.href = '/Accounts/Login';
+
                 ShowMessageDiv(result.message);
                 return;
             }
@@ -151,6 +164,7 @@ function SetDeliveryAddress(orderID, addressID) {
 }
 
 function GetOrderAddress(orderID) {
+
     $.ajax({
         async: false,
         type: "GET",
@@ -159,9 +173,11 @@ function GetOrderAddress(orderID) {
         url: "/Addresses/GetOrderAddress",
         success: function (result) {
             if (result.Code == 1) {
+
                 window.Address = {};
                 window.Address = result.Address;
             } else {
+
                 ShowMessageDiv(result.message);
             }
         }

@@ -3,6 +3,7 @@ let domain;
 let isEdit = false;
 
 $(document).ready(function () {
+
     let params = (new URL(window.location.href)).searchParams;
 
     ValidateParams(params);
@@ -10,6 +11,7 @@ $(document).ready(function () {
 });
 
 $('#register').click(function () {
+
     let model = {};
 
     if (isEdit) model.GuidID = guid;
@@ -50,6 +52,7 @@ $('#register').click(function () {
 
 //#region ValidateParams
 function ValidateParams(params) {
+
     let method = params.get('method');
     process = params.get('process');
     guid = params.get('guid');
@@ -70,6 +73,7 @@ function ValidateParams(params) {
 
 //#region SetHtmlElementsByProcess
 function SetHtmlElementsByProcess(process) {
+
     $('.2').hide();
 
     switch (process) {

@@ -44,6 +44,7 @@ function SetProductRating(rate) {
 }
 
 function SaveProductRating(rate) {
+
     let rating = null;
 
     let model = {};
@@ -81,6 +82,7 @@ function SaveProductRating(rate) {
 };
 
 function GetProductByID(guid) {
+
     let products = null;
 
     $.ajax({
@@ -113,6 +115,7 @@ function GetProductByID(guid) {
 }
 
 function GetProducts() {
+
     let products = null;
 
     $.ajax({
@@ -144,6 +147,7 @@ function GetProducts() {
 }
 
 function GetMostSolds() {
+
     let products = null;
 
     $.ajax({

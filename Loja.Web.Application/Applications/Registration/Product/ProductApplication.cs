@@ -235,10 +235,18 @@ namespace Loja.Web.Application.Applications.Registration.Product
             model.CurrencyID = currencies.First(x => x.GuidID == model.CurrencyGuid && x.Active && !x.Deleted).ID;
             model.SubcategoryID = subcategories.First(x => x.GuidID == model.SubcategoryGuid && x.Active && !x.Deleted).ID;
             model.ManufacturerID = manufacturers.First(x => x.GuidID == model.ManufacturerGuid && x.Active && !x.Deleted).ID;
-            model.WeightMeasurementTypeID = measurements.First(x => x.GuidID == model.WeightGuid && x.Active && !x.Deleted).ID;
-            model.HeightMeasurementTypeID = measurements.First(x => x.GuidID == model.HeightGuid && x.Active && !x.Deleted).ID;
-            model.WidthMeasurementTypeID = measurements.First(x => x.GuidID == model.WidthGuid && x.Active && !x.Deleted).ID;
-            model.LengthMeasurementTypeID = measurements.First(x => x.GuidID == model.LengthGuid && x.Active && !x.Deleted).ID;
+            
+            if (model.WeightGuid != Guid.Empty)
+                model.WeightMeasurementTypeID = measurements.First(x => x.GuidID == model.WeightGuid && x.Active && !x.Deleted).ID;
+
+            if (model.HeightGuid != Guid.Empty)
+                model.HeightMeasurementTypeID = measurements.First(x => x.GuidID == model.HeightGuid && x.Active && !x.Deleted).ID;
+
+            if (model.WidthGuid != Guid.Empty)
+                model.WidthMeasurementTypeID = measurements.First(x => x.GuidID == model.WidthGuid && x.Active && !x.Deleted).ID;
+
+            if (model.LengthGuid != Guid.Empty)
+                model.LengthMeasurementTypeID = measurements.First(x => x.GuidID == model.LengthGuid && x.Active && !x.Deleted).ID;
 
             if (model.GuidID == Guid.Empty)
             {
@@ -327,18 +335,21 @@ namespace Loja.Web.Application.Applications.Registration.Product
             if (model.Discount < 0 || model.Discount >= 100) throw new Exception("The product's price cannot be less then 0 or greater then 100.");
             if (model.Stock < 0) throw new Exception("The product's stock cannot be less then 0.");
 
-            if (model.Weight < 0) throw new Exception("The product's weight cannot be less than 0.");
-            if (model.Height < 0) throw new Exception("The product's height cannot be less than 0.");
-            if (model.Width < 0) throw new Exception("The product's width cannot be less than 0.");
-            if (model.Length < 0) throw new Exception("The product's length cannot be less than 0.");
+            if (model.WeightGuid != Guid.Empty)
+                if (model.Weight < 0 || model.Weight == null) throw new Exception("The product's weight cannot be less than 0.");
+
+            if (model.HeightGuid != Guid.Empty)
+                if (model.Height < 0 || model.Height == null) throw new Exception("The product's height cannot be less than 0.");
+
+            if (model.WidthGuid != Guid.Empty)
+                if (model.Width < 0 || model.Width == null) throw new Exception("The product's width cannot be less than 0.");
+
+            if (model.LengthGuid != Guid.Empty)
+                if (model.Length < 0 || model.Length == null) throw new Exception("The product's length cannot be less than 0.");
 
             if (model.CurrencyGuid == Guid.Empty) throw new Exception("Please, inform the product's price currency.");
             if (model.SubcategoryGuid == Guid.Empty) throw new Exception("Please, inform the product's subcategory.");
             if (model.ManufacturerGuid == Guid.Empty) throw new Exception("Please, inform the product's manufacturer.");
-            if (model.WeightGuid == Guid.Empty) throw new Exception("Please, inform the product's weight measure.");
-            if (model.HeightGuid == Guid.Empty) throw new Exception("Please, inform the product's height measure.");
-            if (model.WidthGuid == Guid.Empty) throw new Exception("Please, inform the product's width measure.");
-            if (model.LengthGuid == Guid.Empty) throw new Exception("Please, inform the product's length measure.");
         }
         #endregion
 

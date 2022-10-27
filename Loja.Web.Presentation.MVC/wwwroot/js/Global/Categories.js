@@ -1,4 +1,5 @@
 ﻿function GetCategories() {
+
     let categories = null;
 
     $.ajax({
@@ -30,6 +31,7 @@
 }
 
 function GetSubcategories() {
+
     let subcategories = null;
 
     $.ajax({

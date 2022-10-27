@@ -1,4 +1,5 @@
 ﻿function GetMeasurements() {
+
     let measurements = null;
 
     $.ajax({

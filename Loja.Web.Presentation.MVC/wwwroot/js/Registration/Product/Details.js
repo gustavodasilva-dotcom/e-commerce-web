@@ -21,19 +21,23 @@ $(document).ready(function () {
 });
 
 $('#btn-add-to-cart').click(function () {
+
     AddItemToCart();
 });
 
 $('#btn-buy-now').click(function () {
+
     AddItemToCart();
     window.location.href = '/Orders/SelectPay?oneItemOnly=1&productGuidID=' + productID;
 });
 
 $('#btn-edit').click(function () {
+
     window.location.href = '/Products/Process?edit=1&guidID=' + productID;
 });
 
 function popImage(image) {
+
     bigImage.src = image;
 }
 

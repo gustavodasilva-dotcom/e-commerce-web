@@ -14,6 +14,7 @@ $(document).ready(function () {
 });
 
 function SetHtmlElements() {
+
     let order = window.Order;
     let address = window.Address;
 
@@ -28,6 +29,7 @@ function SetHtmlElements() {
 }
 
 function SetHtmlElementsLeft(order) {
+
     let htmlCode = '';
 
     orderTotal = CalculateOrderTotal(order);
@@ -35,6 +37,7 @@ function SetHtmlElementsLeft(order) {
     htmlCode += '<h2 class="overview-title-2">Products:</h2>';
 
     for (let i = 0; i < order.products.length; i++) {
+
         htmlCode += '<div class="product-card">';
         
         htmlCode +=     `<input type="hidden" id="${order.products[i].guidID}" value="${order.products[i].guidID}" >`;
@@ -70,6 +73,7 @@ function SetHtmlElementsLeft(order) {
 }
 
 function SetHtmlElementsRight(address, order) {
+
     let htmlCode = '';
 
     htmlCode += '<h2 class="overview-title-2">Status:</h2>';
@@ -103,13 +107,11 @@ function SetHtmlElementsRight(address, order) {
 }
 
 $('#btn-finish-order').click(function () {
+
     ProcessOrder(orderID, orderTotal, true);
 });
 
 $('#btn-cancel-order').click(function () {
-    ProcessOrder(orderID, orderTotal, false);
-});
 
-$('#btn-alter-order').click(function () {
-    alert('To be developed.');
+    ProcessOrder(orderID, orderTotal, false);
 });

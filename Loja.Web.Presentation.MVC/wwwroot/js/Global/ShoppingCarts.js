@@ -1,5 +1,7 @@
 ﻿function AddToCart(quantity, productID, productQuantity) {
+
     if (productQuantity > 0) {
+
         let shoppingCart = {};
 
         shoppingCart.Quantity = quantity;
@@ -31,6 +33,7 @@
 }
 
 function GetShoppingCartItems() {
+
     $.ajax({
         async: false,
         type: "GET",
@@ -54,6 +57,7 @@ function GetShoppingCartItems() {
 }
 
 function EmptyShoppingCart(shoppingCartID) {
+
     $.ajax({
         async: false,
         type: "POST",

@@ -4,6 +4,7 @@ let editEnabled = false;
 let isBrazilianCompany = false;
 
 $(document).ready(function () {
+
     let params = (new URL(window.location.href)).searchParams;
 
     ValidateParams(params);
@@ -12,6 +13,7 @@ $(document).ready(function () {
 });
 
 $('input[name="localition"]').click(function () {
+
     SetVisibilityByLocation();
     SetContactMasks();
     SetAddressMasks();
@@ -19,7 +21,9 @@ $('input[name="localition"]').click(function () {
 });
 
 $('#btn-edit').click(function () {
+
     if (editEnabled) {
+
         ReadonlyElements(false);
         SetContactMasks();
         SetAddressMasks();
@@ -31,6 +35,7 @@ $('#btn-edit').click(function () {
 })
 
 $('#btn-register-update').click(function () {
+
     let model = {};
 
     model.GuidID = guid;
@@ -38,9 +43,11 @@ $('#btn-register-update').click(function () {
     model.BrazilianCompany = $('#localition_brazil:checked').length > 0 ? true : false;
 
     if (model.BrazilianCompany) {
+
         model.FederalTaxpayerRegistrationNumber = $('#edt_FedTaxPayer').val();
         model.StateTaxpayerRegistrationNumber = $('#edt_SttTaxPayer').val();
     } else {
+
         model.CAGE = $('#edt_Cage').val();;
         model.NCAGE = model.CAGE;
         model.SEC = $('#edt_Sec').val();
@@ -64,6 +71,7 @@ $('#btn-register-update').click(function () {
 
 //#region ValidateParams
 function ValidateParams(params) {
+
     guid = params.get('guid');
 
     if (guid != null && guid === '') window.location.href = '/Default/Select?statusCode=400';
@@ -73,7 +81,9 @@ function ValidateParams(params) {
 
 //#region SetHtmlElements
 function SetHtmlElements() {
+
     if (isEdit) {
+
         ReadonlyElements(true);
 
         $('#btn-register-update').text('Update');
@@ -103,6 +113,7 @@ function SetHtmlElements() {
             SetAddressInputValues(manufacturer.address);
         }
     } else {
+
         $('#btn-edit').css('display', 'none');
         $('#btn-register-update').css('display', 'block');
 
@@ -113,6 +124,7 @@ function SetHtmlElements() {
 
 //#region ReadonlyElements
 function ReadonlyElements(readonly) {
+
     $('#edt_Name').prop('readonly', readonly);
 
     $('input[name="localition"]').prop('disabled', readonly);
@@ -135,6 +147,7 @@ function ReadonlyElements(readonly) {
 
 //#region SetMasks
 function SetMasks() {
+
     if ($('#localition_brazil:checked').length > 0) {
         $('#edt_FedTaxPayer').mask('00.000.000/0000-00');
     }
@@ -146,7 +159,9 @@ function SetMasks() {
 
 //#region SetVisibilityByLocation
 function SetVisibilityByLocation() {
+
     if ($('#localition_brazil:checked').length > 0) {
+
         $('#localition_brazil').prop('checked', true);
 
         $('#register-input-brazilian').css('display', 'block');
@@ -154,6 +169,7 @@ function SetVisibilityByLocation() {
 
         isBrazilianCompany = true;
     } else {
+
         $('#localition_foreign').prop('checked', true);
 
         $('#register-input-foreigh').css('display', 'block');

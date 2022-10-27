@@ -3,6 +3,7 @@ let isEdit = false;
 let imagesIDs = [];
 
 $(document).ready(function () {
+
     CheckRoute();
 
     SetMasks();
@@ -18,13 +19,16 @@ $(document).ready(function () {
     }
 
     SetElementsVisibility(isEdit);
+
 });
 
 $('#btn-edit').click(function () {
+
     SetElementsVisibility(false);
 });
 
 $('.register-btn-submit').click(function () {
+
     if (imagesIDs.length == 0 && $('input[type="file"]').get(0).files.length > 0) {
         imagesIDs = UploadImages();
 
@@ -87,6 +91,7 @@ $('.register-btn-submit').click(function () {
 });
 
 function CheckRoute() {
+
     var route = window.location.href;
     var params = new URL(route).searchParams;
     var edit = params.get('edit');
@@ -100,6 +105,7 @@ function CheckRoute() {
 }
 
 function SetMasks() {
+
     $('#register-input-price').maskMoney();
     $('#register-input-weight').mask("#0.000", { reverse: true });
     $('#register-input-height').mask("#0.000", { reverse: true });
@@ -108,30 +114,35 @@ function SetMasks() {
 }
 
 function GetListManufacturers() {
+
     let manufacturers = GetManufacturers();
 
     if (manufacturers != null) SetComboOptions(manufacturers, 'register-select-manufacturers');
 }
 
 function GetListSubcategories() {
+
     let subcategories = GetSubcategories();
 
     if (subcategories != null) SetComboOptions(subcategories, 'register-select-subcategories');
 }
 
 function GetListCurrencies() {
+
     let currencies = GetCurrencies();
 
     if (currencies != null) SetComboOptions(currencies, 'register-select-currencies');
 }
 
 function GetListMeasurements() {
+
     let measurements = GetMeasurements();
 
     if (measurements != null) SetComboBoxMeasurements(measurements);
 }
 
 function SetComboBoxMeasurements(measurements) {
+
     var mass = measurements.filter(function (value) { return value.measurementTypeID == 1 });
     var height = measurements.filter(function (value) { return value.measurementTypeID == 2 });
 
@@ -147,6 +158,7 @@ function SetComboBoxMeasurements(measurements) {
 }
 
 function SetElementsVisibility(able) {
+
     $('#btn-edit').css('display', !able ? 'none' : 'block');
 
     $('#register-input-name').prop('disabled', able);
@@ -176,19 +188,37 @@ function SetElementsVisibility(able) {
     $('#register-input-file').prop('disabled', able);
 
     $('#btn-register-update').css('display', able ? 'none' : 'block');
+
     if (isEdit) $('#btn-register-update').text('Update');
+
 }
 
 function SetDetails(product) {
+
     $('#register-input-name').val(product.name);
     $('#register-input-description').text(product.description);
     $('#register-input-price').val(product.price).trigger('mask.maskMoney');
     $('#register-input-discount').val(product.discount);
 
-    $('#register-input-weight').val(product.weight.value);
-    $('#register-input-height').val(product.height.value);
-    $('#register-input-width').val(product.width.value);
-    $('#register-input-length').val(product.length.value);
+    if (product.weight != null) {
+        $('#register-input-weight').val(product.weight.value);
+        $('#register-select-mass-measurements').val(product.weight.guidID);
+    }
+
+    if (product.height != null) {
+        $('#register-input-height').val(product.height.value);
+        $('#register-select-height-measurements').val(product.height.guidID);
+    }
+
+    if (product.width != null) {
+        $('#register-input-width').val(product.width.value);
+        $('#register-select-width-measurements').val(product.width.guidID);
+    }
+
+    if (product.length != null) {
+        $('#register-input-length').val(product.length.value);
+        $('#register-select-length-measurements').val(product.length.guidID);
+    }
 
     $('#register-input-stock').val(product.stock);
 
@@ -196,8 +226,4 @@ function SetDetails(product) {
     $('#register-select-subcategories').val(product.subcategory.guidID);
     $('#register-select-currencies').val(product.currency.guidID);
 
-    $('#register-select-height-measurements').val(product.height.guidID);
-    $('#register-select-width-measurements').val(product.width.guidID);
-    $('#register-select-length-measurements').val(product.length.guidID);
-    $('#register-select-mass-measurements').val(product.weight.guidID);
 }

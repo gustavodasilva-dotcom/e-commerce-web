@@ -1,4 +1,5 @@
 ﻿function GetOrderDetails(orderID) {
+
     $.ajax({
         async: false,
         type: "GET",
@@ -52,6 +53,7 @@ function GetByUser() {
 }
 
 function ProcessOrder(orderID, orderTotal, finishOrder) {
+
     $.ajax({
         async: false,
         type: "POST",

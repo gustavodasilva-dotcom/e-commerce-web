@@ -1,4 +1,5 @@
 ﻿function GetManufacturers() {
+
     let manufacturers = null;
 
     $.ajax({
@@ -30,6 +31,7 @@
 }
 
 function GetManufacturerByID(id) {
+
     let manufacturer = null;
 
     $.ajax({
@@ -62,6 +64,7 @@ function GetManufacturerByID(id) {
 }
 
 function SaveManufacturer(model) {
+
     let manufacturer = null;
 
     $.ajax({

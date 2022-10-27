@@ -1,6 +1,7 @@
 ﻿let orderID;
 
 $(document).ready(function () {
+
     let params = (new URL(window.location.href)).searchParams;
     orderID = params.get('orderID');
 
@@ -11,11 +12,13 @@ $(document).ready(function () {
 });
 
 $('#btn-register-address').click(function () {
+
     $('#register-new-address').css('display', 'block');
     $('#btn-move-next').css('display', 'none');
 });
 
 $('#register-address').click(function () {
+
     let addressModel = {};
 
     addressModel.IsForeign = $('input[name="localition"]').val() == 'false' ? true : false;
@@ -37,6 +40,7 @@ $('#register-address').click(function () {
 });
 
 $('#btn-move-next').click(function () {
+
     let addressID = $('input[name="address-chk"]:checked').val();
 
     SetDeliveryAddress(orderID, addressID);
@@ -45,7 +49,9 @@ $('#btn-move-next').click(function () {
 });
 
 function SetAddressesCards() {
+
     if (window.Addresses.length > 0) {
+
         let addresses = window.Addresses;
 
         let htmlCards = '';

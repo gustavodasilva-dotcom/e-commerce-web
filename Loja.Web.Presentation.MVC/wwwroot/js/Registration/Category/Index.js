@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     var categories = GetCategories();
 
     if (categories != null || categories != undefined)
@@ -6,6 +7,7 @@
 });
 
 function SetTableElements(categories) {
+
     let htmlCode = '';
 
     htmlCode += '<table class="register-table" id="table_Categories">';
