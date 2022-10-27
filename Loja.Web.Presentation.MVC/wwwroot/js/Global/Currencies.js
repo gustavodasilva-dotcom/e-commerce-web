@@ -20,7 +20,7 @@
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }

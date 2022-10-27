@@ -4,6 +4,7 @@ let pageTitle;
 let checkProcess = false;
 
 $(document).ready(function () {
+
     let params = (new URL(window.location.href)).searchParams;
 
     ValidateParams(params);
@@ -13,10 +14,12 @@ $(document).ready(function () {
 });
 
 function ValidateParams(params) {
+
     statusCode = params.get('statusCode');
     process = params.get('process');
 
     switch (statusCode) {
+
         case '400':
             pageTitle = 'Bad Request';
             checkProcess = false;
@@ -35,6 +38,7 @@ function ValidateParams(params) {
     }
 
     if (checkProcess) {
+
         switch (process) {
             case '1':
                 pageTitle = 'Thank you!';
@@ -46,11 +50,13 @@ function ValidateParams(params) {
 }
 
 function SetHtmlElements() {
+
     let htmlCode = '';
 
     $('#page-title').text(pageTitle);
 
     if (statusCode === '201' && process === '1') {
+
         htmlCode += '<p>Your order was created sucessfully.</p>';
 
         if (window.Tracking == null || window.Tracking == undefined)

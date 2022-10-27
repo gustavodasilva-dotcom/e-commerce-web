@@ -21,7 +21,7 @@
                     if (result.RedirectToLogin) {
                         window.location.href = '/Accounts/Login';
                     } else {
-                        ShowMessageDiv(result.Message);
+                        ShowModal(result.Message);
                         return;
                     }
                 }
@@ -48,7 +48,7 @@ function GetShoppingCartItems() {
                 if (result.RedirectToLogin) {
                     window.location.href = '/Accounts/Login';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -72,7 +72,7 @@ function EmptyShoppingCart(shoppingCartID) {
                 if (result.RedirectToLogin) {
                     window.location.href = '/Accounts/Login';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }

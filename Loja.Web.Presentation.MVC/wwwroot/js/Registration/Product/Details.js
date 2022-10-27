@@ -16,8 +16,7 @@ $(document).ready(function () {
         SetDescription(product.description);
     }
 
-    GetBases64ByProductIDAsync(productID);
-    ConvertBase64ToImage();
+    ConvertBase64ToImage(product.bases64);
 });
 
 $('#btn-add-to-cart').click(function () {
@@ -102,9 +101,9 @@ function AddItemToCart() {
     AddToCart(quantity, productID, productQuantity);
 }
 
-function ConvertBase64ToImage() {
+function ConvertBase64ToImage(bases64) {
 
-    if (bases64.length > 0) {
+    if (bases64 != null) {
 
         for (let i = 0; i < bases64.length; i++) {
 

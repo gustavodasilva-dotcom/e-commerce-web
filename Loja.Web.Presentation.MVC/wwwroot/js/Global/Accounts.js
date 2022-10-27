@@ -19,7 +19,7 @@
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -51,7 +51,7 @@ function RegisterUser(userModel) {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -79,7 +79,7 @@ function Login(emailUsername, password) {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -104,7 +104,7 @@ function Logout() {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }

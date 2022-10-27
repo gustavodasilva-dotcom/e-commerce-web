@@ -71,7 +71,7 @@ function SaveProductRating(rate) {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -104,7 +104,7 @@ function GetProductByID(guid) {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -136,7 +136,7 @@ function GetProducts() {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }
@@ -168,7 +168,7 @@ function GetMostSolds() {
                 } else if (result.RedirectToHome) {
                     window.location.href = '/Home/Index';
                 } else {
-                    ShowMessageDiv(result.Message);
+                    ShowModal(result.Message);
                     return;
                 }
             }

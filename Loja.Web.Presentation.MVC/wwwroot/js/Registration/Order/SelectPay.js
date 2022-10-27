@@ -148,7 +148,7 @@ $('#btn-move-next').click(function () {
     if (stepOneModel.PaymentGuid == '' ||
         stepOneModel.PaymentGuid == null) {
 
-        ShowMessageDiv('Please, select the payment method.');
+        ShowModal('Please, select the payment method.');
         return;
     }
 
@@ -193,7 +193,7 @@ $('#btn-move-next').click(function () {
         let validation = ValidateCards(stepOneModel.CardInfo);
 
         if (!validation.success) {
-            ShowMessageDiv(validation.message);
+            ShowModal(validation.message);
             return;
         }
     }

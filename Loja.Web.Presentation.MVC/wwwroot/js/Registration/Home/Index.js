@@ -16,7 +16,7 @@ function SetMostSolds(products) {
             htmlCode += '<div class="card-gallery-small">';
             htmlCode += `<a href="/Products/Details?guidID=${products[i].guidID}">`;
 
-            if (products[i].bases64.length > 0)
+            if (products[i].bases64 != null)
                 htmlCode += `<img src="data:image/png;base64,${products[i].bases64[0]}">`;
             else
                 htmlCode += '<img src="/media/default.png">';

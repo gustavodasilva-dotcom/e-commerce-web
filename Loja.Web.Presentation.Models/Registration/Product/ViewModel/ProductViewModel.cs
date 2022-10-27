@@ -33,7 +33,7 @@ namespace Loja.Web.Presentation.Models.Registration.Product.ViewModel
         
         public ProductRatingViewModel? Rating { get; set; }
 
-        public List<string> Bases64 { get; set; }
+        public List<string>? Bases64 { get; set; }
 
         public int Quantity { get; set; }
 

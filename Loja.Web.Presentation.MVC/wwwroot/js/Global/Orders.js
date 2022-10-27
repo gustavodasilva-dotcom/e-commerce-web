@@ -18,7 +18,7 @@
                 requestSuccessed = false;
 
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
             }
         }
     });
@@ -44,7 +44,7 @@ function GetByUser() {
                 requestSuccessed = false;
 
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
             }
         }
     });
@@ -76,7 +76,7 @@ function ProcessOrder(orderID, orderTotal, finishOrder) {
                 requestSuccessed = false;
 
                 if (result.RedirectToLogin) window.location.href = '/Accounts/Login';
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
             }
         }
     });

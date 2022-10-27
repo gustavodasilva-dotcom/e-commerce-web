@@ -25,7 +25,7 @@ function GetUserCards() {
                 window.CardsInfos = result.CardsInfos;
             }
             else {
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
             }
         }
     });
@@ -49,7 +49,7 @@ function GetPaymentTypes() {
                 window.PaymentTypes = result.PaymentTypes;
             }
             else {
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
             }
         }
     });
@@ -193,7 +193,7 @@ function StepOne(stepOne) {
 
                 requestSuccessed = false;
 
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
                 return;
             }
         }

@@ -25,14 +25,16 @@ window.addEventListener('load', () => {
 
 
 //#region Model code
-function ShowMessageDiv(message) {
-    $('#div_Message').hide();
-    $('#div_Message').show();
-    $('.modal-content p').text(message);
+function ShowModal(message = null) {
+    $('.modal').hide();
+    $('.modal').show();
+
+    if (message != null)
+        $('.modal-content p').text(message);
 }
 
 $('.close').click(function () {
-    $('#div_Message').hide();
+    $('.modal').hide();
     $(document.body).css('overflow', 'auto');
 });
 //#endregion

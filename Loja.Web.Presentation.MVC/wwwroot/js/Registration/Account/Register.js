@@ -24,7 +24,7 @@ $('#register-user').click(function () {
 
     if (user != null || user != undefined) {
 
-        ShowMessageDiv('User registered sucessfully.');
+        ShowModal('User registered sucessfully.');
         window.location.href = '/Accounts/Login';
     }
 });

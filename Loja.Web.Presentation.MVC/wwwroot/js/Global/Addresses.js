@@ -35,7 +35,7 @@ $('#address-postal-code').focusout(function () {
                     SetAddressInputValues(result);
                 }
                 else {
-                    ShowMessageDiv(result.message);
+                    ShowModal(result.message);
                     ReadonlyAddressInputs(true);
                     CleanAddressInputValues();
                 }
@@ -108,7 +108,7 @@ function RegisterUserAddress(addressModel) {
         success: function (result) {
             if (result.Code != 1) {
 
-                ShowMessageDiv(result.message);
+                ShowModal(result.message);
                 return;
             } else {
 
@@ -136,7 +136,7 @@ function GetUserAddresses() {
                 if (result.RedirectToLogin)
                     window.location.href = '/Accounts/Login';
 
-                ShowMessageDiv(result.message);
+                ShowModal(result.message);
             }
         }
     });
@@ -156,7 +156,7 @@ function SetDeliveryAddress(orderID, addressID) {
                 if (result.RedirectToLogin)
                     window.location.href = '/Accounts/Login';
 
-                ShowMessageDiv(result.message);
+                ShowModal(result.message);
                 return;
             }
         }
@@ -178,7 +178,7 @@ function GetOrderAddress(orderID) {
                 window.Address = result.Address;
             } else {
 
-                ShowMessageDiv(result.message);
+                ShowModal(result.message);
             }
         }
     });

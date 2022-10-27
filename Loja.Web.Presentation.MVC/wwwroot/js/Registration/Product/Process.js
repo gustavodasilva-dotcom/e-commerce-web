@@ -33,7 +33,7 @@ $('.register-btn-submit').click(function () {
         imagesIDs = UploadImages();
 
         if (imagesIDs.length != 6) {
-            ShowMessageDiv("There has to be exactly 6 files to upload.");
+            ShowModal("There has to be exactly 6 files to upload.");
             return;
         }
     }
@@ -84,7 +84,7 @@ $('.register-btn-submit').click(function () {
                 window.location.href = '/Products/Details?guidID=' + result.Products.guidID;
             }
             else {
-                ShowMessageDiv(result.Message);
+                ShowModal(result.Message);
             }
         }
     });

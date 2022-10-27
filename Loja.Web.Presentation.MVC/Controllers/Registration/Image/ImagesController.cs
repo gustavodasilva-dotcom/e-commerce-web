@@ -28,16 +28,8 @@ namespace Loja.Web.Presentation.MVC.Controllers.Registration.Image
             result.Code = 0;
             try
             {
-                var bases64 = await _imageApplication.GetBases64ByProductIDAsync(productID);
-                if (bases64.Any())
-                {
-                    result.Code = 1;
-                    result.Bases64 = bases64;
-                }
-                else
-                {
-                    result.Message = "This product has no images.";
-                }
+                result.Bases64 = await _imageApplication.GetBases64ByProductIDAsync(productID);
+                result.Code = 1;
             }
             catch (Exception e)
             {

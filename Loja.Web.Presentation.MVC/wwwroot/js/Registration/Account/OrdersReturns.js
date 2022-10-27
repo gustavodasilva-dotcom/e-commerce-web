@@ -126,8 +126,7 @@ function SetHtmlElements() {
 
 function OpenOrderDetailsModal(order) {
 
-    $('#div_Message').hide();
-    $('#div_Message').show();
+    ShowModal();
 
     $(document.body).css('overflow', 'hidden');
 

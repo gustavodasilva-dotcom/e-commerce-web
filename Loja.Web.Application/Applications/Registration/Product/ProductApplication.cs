@@ -151,7 +151,7 @@ namespace Loja.Web.Application.Applications.Registration.Product
                     Height = heightModel,
                     Width = widthModel,
                     Length = lengthModel,
-                    Bases64 = bases64.ToList(),
+                    Bases64 = bases64?.ToList(),
                     Rating = await GetProductRatingAsync(product),
                     Stock = product.Stock,
                     Active = product.Active,

@@ -47,7 +47,7 @@ $('#btn-ept-cart').click(function () {
     if (window.ShoppingCart.shoppingCartProducts == null ||
         window.ShoppingCart.shoppingCartProducts.length == 0) {
 
-        ShowMessageDiv('The shopping cart is alredy empty.');
+        ShowModal('The shopping cart is alredy empty.');
         return;
     }
 
@@ -59,7 +59,7 @@ $('#btn-buy-cart').click(function () {
     if (window.ShoppingCart.shoppingCartProducts == null ||
         window.ShoppingCart.shoppingCartProducts.length == 0) {
 
-        ShowMessageDiv("It's not possible to by an empty shopping cart.");
+        ShowModal("It's not possible to by an empty shopping cart.");
         return;
     }
 

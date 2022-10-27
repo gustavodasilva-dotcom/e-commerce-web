@@ -24,30 +24,35 @@ namespace Loja.Web.Application.Applications.Registration.Image
         #endregion
 
         #region GetBases64ByProductIDAsync
-        public async Task<IEnumerable<string?>> GetBases64ByProductIDAsync(Guid productID)
+        public async Task<List<string>?> GetBases64ByProductIDAsync(Guid productID)
         {
-            List<string> bases64 = new();
+            List<string>? bases64 = null;
+
             var products = await _products.GetAllAsync();
-            var product = products?.FirstOrDefault(x => x?.GuidID == productID);
-            if (product is null)
-            {
+
+            var product = products?.FirstOrDefault(x => x?.GuidID == productID && x.Active && !x.Deleted) ??
                 throw new Exception("This product does not exists.");
-            }
+
             var allProductsImages = await _productsImages.GetAllAsync();
+
             var productsImages = allProductsImages.Where(x => x?.ProductID == product.ID);
-            if (productsImages is null)
+
+            if (productsImages is not null)
             {
-                throw new Exception("This product has no images.");
-            }
-            var images = await _images.GetAllAsync();
-            foreach (var productImage in productsImages)
-            {
-                var base64 = images.FirstOrDefault(x => x?.ID == productImage?.ImageID);
-                if (base64 != null)
+                var images = await _images.GetAllAsync();
+
+                foreach (var productImage in productsImages)
                 {
-                    bases64.Add(base64.Base64);
+                    if (bases64 is null)
+                        bases64 = new();
+                    
+                    var base64 = images.FirstOrDefault(x => x?.ID == productImage?.ImageID);
+
+                    if (base64 is not null)
+                        bases64.Add(base64.Base64);
                 }
             }
+            
             return bases64;
         }
         #endregion
@@ -57,21 +62,20 @@ namespace Loja.Web.Application.Applications.Registration.Image
         {
             long? imageID;
             List<Images>? result = new();
+
             foreach (var base64 in bases64)
             {
-                imageID = await _images.InsertAsync(base64);
-                if (imageID is null)
-                {
+                imageID = await _images.InsertAsync(base64) ??
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                }
+
                 var images = await _images.GetAllAsync();
-                var image = images.FirstOrDefault(x => x.ID == imageID);
-                if (image is null)
-                {
+
+                var image = images.FirstOrDefault(x => x.ID == imageID) ??
                     throw new Exception("An error occurred while executing the process. Please, contact the system administrator.");
-                }
+
                 result?.Add(image);
             }
+
             return result;
         }
         #endregion
@@ -80,14 +84,15 @@ namespace Loja.Web.Application.Applications.Registration.Image
         public async Task<List<long?>> InsertProductsImagesAsync(DefaultObjectImagesModel defaultObjectImages)
         {
             List<long?> ids = new();
+
             foreach (var id in defaultObjectImages.ImagesIDs)
             {
                 var productImageID = await _productsImages.InsertAsync(defaultObjectImages.ObjectID, id);
-                if (productImageID != null)
-                {
+
+                if (productImageID is not null)
                     ids.Add(productImageID);
-                }
             }
+
             return ids;
         }
         #endregion

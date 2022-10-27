@@ -24,16 +24,17 @@ function UploadImages() {
                 data: fileData,
                 success: function (result) {
                     if (result.Code == 1) {
+
                         for (let i = 0; i < result.Images.length; i++)
                             ids[i] = result.Images[i].id;
                     } else {
-                        ShowMessageDiv(result.Message);
+                        ShowModal(result.Message);
                     }
                 },
             });
         }
     } else {
-        ShowMessageDiv('Not inserting images, because FormData is not supported by the browser.');
+        ShowModal('Not inserting images, because FormData is not supported by the browser.');
     }
 
     return ids;
@@ -54,7 +55,8 @@ function InsertProductsImages(productId, imagesId) {
         data: { defaultObjectImages: model },
         success: function (result) {
             if (result.Code != 1) {
-                ShowMessageDiv(result.Message);
+
+                ShowModal(result.Message);
                 return;
             }
         },
@@ -62,8 +64,6 @@ function InsertProductsImages(productId, imagesId) {
 }
 
 async function GetBases64ByProductIDAsync(productID) {
-
-    bases64 = {};
 
     $.ajax({
         async: false,
@@ -73,10 +73,13 @@ async function GetBases64ByProductIDAsync(productID) {
         data: { productID: productID },
         success: function (result) {
             if (result.Code == 1) {
+
                 bases64 = [];
                 bases64 = result.Bases64;
             } else {
-                ShowMessageDiv(result.Message);
+
+                ShowModal(result.Message);
+                return;
             }
         },
     });

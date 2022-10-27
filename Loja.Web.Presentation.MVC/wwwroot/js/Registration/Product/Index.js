@@ -4,7 +4,6 @@ let subcategories = {};
 
 let checkParam = false;
 
-
 $(document).ready(function () {
 
     param = new URL(window.location.href).searchParams.get('subcategory');
@@ -13,11 +12,13 @@ $(document).ready(function () {
         products = GetProducts();
 
     if (jQuery.isEmptyObject(subcategories)) {
+
         subcategories = GetSubcategories();
         SetComboOptions(subcategories, 'register-select-subcategories');
     }
     
     if (param != null) {
+
         checkParam = true;
         $('#register-select-subcategories').val(param);
         $('#register-select-subcategories').trigger('change');
@@ -41,7 +42,7 @@ $('#register-select-subcategories').on('change', function () {
         htmlCode += '<div class="card-gallery">';
         htmlCode +=     `<a href="/Products/Details?guidID=${subcategProducts[i].guidID}">`;
 
-        if (subcategProducts[i].bases64.length > 0)
+        if (subcategProducts[i].bases64 != null)
             htmlCode += `<img src="data:image/png;base64,${subcategProducts[i].bases64[0]}">`;
         else
             htmlCode += '<img src="/media/default.png">';
