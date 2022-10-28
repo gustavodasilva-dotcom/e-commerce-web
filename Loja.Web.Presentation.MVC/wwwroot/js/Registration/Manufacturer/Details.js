@@ -20,18 +20,20 @@ $('input[name="localition"]').click(function () {
     ReadonlyAddressInputs(isBrazilianCompany);
 });
 
-$('#btn-edit').click(function () {
+$('#edit').click(function () {
 
-    if (editEnabled) {
+    isEdit = !isEdit;
 
-        ReadonlyElements(false);
-        SetContactMasks();
-        SetAddressMasks();
-        ReadonlyAddressInputs(isBrazilianCompany);
+    ReadonlyElements(isEdit);
+    SetContactMasks();
+    SetAddressMasks();
+    ReadonlyAddressInputs(isBrazilianCompany, isEdit);
 
+    if (isEdit)
+        $('#btn-register-update').css('display', 'none');
+    else
         $('#btn-register-update').css('display', 'block');
-        $(this).css('display', 'none');
-    }
+
 })
 
 $('#btn-register-update').click(function () {
@@ -91,14 +93,17 @@ function SetHtmlElements() {
         var manufacturer = GetManufacturerByID(guid);
 
         if (manufacturer != null || manufacturer != undefined) {
+
             $('#edt_Name').val(manufacturer.name);
 
             isBrazilianCompany = manufacturer.brazilianCompany;
 
             if (manufacturer.brazilianCompany) {
+
                 $('#localition_brazil').prop('checked', true);
                 $('#register-input-brazilian').css('display', 'block');
             } else {
+
                 $('#localition_foreign').prop('checked', true);
                 $('#register-input-foreigh').css('display', 'block');
             }
@@ -114,7 +119,6 @@ function SetHtmlElements() {
         }
     } else {
 
-        $('#btn-edit').css('display', 'none');
         $('#btn-register-update').css('display', 'block');
 
         SetVisibilityByLocation();
@@ -125,23 +129,23 @@ function SetHtmlElements() {
 //#region ReadonlyElements
 function ReadonlyElements(readonly) {
 
-    $('#edt_Name').prop('readonly', readonly);
+    $('#edt_Name').prop('disabled', readonly);
 
     $('input[name="localition"]').prop('disabled', readonly);
     
-    $('#edt_Cage').prop('readonly', readonly);
-    $('#edt_Sec').prop('readonly', readonly);
-    $('#edt_FedTaxPayer').prop('readonly', readonly);
-    $('#edt_SttTaxPayer').prop('readonly', readonly);
+    $('#edt_Cage').prop('disabled', readonly);
+    $('#edt_Sec').prop('disabled', readonly);
+    $('#edt_FedTaxPayer').prop('disabled', readonly);
+    $('#edt_SttTaxPayer').prop('disabled', readonly);
     
-    $('#edt_Phone').prop('readonly', readonly);
-    $('#edt_Cellphone').prop('readonly', readonly);
-    $('#edt_Email').prop('readonly', readonly);
-    $('#edt_Website').prop('readonly', readonly);
+    $('#edt_Phone').prop('disabled', readonly);
+    $('#edt_Cellphone').prop('disabled', readonly);
+    $('#edt_Email').prop('disabled', readonly);
+    $('#edt_Website').prop('disabled', readonly);
     
-    $('#address-postal-code').prop('readonly', readonly);
-    $('#address-number').prop('readonly', readonly);
-    $('#address-comment').prop('readonly', readonly);
+    $('#address-postal-code').prop('disabled', readonly);
+    $('#address-number').prop('disabled', readonly);
+    $('#address-comment').prop('disabled', readonly);
 }
 //#endregion
 

@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     $('#localition_brazil').prop('checked', true);
     $('#address-postal-code').mask('00000-000');
 
@@ -6,18 +7,21 @@
 });
 
 $('#localition_brazil').change(function () {
+
     $('#address-postal-code').mask('00000-000');
 
     ReadonlyAddressInputs(true);
 });
 
 $('#localition_foreign').change(function () {
+
     $('#address-postal-code').unmask();
 
     ReadonlyAddressInputs(false);
 });
 
 $('#address-postal-code').focusout(function () {
+
     if ($('input[id="localition_brazil"]:checked').length > 0
         && !$('#address-postal-code').is('[readonly]')
         && $('#address-postal-code').val().length >= 9) {
@@ -48,14 +52,18 @@ $('#address-postal-code').focusout(function () {
 });
 
 function SetAddressMasks() {
+
     if (isBrazilianCompany) {
+
         $('#address-postal-code').mask('00000-000');
         $('#address-postal-code').trigger('input');
     }
 }
 
-function ReadonlyAddressInputs(readonly) {
-    if (readonly) {
+function ReadonlyAddressInputs(brazilianCompany = true, idEdit = false) {
+
+    if (brazilianCompany) {
+
         $('#address-name').prop('readonly', true);
         $('#address-neighborhood').prop('readonly', true);
         $('#address-city').prop('readonly', true);
@@ -63,15 +71,27 @@ function ReadonlyAddressInputs(readonly) {
         $('#address-country').prop('readonly', true);
     }
     else {
-        $('#address-name').prop('readonly', false);
-        $('#address-neighborhood').prop('readonly', false);
-        $('#address-city').prop('readonly', false);
-        $('#address-state').prop('readonly', false);
-        $('#address-country').prop('readonly', false);
+
+        if (isEdit) {
+
+            $('#address-name').prop('readonly', true);
+            $('#address-neighborhood').prop('readonly', true);
+            $('#address-city').prop('readonly', true);
+            $('#address-state').prop('readonly', true);
+            $('#address-country').prop('readonly', true);
+        } else {
+
+            $('#address-name').prop('readonly', false);
+            $('#address-neighborhood').prop('readonly', false);
+            $('#address-city').prop('readonly', false);
+            $('#address-state').prop('readonly', false);
+            $('#address-country').prop('readonly', false);
+        }
     }
 }
 
 function SetAddressInputValues(model) {
+
     $('#address-postal-code').val(model.street.postalCode);
     $('#address-name').val(model.street.name);
     $('#address-number').val(model.number);
@@ -83,6 +103,7 @@ function SetAddressInputValues(model) {
 }
 
 function SetAddressModel() {
+
     let addresses = {};
 
     addresses.PostalCode = $('#address-postal-code').val();

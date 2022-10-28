@@ -22,9 +22,16 @@ $(document).ready(function () {
 
 });
 
-$('#btn-edit').click(function () {
+$('#edit').click(function () {
 
-    SetElementsVisibility(false);
+    let visible = false;
+
+    if (document.querySelector('.register-input').disabled)
+        visible = false;
+    else
+        visible = true;
+
+    SetElementsVisibility(visible);
 });
 
 $('.register-btn-submit').click(function () {

@@ -16,11 +16,7 @@
         <link rel="stylesheet" href="~/css/Global/00_Global.css" />
     </head>
     <body>
-        @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
-        {
-            <button class="default-button" onclick="window.location.href = 'Manufacturers/Details';">Register</button>
-        }
-
+        
         <div class="register-wrapper">
 
             <!--- Modal --->
@@ -35,6 +31,11 @@
             <!--- Modal --->
 
             <div>
+                @if (Accessor?.HttpContext?.Session.GetString("Role") == "Employee")
+                {
+                    <i class="fa fa-plus fa-2x" aria-hidden="true" onclick="window.location.href = '/Manufacturers/Details';"></i>
+                }
+
                 <h1 class="register-title">@ViewData["Title"]</h1>
             </div>
 
